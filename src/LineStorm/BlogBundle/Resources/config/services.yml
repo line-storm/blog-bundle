@@ -1,0 +1,17 @@
+parameters:
+  linestorm.blog.routing_loader.class:          LineStorm\BlogBundle\Router\BlogLoader
+
+  linestorm.blog.model_manager.class:           LineStorm\BlogBundle\Model\ModelManager
+
+services:
+
+  linestorm.blog.routing_loader:
+    class: %linestorm.blog.routing_loader.class%
+    tags:
+      - { name: routing.loader }
+
+  linestorm.blog.model_manager:
+    class: %linestorm.blog.model_manager.class%
+    calls:
+      - [ setMappings, [%linestorm_blog.entity_config%] ]
+      - [ setEntityManager, [@doctrine, %linestorm_blog.entity_manager%] ]

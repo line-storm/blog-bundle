@@ -1,0 +1,1 @@
+Blog Bundle for symfony >=2.3
