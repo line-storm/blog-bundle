@@ -7,5 +7,8 @@
         <p>
             <a href="{{ path('linestorm_blog_post', {category: category.name, id: post.id, slug: post.slug }) }}">{{ post.body }}</a>
         </p>
+        {% if not loop.last %}
+            <hr />
+        {% endif %}
     {% endfor %}
 {% endblock %}
