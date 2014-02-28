@@ -76,7 +76,7 @@ abstract class BlogPost
 
     /**
      * @ORM\ManyToMany(targetEntity="BlogTag")
-     * @ORM\JoinTable(name="users_groups")
+     * @ORM\JoinTable(name="blog_post_tag")
      */
     protected $tags;
 

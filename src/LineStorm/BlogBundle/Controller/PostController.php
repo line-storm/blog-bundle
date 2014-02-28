@@ -126,4 +126,15 @@ class PostController extends Controller implements ClassResourceInterface
             'post' => $post,
         ));
     }
+
+    public function createAction()
+    {
+        $modelManager = $this->get('linestorm.blog.model_manager');
+
+        $posts = $modelManager->get('post')->findBy(array(), array('liveOn' => 'DESC'), 10);
+
+        return $this->render('LineStormBlogBundle:Post:create.html.twig', array(
+            'posts' => $posts,
+        ));
+    }
 }
