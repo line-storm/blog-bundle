@@ -82,7 +82,7 @@ class PostController extends Controller implements ClassResourceInterface
     public function editAction($id)
     {
         $user = $this->getUser();
-        if(!$user->isAdmin())
+        if(!$user->hasGroup('admin'))
         {
             throw new AccessDeniedException();
         }
@@ -93,9 +93,15 @@ class PostController extends Controller implements ClassResourceInterface
 
         $dql = "
             SELECT
-                partial p.{id,title,body}
+                partial p.{id,title,body,liveOn},
+                t,
+                c,
+                partial a.{id, username}
             FROM
                 {$modelManager->getEntityClass('post')} p
+                JOIN p.tags t
+                JOIN p.category c
+                JOIN p.author a
             WHERE
                 p.id = ?1
         ";

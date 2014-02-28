@@ -47,7 +47,7 @@ abstract class BlogPost
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="edited_on", type="datetime", nullable=false)
+     * @ORM\Column(name="edited_on", type="datetime", nullable=true)
      */
     protected $editedOn;
 

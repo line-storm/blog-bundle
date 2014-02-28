@@ -1,0 +1,15 @@
+{% extends 'LineStormBlogBundle::layout.html.twig' %}
+
+{% block content %}
+    <h1>BlogPost creation</h1>
+
+    {{ form(form) }}
+
+        <ul class="record_actions">
+    <li>
+        <a href="{{ path('linestorm_blog_admin_post') }}">
+            Back to the list
+        </a>
+    </li>
+</ul>
+{% endblock %}
