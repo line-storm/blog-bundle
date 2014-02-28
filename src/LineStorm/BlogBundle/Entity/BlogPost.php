@@ -30,13 +30,6 @@ abstract class BlogPost
     protected $title;
 
     /**
-     * @var string
-     *
-     * @ORM\Column(name="body", type="text", nullable=false)
-     */
-    protected $body;
-
-    /**
      * @var \DateTime
      *
      * @ORM\Column(name="created_on", type="datetime", nullable=false)
@@ -103,7 +96,7 @@ abstract class BlogPost
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="deleted_on", type="datetime", nullable=false)
+     * @ORM\Column(name="deleted_on", type="datetime", nullable=true)
      */
     protected $deletedOn;
 
