@@ -1,0 +1,3 @@
+linestorm_blog_admin_home:
+    resource: .
+    type: linestorm_blog_admin

@@ -60,7 +60,7 @@ class PostController extends Controller implements ClassResourceInterface
 
         $dql = "
             SELECT
-                partial p.{id,title,body,createdOn}
+                partial p.{id,title,createdOn}
             FROM
                 {$modelManager->getEntityClass('post')} p
             WHERE

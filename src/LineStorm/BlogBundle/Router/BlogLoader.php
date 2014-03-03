@@ -2,20 +2,25 @@
 
 namespace LineStorm\BlogBundle\Router;
 
+use LineStorm\BlogBundle\Module\ModuleManager;
+use Symfony\Component\Config\Loader\Loader;
 use Symfony\Component\Config\Loader\LoaderInterface;
 use Symfony\Component\Config\Loader\LoaderResolverInterface;
 use Symfony\Component\Routing\Route;
 use Symfony\Component\Routing\RouteCollection;
 
-class BlogLoader implements LoaderInterface
+class BlogLoader extends Loader implements LoaderInterface
 {
     private $loaded = false;
 
     private $routes;
 
-    public function __construct()
+    private $moduleManager;
+
+    public function __construct(ModuleManager $moduleManager)
     {
         $this->routes = new RouteCollection();
+        $this->moduleManager = $moduleManager;
     }
 
     public function load($resource, $type = null)
@@ -40,17 +45,6 @@ class BlogLoader implements LoaderInterface
     public function supports($resource, $type = null)
     {
         return 'linestorm_blog' === $type;
-    }
-
-    public function getResolver()
-    {
-        // needed, but can be blank, unless you want to load other resources
-        // and if you do, using the Loader base class is easier (see below)
-    }
-
-    public function setResolver(LoaderResolverInterface $resolver)
-    {
-        // same as above
     }
 
     private function makeHomepageRoute()

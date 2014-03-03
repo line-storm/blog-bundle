@@ -2,6 +2,7 @@
 
 namespace LineStorm\BlogBundle\DependencyInjection;
 
+use LineStorm\BlogBundle\DependencyInjection\ContainerBuilder\ModuleCompilerPass;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\HttpKernel\DependencyInjection\Extension;

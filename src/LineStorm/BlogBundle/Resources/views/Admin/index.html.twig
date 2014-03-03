@@ -1,0 +1,18 @@
+{% extends 'LineStormBlogBundle::layout.html.twig' %}
+
+{% block content %}
+    <div class="row">
+        <div class="col-sm-3">
+            <div class="list-group">
+                {% for id,module in blog_admin_module_list() %}
+                    <a class="list-group-item" href="{{ path(module.home, {module: module.id}) }}">{{ module.name }}</a>
+                {% endfor %}
+            </div>
+        </div>
+        <div class="col-sm-8">
+            {% block module %}
+
+            {% endblock %}
+        </div>
+    </div>
+{% endblock %}

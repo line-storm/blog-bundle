@@ -3,14 +3,9 @@
 namespace LineStorm\BlogBundle\Controller;
 
 use Doctrine\ORM\Query;
-use FOS\RestBundle\Routing\ClassResourceInterface;
-use FOS\RestBundle\View\View;
-use LineStorm\BlogBundle\Entity\BasePost;
-use LineStorm\BlogBundle\Entity\PostInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
-class BlogController extends Controller implements ClassResourceInterface
+class BlogController extends Controller
 {
     public function indexAction()
     {
@@ -22,4 +17,5 @@ class BlogController extends Controller implements ClassResourceInterface
             'posts' => $posts,
         ));
     }
+
 }

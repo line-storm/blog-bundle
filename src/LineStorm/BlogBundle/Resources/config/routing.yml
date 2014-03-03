@@ -1,13 +1,11 @@
-linestorm_blog_homepage:
-    pattern:  /
-    defaults: { _controller: LineStormBlogBundle:Default:index }
+linestorm_blog_routes:
+  resource: .
+  type:       linestorm_blog
 
 linestorm_blog_api:
-    type:     rest
-    resource: LineStorm\BlogBundle\Controller\PostController
-    prefix:   /api
+  prefix:       /api
+  resource:     'routing/api.yml'
 
-
-linestorm_blog_admin_post:
-    resource: "routing/admin-post.yml"
-    prefix:   /admin/post
+linestorm_blog_admin:
+  prefix:       /admin
+  resource:     'routing/admin.yml'

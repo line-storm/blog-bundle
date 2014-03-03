@@ -6,7 +6,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Symfony\Component\Security\Core\User\UserInterface;
 
-class AdminPostController extends Controller
+class AdminController extends Controller
 {
     public function indexAction()
     {
@@ -16,17 +16,14 @@ class AdminPostController extends Controller
             throw new AccessDeniedException();
         }
 
-        $modelManager = $this->get('linestorm.blog.model_manager');
+        $moduleManager = $this->get('linestorm.blog.module_manager');
 
-        $posts = $modelManager->get('post')->findAll();
-
-        return $this->render('LineStormBlogBundle:Modules:Post/list.html.twig', array(
-            'posts' => $posts,
+        return $this->render('LineStormBlogBundle:Admin:index.html.twig', array(
+            'modules' => $moduleManager->getModules(),
         ));
     }
 
-
-    public function editAction($id)
+    public function moduleAction($module)
     {
         $user = $this->getUser();
         if( !($user instanceof UserInterface) || !($user->hasGroup('admin')))
@@ -34,13 +31,10 @@ class AdminPostController extends Controller
             throw new AccessDeniedException();
         }
 
-        $modelManager = $this->get('linestorm.blog.model_manager');
+        $moduleManager = $this->get('linestorm.blog.module_manager');
 
-        $post = $modelManager->get('post')->find($id);
+        $moduleObject = $moduleManager->getModule($module);
 
-        return $this->render('LineStormBlogBundle:Modules:Post/edit.html.twig', array(
-            'post' => $post,
-        ));
+        return $moduleObject->getPage();
     }
-
 }

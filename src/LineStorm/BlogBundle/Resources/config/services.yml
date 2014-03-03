@@ -1,17 +1,46 @@
 parameters:
   linestorm.blog.routing_loader.class:          LineStorm\BlogBundle\Router\BlogLoader
+  linestorm.blog.admin.routing_loader.class:    LineStorm\BlogBundle\Router\BlogAdminLoader
 
   linestorm.blog.model_manager.class:           LineStorm\BlogBundle\Model\ModelManager
+  linestorm.blog.module_manager.class:          LineStorm\BlogBundle\Module\ModuleManager
+
+  linestorm.blog.module.post.class:             LineStorm\BlogBundle\Module\PostModule
 
 services:
 
   linestorm.blog.routing_loader:
     class: %linestorm.blog.routing_loader.class%
+    arguments: [@linestorm.blog.module_manager]
     tags:
       - { name: routing.loader }
+
+  linestorm.blog.admin.routing_loader:
+    class: %linestorm.blog.admin.routing_loader.class%
+    arguments: [@linestorm.blog.module_manager]
+    tags:
+      - { name: routing.loader }
+
+  linestorm.blog.module_manager:
+    class: %linestorm.blog.module_manager.class%
 
   linestorm.blog.model_manager:
     class: %linestorm.blog.model_manager.class%
     calls:
       - [ setMappings, [%linestorm_blog.entity_config%] ]
       - [ setEntityManager, [@doctrine, %linestorm_blog.entity_manager%] ]
+
+
+  linestorm.blog.module.post:
+    class: %linestorm.blog.module.post.class%
+    tags:
+      - { name: linestorm.blog.module }
+
+
+  #
+  # TWIG ADMIN
+  acme.twig.acme_extension:
+    class: LineStorm\BlogBundle\Twig\BlogAdminExtension
+    arguments: [ @linestorm.blog.module_manager ]
+    tags:
+      - { name: twig.extension }

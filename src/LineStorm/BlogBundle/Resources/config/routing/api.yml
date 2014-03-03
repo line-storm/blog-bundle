@@ -1,0 +1,11 @@
+linestorm_blog_api_post:
+    type:     rest
+    resource: LineStorm\BlogBundle\Controller\PostController
+
+linestorm_blog_api_tag:
+    type:     rest
+    resource: LineStorm\BlogBundle\Controller\TagController
+
+linestorm_blog_api_category:
+    type:     rest
+    resource: LineStorm\BlogBundle\Controller\CategoryController
