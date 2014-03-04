@@ -37,4 +37,11 @@ abstract class BlogPostGallery
      */
     protected $images;
 
+    /**
+     * @var BlogPost
+     *
+     * @ORM\ManyToOne(targetEntity="BlogPost", inversedBy="galleries")
+     */
+    protected $post;
+
 }

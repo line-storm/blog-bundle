@@ -1,6 +1,6 @@
 {% extends 'LineStormBlogBundle:Admin:index.html.twig' %}
 
-{% block module %}
+{% block content %}
     <div class="list-group">
         {% for post in posts %}
             <a class="list-group-item" href="{{ path('linestorm_blog_admin_module_post_edit', {id: post.id}) }}">

@@ -30,4 +30,11 @@ abstract class BlogPostArticle
      */
     protected $order;
 
+    /**
+     * @var BlogPost
+     *
+     * @ORM\ManyToOne(targetEntity="BlogPost", inversedBy="articles")
+     */
+    protected $post;
+
 }

@@ -26,10 +26,12 @@ class BlogPostType extends AbstractType
     {
         $builder
             ->add('title', 'text')
-            ->add('body', 'textarea')
             //->add('createdOn', 'datetime')
             //->add('editedOn', 'datetime')
-            ->add('liveOn', 'datetime')
+            ->add('liveOn', 'datetime', array(
+                'date_widget' => 'single_text',
+                'time_widget' => 'single_text',
+            ))
             //->add('deletedOn')
             //->add('author')
             //->add('editedBy')

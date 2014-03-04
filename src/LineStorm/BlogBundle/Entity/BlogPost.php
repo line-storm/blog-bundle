@@ -108,6 +108,20 @@ abstract class BlogPost
      */
     protected $deletedBy;
 
+    /**
+     * @var BlogPostArticle[]
+     *
+     * @ORM\OneToMany(targetEntity="BlogPostArticle", mappedBy="post")
+     */
+    protected $articles;
+
+    /**
+     * @var BlogPostGallery[]
+     *
+     * @ORM\OneToMany(targetEntity="BlogPostGallery", mappedBy="post")
+     */
+    protected $galleries;
+
 
     /**
      * Constructor

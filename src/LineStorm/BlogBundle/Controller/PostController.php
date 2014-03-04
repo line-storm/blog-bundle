@@ -8,17 +8,17 @@ use FOS\RestBundle\View\View;
 use LineStorm\BlogBundle\Entity\BasePost;
 use LineStorm\BlogBundle\Entity\PostInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
 class PostController extends Controller implements ClassResourceInterface
 {
-    private function createResponse($data, $code=200)
+    private function createResponse($data, $code = 200)
     {
         return View::create()
-            ->setStatusCode($code)
-            ->setData($data)
-            ->setFormat('json')
-        ;
+                   ->setStatusCode($code)
+                   ->setData($data)
+                   ->setFormat('json');
     }
 
 
@@ -33,7 +33,7 @@ class PostController extends Controller implements ClassResourceInterface
 
         $em = $modelManager->getManager();
 
-        $dql = "
+        $dql   = "
             SELECT
                 partial p.{id,title,body,createdOn}
             FROM
@@ -50,25 +50,32 @@ class PostController extends Controller implements ClassResourceInterface
     /**
      * Get a post
      *
-     * [GET] /api/blog/post/{id}.{_format}
+     * [GET] /api/blog/post
      */
-    public function getAction($id)
+    public function postAction(Request $request)
     {
         $modelManager = $this->get('linestorm.blog.model_manager');
+        $class        = $modelManager->getEntityClass('post');
+        $entity       = new $class();
+        $form         = $this->createCreateForm($entity);
 
-        $em = $modelManager->getManager();
+        $form->handleRequest($request);
 
-        $dql = "
-            SELECT
-                partial p.{id,title,createdOn}
-            FROM
-                {$modelManager->getEntityClass('post')} p
-            WHERE
-                p.id = ?1
-        ";
-        $post = $em->createQuery($dql)->setParameter(1, $id)->getOneOrNullResult(Query::HYDRATE_ARRAY);
+        if($form->isValid())
+        {
+            $em = $this->getDoctrine()->getManager();
+            $entity->setAuthor($this->getUser());
+            $entity->setCreatedOn(new \DateTime());
+            $entity->setEditedOn(new \DateTime());
+            $em->persist($entity);
+            $em->flush();
 
-        $view = $this->createResponse($post, is_array($post) ? 200 : 404);
+            $view = $this->createResponse(array(), 302);
+        }
+        else
+        {
+            $view = $this->createResponse(array(), 400);
+        }
 
         return $this->get('fos_rest.view_handler')->handle($view);
     }
@@ -106,13 +113,13 @@ class PostController extends Controller implements ClassResourceInterface
                 p.id = ?1
         ";
 
-        $csrf = $this->get('form.csrf_provider');
+        $csrf  = $this->get('form.csrf_provider');
         $token = $csrf->generateCsrfToken('blog_post_edit');
 
         $post = $em->createQuery($dql)->setParameter(1, $id)->getOneOrNullResult(Query::HYDRATE_ARRAY);
 
         $post['_csrf'] = $token;
-        $view = $this->createResponse($post, is_array($post) ? 200 : 404);
+        $view          = $this->createResponse($post, is_array($post) ? 200 : 404);
 
         return $this->get('fos_rest.view_handler')->handle($view);
     }

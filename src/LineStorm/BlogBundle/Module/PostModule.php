@@ -3,7 +3,6 @@
 namespace LineStorm\BlogBundle\Module;
 
 use Symfony\Component\Config\Loader\LoaderInterface;
-use Symfony\Component\Config\Resource\FileResource;
 use Symfony\Component\Routing\RouteCollection;
 
 class PostModule extends AbstractModule implements ModuleInterface
@@ -19,6 +18,14 @@ class PostModule extends AbstractModule implements ModuleInterface
     public function getName()
     {
         return $this->name;
+    }
+
+    public function getNavigation()
+    {
+        return array(
+            'View All' => array('linestorm_blog_admin_module_post_list', array()),
+            'New'      => array('linestorm_blog_admin_module_post_create', array()),
+        );
     }
 
     public function getHome()

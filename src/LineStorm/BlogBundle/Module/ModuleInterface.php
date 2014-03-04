@@ -16,5 +16,9 @@ interface ModuleInterface {
 
     public function getName();
 
+    public function getHome();
+
+    public function getNavigation();
+
     public function addRoutes(LoaderInterface $loader);
 } 
