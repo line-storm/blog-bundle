@@ -3,5 +3,28 @@
 {% block page_desc %}Pew Pew Pew{% endblock %}
 
 {% block content %}
-    {{ form(form) }}
+    <style>
+        #blog-post-content {
+            min-height: 400px;
+            width: 100%;
+        }
+    </style>
+    <link href="/bundles/linestormblog/css/dropzone.css" type="text/css" rel="stylesheet" />
+    <script type="text/javascript" src="/bundles/linestormblog/js/dropzone.js"></script>
+    <script type="text/javascript" src="/bundles/linestormblog/js/ckeditor/ckeditor.js"></script>
+    <script type="text/javascript" src="/bundles/linestormblog/js/ckeditor/adapters/jquery.js"></script>
+    <script type="application/javascript">
+        $(document).ready(function () {
+            $('#blog-post-content').attr('contenteditable', true).focus().ckeditor();
+        });
+    </script>
+    <h1 id="blog-post-title"></h1>
+
+    <div id="blog-post-content">
+
+    </div>
+
+    {# { form_start(form) } #}
+    {# { form(form) }}
+    {{ form_end(form) } #}
 {% endblock %}

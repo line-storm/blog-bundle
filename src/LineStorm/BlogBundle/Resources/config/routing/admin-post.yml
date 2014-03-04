@@ -18,6 +18,8 @@ linestorm_blog_admin_post_create:
 linestorm_blog_admin_post_edit:
     path:     /{id}/edit
     defaults: { _controller: "LineStormBlogBundle:AdminPost:edit" }
+    requirements:
+        id: \d+
 
 linestorm_blog_admin_post_update:
     path:     /{id}/update

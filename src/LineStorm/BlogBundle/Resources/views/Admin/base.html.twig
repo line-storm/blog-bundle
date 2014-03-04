@@ -15,7 +15,11 @@
     <title>LineStorm Blog Admin Panel</title>
 
     <script type="text/javascript">
-        window.lineStormTags = {};
+        window.lineStormTags = {
+            mediaBank: {
+                path: '{{ path('linestorm_blog_admin_upload') }}'
+            }
+        };
     </script>
 
     {% stylesheets

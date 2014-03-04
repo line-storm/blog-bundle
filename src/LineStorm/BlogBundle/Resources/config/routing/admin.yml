@@ -1,3 +1,7 @@
 linestorm_blog_admin_home:
     resource: .
     type: linestorm_blog_admin
+
+linestorm_blog_admin_upload:
+    path: /upload
+    defaults: { _controller: "LineStormBlogBundle:Admin:upload" }
