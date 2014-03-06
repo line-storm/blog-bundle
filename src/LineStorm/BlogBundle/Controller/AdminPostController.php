@@ -50,6 +50,9 @@ class AdminPostController extends Controller
             throw new AccessDeniedException();
         }
 
+        $moduleManager = $this->get('linestorm.blog.module_manager');
+        $module        = $moduleManager->getModule('post');
+
         $modelManager = $this->get('linestorm.blog.model_manager');
         $class = $modelManager->getEntityClass('post');
         $entity = new $class();
@@ -62,6 +65,7 @@ class AdminPostController extends Controller
 
         return $this->render('LineStormBlogBundle:Modules:Post/new.html.twig', array(
             'form' => $form->createView(),
+            'module' => $module,
         ));
     }
 

@@ -16,6 +16,10 @@
 
     <script type="text/javascript">
         window.lineStormTags = {
+            page: {
+                baseUrl: '{{ app.request.getBaseUrl() }}',
+                basePath: '{{ app.request.getBasePath() }}'
+            },
             mediaBank: {
                 path: '{{ path('linestorm_blog_admin_upload') }}'
             }
@@ -34,6 +38,7 @@
 
     {% javascripts
         'js/jquery.js'
+        'js/jquery-sortable.js'
         'js/bootstrap.js'
         '@LineStormBlogBundle/Resources/public/js/custom.js'
         output='compiled/js/main.js' %}

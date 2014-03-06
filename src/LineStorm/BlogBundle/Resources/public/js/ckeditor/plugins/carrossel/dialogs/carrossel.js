@@ -39,7 +39,33 @@ CKEDITOR.dialog.add( 'carrosselDialog', function ( editor ) {
                         this.removeFile(file);
                         alert("Cannot add file: "+response);
                     });
-                }
+                },
+                previewTemplate:    '   <div class="dz-preview">' +
+                                    '       <img class="dz-image" data-dz-thumbnail />' +
+                                    '       <div class="dz-details">' +
+                                    '           <div class="row">' +
+                                    '               <div class="col-xs-12">' +
+                                    '                   <div class="dz-progress"><span class="dz-upload" data-dz-uploadprogress></span></div>' +
+                                    '               </div>' +
+                                    '           </div>' +
+                                    '           <div class="row">' +
+                                    '               <div class="col-xs-4">' +
+                                    '                   <strong>Details:</strong>' +
+                                    '               </div>' +
+                                    '               <div class="col-xs-8">' +
+                                    '                   <div class="dz-size" data-dz-size></div>' +
+                                    '               </div>' +
+                                    '           </div>' +
+                                    '           <div class="row">' +
+                                    '               <div class="col-xs-4">' +
+                                    '                   <strong>Caption:</strong>' +
+                                    '               </div>' +
+                                    '               <div class="col-xs-8">' +
+                                    '                   <textarea class="form-control"></textarea>' +
+                                    '               </div>' +
+                                    '           </div>' +
+                                    '       </div>' +
+                                    '   </div>'
             });
         },
         onOk: function(){

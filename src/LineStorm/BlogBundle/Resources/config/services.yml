@@ -5,7 +5,9 @@ parameters:
   linestorm.blog.model_manager.class:           LineStorm\BlogBundle\Model\ModelManager
   linestorm.blog.module_manager.class:          LineStorm\BlogBundle\Module\ModuleManager
 
-  linestorm.blog.module.post.class:             LineStorm\BlogBundle\Module\PostModule
+  linestorm.blog.module.post.class:             LineStorm\BlogBundle\Module\Post\PostModule
+  linestorm.blog.module.post.article.class:     LineStorm\BlogBundle\Module\Post\Component\ArticleComponent
+  linestorm.blog.module.post.gallery.class:     LineStorm\BlogBundle\Module\Post\Component\GalleryComponent
 
 services:
 
@@ -30,12 +32,23 @@ services:
       - [ setMappings, [%linestorm_blog.entity_config%] ]
       - [ setEntityManager, [@doctrine, %linestorm_blog.entity_manager%] ]
 
-
+  #
+  # Module Management
+  #
   linestorm.blog.module.post:
     class: %linestorm.blog.module.post.class%
     tags:
       - { name: linestorm.blog.module }
+    calls:
+      - [ setComponents, [ [@linestorm.blog.module.post.article, @linestorm.blog.module.post.gallery] ] ]
 
+  linestorm.blog.module.post.article:
+    class: %linestorm.blog.module.post.article.class%
+    arguments: [@linestorm.blog.model_manager]
+
+  linestorm.blog.module.post.gallery:
+    class: %linestorm.blog.module.post.gallery.class%
+    arguments: [@linestorm.blog.model_manager]
 
   #
   # TWIG ADMIN
