@@ -31,6 +31,7 @@ class BlogPostType extends AbstractType
             ->add('liveOn', 'datetime', array(
                 'date_widget' => 'single_text',
                 'time_widget' => 'single_text',
+                'data'        => new \DateTime(),
             ))
             //->add('deletedOn')
             //->add('author')
@@ -55,7 +56,7 @@ class BlogPostType extends AbstractType
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
         $resolver->setDefaults(array(
-            'data_class' => 'LineStorm\BlogBundle\Entity\BlogPost'
+            'data_class' => $this->modelManager->getEntityClass('post')
         ));
     }
 

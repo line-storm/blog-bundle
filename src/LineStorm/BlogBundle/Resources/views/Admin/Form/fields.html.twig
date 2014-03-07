@@ -81,12 +81,12 @@
         {% else %}
             <div {{ block('widget_container_attributes') }}>
                 <div class="row">
-                    <div class="col-sm-6">{{ form_errors(form.date) }}</div>
-                    <div class="col-sm-6">{{ form_errors(form.time) }}</div>
+                    <div class="col-xs-6">{{ form_errors(form.date) }}</div>
+                    <div class="col-xs-6">{{ form_errors(form.time) }}</div>
                 </div>
                 <div class="row">
-                    <div class="col-sm-6">{{ form_widget(form.date) }}</div>
-                    <div class="col-sm-6">{{ form_widget(form.time) }}</div>
+                    <div class="col-xs-6">{{ form_widget(form.date) }}</div>
+                    <div class="col-xs-6">{{ form_widget(form.time) }}</div>
                 </div>
             </div>
         {% endif %}

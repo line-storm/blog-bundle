@@ -1,19 +1,24 @@
 linestorm_blog_admin_module_post_list:
     pattern:  /
-    defaults: { _controller: LineStormBlogBundle:AdminPost:list }
+    defaults: { _controller: LineStormBlogBundle:Admin/Post:list }
 
 linestorm_blog_admin_module_post_edit:
     pattern:  /edit/{id}
-    defaults: { _controller: LineStormBlogBundle:AdminPost:edit }
+    defaults: { _controller: LineStormBlogBundle:Admin/Post:edit }
     requirements:
        id: \d+
 
 linestorm_blog_admin_module_post_create:
     pattern:  /new
-    defaults: { _controller: LineStormBlogBundle:AdminPost:new }
+    defaults: { _controller: LineStormBlogBundle:Admin/Post:new }
 
 
-linestorm_blog_api:
+linestorm_blog_admin_module_post_api_component:
   type:         rest
-  prefix:       /component
+  prefix:       /api
   resource:     "@LineStormBlogBundle/Resources/config/routing/modules/component/component.yml"
+
+linestorm_blog_admin_module_post_api_post:
+  type:         rest
+  prefix:       /api
+  resource:     "@LineStormBlogBundle/Resources/config/routing/modules/post/api.yml"

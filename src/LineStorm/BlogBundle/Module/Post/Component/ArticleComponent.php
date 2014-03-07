@@ -2,6 +2,7 @@
 
 namespace LineStorm\BlogBundle\Module\Post\Component;
 
+use LineStorm\BlogBundle\Entity\BlogPostArticle;
 use Symfony\Component\Config\Loader\LoaderInterface;
 
 class ArticleComponent extends AbstractComponent implements ComponentInterface
@@ -31,8 +32,11 @@ class ArticleComponent extends AbstractComponent implements ComponentInterface
 
     public function createEntity(array $data)
     {
+        /** @var BlogPostArticle $class */
         $class = $this->modelManager->getEntityClass('post_article');
         $entity = new $class();
+
+        $entity->setBody($data['body']);
 
         return $entity;
     }

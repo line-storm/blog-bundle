@@ -22,6 +22,11 @@ abstract class BlogTag
      */
     protected $createdOn;
 
+    public function getId()
+    {
+        return $this->id;
+    }
+
     /**
      * Set name
      *

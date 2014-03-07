@@ -1,13 +1,13 @@
 <?php
 
-namespace LineStorm\BlogBundle\Controller;
+namespace LineStorm\BlogBundle\Controller\Admin;
 
 use LineStorm\BlogBundle\Form\BlogPostType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Symfony\Component\Security\Core\User\UserInterface;
 
-class AdminPostController extends Controller
+class PostController extends Controller
 {
     public function listAction()
     {
@@ -58,9 +58,10 @@ class AdminPostController extends Controller
         $entity = new $class();
 
         $form = $this->createForm(new BlogPostType($modelManager), $entity, array(
-            'action' => $this->generateUrl('linestorm_blog_api_post_post'),
+            'action' => $this->generateUrl('linestorm_blog_admin_module_post_api_post_post_post'),
             'method' => 'POST',
         ));
+
         $form->add('submit', 'submit', array('label' => 'Create', 'attr' => array('class' => 'btn btn-primary')));
 
         return $this->render('LineStormBlogBundle:Modules:Post/new.html.twig', array(

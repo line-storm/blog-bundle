@@ -93,14 +93,15 @@
     -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=0)";
     filter: alpha(opacity=0);
 }
-
+.dropzone .dz-preview {
+    margin-bottom: 10px;
+}
 .dropzone .dz-preview .dz-image {
     height: 100px;
     width: 100px;
     float: left;
 }
 .dropzone .dz-preview .dz-details {
-    min-height: 200px;
     width: calc(100% - 120px);
     float: right;
 }
