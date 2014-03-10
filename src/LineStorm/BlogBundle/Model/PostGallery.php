@@ -4,7 +4,11 @@ namespace LineStorm\BlogBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
-abstract class BlogPostArticle
+/**
+ * @ORM\Table(name="blog_post_gallery")
+ * @ORM\Entity
+ */
+class BlogPostGallery
 {
 
     /**
@@ -31,9 +35,16 @@ abstract class BlogPostArticle
     protected $order;
 
     /**
+     * @var
+     *
+     * @ORM\OneToMany(targetEntity="BlogPostGallery", mappedBy="gallery")
+     */
+    protected $images;
+
+    /**
      * @var BlogPost
      *
-     * @ORM\ManyToOne(targetEntity="BlogPost", inversedBy="articles")
+     * @ORM\ManyToOne(targetEntity="BlogPost", inversedBy="galleries")
      */
     protected $post;
 

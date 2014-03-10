@@ -4,7 +4,11 @@ namespace LineStorm\BlogBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
-abstract class BlogCategory
+/**
+ * @ORM\Table(name="blog_category")
+ * @ORM\Entity
+ */
+class BlogCategory
 {
     /**
      * @var integer

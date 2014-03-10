@@ -3,9 +3,15 @@
 namespace LineStorm\BlogBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Component\Security\Core\User\UserInterface;
+use FOS\UserBundle\Model\UserInterface;
 
-abstract class BlogPost
+/**
+ * @ORM\Table(name="blog_post")
+ * @ORM\Entity
+ *
+ * @ORM\HasLifecycleCallbacks
+ */
+class BlogPost
 {
     /*
      * TODO:
@@ -37,9 +43,9 @@ abstract class BlogPost
     protected $createdOn;
 
     /**
-     * @var User
+     * @var \FOS\UserBundle\Entity\User
      *
-     * @ORM\ManyToOne(targetEntity="User")
+     * @ORM\ManyToOne(targetEntity="\FOS\UserBundle\Entity\User")
      * @ORM\JoinColumn(name="author_id", referencedColumnName="id")
      */
     protected $author;
@@ -54,7 +60,7 @@ abstract class BlogPost
     /**
      * @var User
      *
-     * @ORM\ManyToOne(targetEntity="User")
+     * @ORM\ManyToOne(targetEntity="\FOS\UserBundle\Entity\User")
      * @ORM\JoinColumn(name="edited_by", referencedColumnName="id")
      */
     protected $editedBy;
@@ -75,7 +81,7 @@ abstract class BlogPost
     protected $category;
 
     /**
-     * @ORM\ManyToMany(targetEntity="BlogTag")
+     * @ORM\ManyToMany(targetEntity="BlogTag", cascade={"persist"})
      * @ORM\JoinTable(name="blog_post_tag")
      */
     protected $tags;
@@ -101,9 +107,9 @@ abstract class BlogPost
     protected $deletedOn;
 
     /**
-     * @var User
+     * @var \FOS\UserBundle\Entity\User
      *
-     * @ORM\ManyToOne(targetEntity="User")
+     * @ORM\ManyToOne(targetEntity="\FOS\UserBundle\Entity\User")
      * @ORM\JoinColumn(name="deleted_by", referencedColumnName="id")
      */
     protected $deletedBy;
@@ -111,14 +117,14 @@ abstract class BlogPost
     /**
      * @var BlogPostArticle[]
      *
-     * @ORM\OneToMany(targetEntity="BlogPostArticle", mappedBy="post")
+     * @ORM\OneToMany(targetEntity="BlogPostArticle", mappedBy="post", cascade={"persist", "remove"})
      */
     protected $articles;
 
     /**
      * @var BlogPostGallery[]
      *
-     * @ORM\OneToMany(targetEntity="BlogPostGallery", mappedBy="post")
+     * @ORM\OneToMany(targetEntity="BlogPostGallery", mappedBy="post", cascade={"persist", "remove"})
      */
     protected $galleries;
 
@@ -130,7 +136,21 @@ abstract class BlogPost
     {
         $this->tags = new \Doctrine\Common\Collections\ArrayCollection();
         $this->children = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->articles = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->galleries = new \Doctrine\Common\Collections\ArrayCollection();
     }
+
+    /**
+     * @ORM\PrePersist
+     */
+    public function prePersist()
+    {
+        if($this->createdOn === null)
+            $this->createdOn = new \DateTime();
+        else
+            $this->editedOn = new \DateTime();
+    }
+
 
     public function getSlug()
     {
@@ -288,10 +308,10 @@ abstract class BlogPost
     /**
      * Set author
      *
-     * @param \LineStorm\BlogBundle\Entity\User $author
+     * @param \FOS\UserBundle\Entity\User $author
      * @return BlogPost
      */
-    public function setAuthor(\LineStorm\BlogBundle\Entity\User $author = null)
+    public function setAuthor(UserInterface $author = null)
     {
         $this->author = $author;
     
@@ -301,7 +321,7 @@ abstract class BlogPost
     /**
      * Get author
      *
-     * @return \LineStorm\BlogBundle\Entity\User 
+     * @return \FOS\UserBundle\Entity\User
      */
     public function getAuthor()
     {
@@ -311,10 +331,10 @@ abstract class BlogPost
     /**
      * Set editedBy
      *
-     * @param \LineStorm\BlogBundle\Entity\User $editedBy
+     * @param \FOS\UserBundle\Entity\User $editedBy
      * @return BlogPost
      */
-    public function setEditedBy(\LineStorm\BlogBundle\Entity\User $editedBy = null)
+    public function setEditedBy(UserInterface $editedBy = null)
     {
         $this->editedBy = $editedBy;
     
@@ -324,7 +344,7 @@ abstract class BlogPost
     /**
      * Get editedBy
      *
-     * @return \LineStorm\BlogBundle\Entity\User 
+     * @return \FOS\UserBundle\Entity\User
      */
     public function getEditedBy()
     {
@@ -446,10 +466,10 @@ abstract class BlogPost
     /**
      * Set deletedBy
      *
-     * @param \LineStorm\BlogBundle\Entity\User $deletedBy
+     * @param \FOS\UserBundle\Entity\User $deletedBy
      * @return BlogPost
      */
-    public function setDeletedBy(\LineStorm\BlogBundle\Entity\User $deletedBy = null)
+    public function setDeletedBy(UserInterface $deletedBy = null)
     {
         $this->deletedBy = $deletedBy;
     
@@ -459,10 +479,81 @@ abstract class BlogPost
     /**
      * Get deletedBy
      *
-     * @return \LineStorm\BlogBundle\Entity\User 
+     * @return \FOS\UserBundle\Entity\User
      */
     public function getDeletedBy()
     {
         return $this->deletedBy;
+    }
+
+    /**
+     * Add articles
+     *
+     * @param \LineStorm\BlogBundle\Entity\BlogPostArticle $articles
+     * @return BlogPost
+     */
+    public function addArticle(\LineStorm\BlogBundle\Entity\BlogPostArticle $articles)
+    {
+        $this->articles[] = $articles;
+
+        return $this;
+    }
+
+    /**
+     * Remove articles
+     *
+     * @param \LineStorm\BlogBundle\Entity\BlogPostArticle $articles
+     */
+    public function removeArticle(\LineStorm\BlogBundle\Entity\BlogPostArticle $articles)
+    {
+        $this->articles->removeElement($articles);
+    }
+
+    /**
+     * Get articles
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getArticles()
+    {
+        return $this->articles;
+    }
+
+    public function hasArticle(\LineStorm\BlogBundle\Entity\BlogPostArticle $article = null)
+    {
+        return $this->articles->contains($article);
+    }
+
+    /**
+     * Add galleries
+     *
+     * @param \LineStorm\BlogBundle\Entity\BlogPostGallery $galleries
+     * @return BlogPost
+     */
+    public function addGallery(\LineStorm\BlogBundle\Entity\BlogPostGallery $galleries)
+    {
+        $this->galleries[] = $galleries;
+
+        return $this;
+    }
+
+    /**
+     * Remove galleries
+     *
+     * @param \LineStorm\BlogBundle\Entity\BlogPostGallery $galleries
+     */
+    public function removeGallery(\LineStorm\BlogBundle\Entity\BlogPostGallery $galleries)
+    {
+        $this->galleries->removeElement($galleries);
+    }
+
+    /**
+     * Get galleries
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getGalleries()
+    {
+        return $this->galleries;
     }
 }

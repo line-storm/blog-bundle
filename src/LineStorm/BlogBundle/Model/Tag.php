@@ -4,8 +4,21 @@ namespace LineStorm\BlogBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
-abstract class BlogTag
+/**
+ * @ORM\Table(name="blog_tag")
+ * @ORM\Entity
+ *
+ * @ORM\HasLifecycleCallbacks
+ */
+class BlogTag implements TagInterface
 {
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="id", type="integer", nullable=false)
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="IDENTITY")
+     */
     protected $id;
 
     /**
@@ -21,6 +34,15 @@ abstract class BlogTag
      * @ORM\Column(name="created_on", type="datetime", nullable=false)
      */
     protected $createdOn;
+
+    /**
+     * @ORM\PrePersist
+     */
+    public function prePersist()
+    {
+        if($this->createdOn === null)
+            $this->createdOn = new \DateTime();
+    }
 
     public function getId()
     {
