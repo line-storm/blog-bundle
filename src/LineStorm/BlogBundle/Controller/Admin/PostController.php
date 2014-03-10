@@ -54,15 +54,13 @@ class PostController extends Controller
         $module        = $moduleManager->getModule('post');
 
         $modelManager = $this->get('linestorm.blog.model_manager');
-        $class = $modelManager->getEntityClass('post');
-        $entity = new $class();
 
-        $form = $this->createForm(new BlogPostType($modelManager), $entity, array(
+        $form = $this->createForm(new BlogPostType($modelManager), null, array(
             'action' => $this->generateUrl('linestorm_blog_admin_module_post_api_post_post_post'),
             'method' => 'POST',
         ));
 
-        $form->add('submit', 'submit', array('label' => 'Create', 'attr' => array('class' => 'btn btn-primary')));
+        //$form->add('submit', 'submit', array('label' => 'Create', 'attr' => array('class' => 'btn btn-primary')));
 
         return $this->render('LineStormBlogBundle:Modules:Post/new.html.twig', array(
             'form' => $form->createView(),

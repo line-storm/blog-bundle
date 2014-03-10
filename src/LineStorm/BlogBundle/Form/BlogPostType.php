@@ -2,21 +2,11 @@
 
 namespace LineStorm\BlogBundle\Form;
 
-use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
-use LineStorm\BlogBundle\Model\ModelManager;
 
-class BlogPostType extends AbstractType
+class BlogPostType extends AbstractBlogFormType
 {
-    protected $modelManager;
-
-    function __construct(ModelManager $modelManager)
-    {
-        $this->modelManager = $modelManager;
-        // TODO: Implement __construct() method.
-    }
-
 
     /**
      * @param FormBuilderInterface $builder
@@ -26,30 +16,42 @@ class BlogPostType extends AbstractType
     {
         $builder
             ->add('title', 'text')
-            //->add('createdOn', 'datetime')
-            //->add('editedOn', 'datetime')
             ->add('liveOn', 'datetime', array(
                 'date_widget' => 'single_text',
                 'time_widget' => 'single_text',
                 'data'        => new \DateTime(),
             ))
-            //->add('deletedOn')
-            //->add('author')
-            //->add('editedBy')
             ->add('category', 'entity', array(
-                'class' => $this->modelManager->getEntityClass('category'),
+                'class'    => $this->modelManager->getEntityClass('category'),
                 'property' => 'name',
             ))
-            ->add('tags', 'entity', array(
-                'multiple' => true,
+            ->add('tags', 'collection', array(
+                'type'      => new BlogTagType($this->modelManager),
+                'allow_add' => true,
+                'allow_delete' => true,
+                'by_reference' => false,
+                /*'multiple' => true,
                 'class' => $this->modelManager->getEntityClass('tag'),
-                'property' => 'name',
+                'property' => 'name',*/
             ))
-            //->add('parent')
-            //->add('deletedBy')
+
+            ->add('article', 'collection', array(
+                'type'      => new BlogPostArticleType($this->modelManager),
+                'allow_add' => true,
+                'allow_delete' => true,
+                'by_reference' => false,
+            ));
+
+        //->add('createdOn', 'datetime')
+        //->add('editedOn', 'datetime')
+        //->add('deletedOn')
+        //->add('author')
+        //->add('editedBy')
+        //->add('parent')
+        //->add('deletedBy')
         ;
     }
-    
+
     /**
      * @param OptionsResolverInterface $resolver
      */

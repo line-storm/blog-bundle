@@ -1,50 +1,34 @@
 <?php
 
-namespace LineStorm\BlogBundle\Entity;
+namespace LineStorm\BlogBundle\Model;
 
 use Doctrine\ORM\Mapping as ORM;
 
-/**
- * @ORM\Table(name="blog_post_gallery")
- * @ORM\Entity
- */
-class BlogPostGallery
+class PostGallery
 {
 
     /**
      * @var integer
-     *
-     * @ORM\Column(name="id", type="integer", nullable=false)
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
      */
     protected $id;
 
     /**
      * @var string
-     *
-     * @ORM\Column(name="body", type="text", nullable=false)
      */
     protected $body;
 
     /**
      * @var integer
-     *
-     * @ORM\Column(name="order", type="integer", nullable=false)
      */
     protected $order;
 
     /**
-     * @var
-     *
-     * @ORM\OneToMany(targetEntity="BlogPostGallery", mappedBy="gallery")
+     * @var PostGalleryImage[]
      */
     protected $images;
 
     /**
-     * @var BlogPost
-     *
-     * @ORM\ManyToOne(targetEntity="BlogPost", inversedBy="galleries")
+     * @var Post
      */
     protected $post;
 

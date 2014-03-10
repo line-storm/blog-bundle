@@ -1,18 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
-  <entity name="LineStorm\BlogBundle\Entity\BlogCategory" table="blog_category">
-    <id name="id" type="integer" column="id">
-      <generator strategy="IDENTITY"/>
-    </id>
+  <mapped-superclass name="LineStorm\BlogBundle\Model\Category">
+
     <field name="name" type="string" column="name" length="50" precision="0" scale="0" nullable="false"/>
     <field name="editedOn" type="datetime" column="edited_on" precision="0" scale="0" nullable="false"/>
     <field name="createdOn" type="datetime" column="created_on" precision="0" scale="0" nullable="false"/>
-    <one-to-many field="posts" target-entity="LineStorm\BlogBundle\Entity\BlogPost" mapped-by="category"/>
-    <one-to-many field="children" target-entity="LineStorm\BlogBundle\Entity\BlogCategory" mapped-by="parent"/>
-    <many-to-one field="parent" target-entity="LineStorm\BlogBundle\Entity\BlogCategory" inversed-by="children">
-      <join-columns>
-        <join-column name="parent_id" referenced-column-name="id" nullable="1"/>
-      </join-columns>
-    </many-to-one>
-  </entity>
+
+  </mapped-superclass>
 </doctrine-mapping>

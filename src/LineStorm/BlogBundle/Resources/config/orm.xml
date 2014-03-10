@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<container xmlns="http://symfony.com/schema/dic/services"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+
+  <services>
+    <service id="linestorm.blog.entity_manager" factory-service="doctrine" factory-method="getManager" class="Doctrine\ORM\EntityManager" public="false">
+      <argument>%linestorm_blog.entity_manager%</argument>
+    </service>
+
+    <service id="linestorm.blog.model.post.listener" class="LineStorm\BlogBundle\Doctrine\Orm\PostListener" public="false">
+      <argument type="service" id="service_container" />
+    </service>
+
+    <service id="linestorm.blog.model.tag.listener" class="LineStorm\BlogBundle\Doctrine\Orm\TagListener" public="false">
+      <argument type="service" id="service_container" />
+    </service>
+  </services>
+
+</container>

@@ -161,21 +161,73 @@
                 self.components[name] = component;
             }
 
-            self.serializeForm = function($form)
-            {
-                var o = {};
-                var a = $form.serializeArray();
-                $.each(a, function() {
-                    if (o[this.name] !== undefined) {
-                        if (!o[this.name].push) {
-                            o[this.name] = [o[this.name]];
-                        }
-                        o[this.name].push(this.value || '');
-                    } else {
-                        o[this.name] = this.value || '';
+            self.serializeForm = function($form){
+
+                var self = this,
+                        fname = $form.prop('name'),
+                        json = {},
+                        push_counters = {},
+                        patterns = {
+                            "validate": /^[a-zA-Z][a-zA-Z0-9_]*(?:\[(?:\d*|[a-zA-Z0-9_]+)\])*$/,
+                            "key":      /[a-zA-Z0-9_]+|(?=\[\])/g,
+                            "push":     /^$/,
+                            "fixed":    /^\d+$/,
+                            "named":    /^[a-zA-Z0-9_]+$/
+                        };
+
+
+                this.build = function(base, key, value){
+                    base[key] = value;
+                    return base;
+                };
+
+                this.push_counter = function(key){
+                    if(push_counters[key] === undefined){
+                        push_counters[key] = 0;
                     }
+                    return push_counters[key]++;
+                };
+
+                $.each($form.serializeArray(), function(){
+
+                    // skip invalid keys
+                    if(!patterns.validate.test(this.name)){
+                        return;
+                    }
+
+                    var k,
+                            keys = this.name.match(patterns.key),
+                            merge = this.value,
+                            reverse_key = this.name;
+
+                    while((k = keys.pop()) !== undefined){
+
+                        // adjust reverse_key
+                        reverse_key = reverse_key.replace(new RegExp("\\[" + k + "\\]$"), '');
+
+                        // push
+                        if(k.match(patterns.push)){
+                            merge = self.build([], self.push_counter(reverse_key), merge);
+                        }
+
+                        // fixed
+                        else if(k.match(patterns.fixed)){
+                            merge = self.build([], k, merge);
+                        }
+
+                        // named
+                        else if(k.match(patterns.named)){
+                            merge = self.build({}, k, merge);
+                        }
+                    }
+
+                    json = $.extend(true, json, merge);
                 });
-                return o;
+
+                if(fname && typeof json[fname] !== 'undefined')
+                    return json[fname];
+                else
+                    return json;
             };
 
             return self;
@@ -257,9 +309,65 @@
                 handle: '.component-handle > i'
             });
         });
+
+        var $collectionHolder;
+
+        jQuery(document).ready(function() {
+            var $addTagLink = $('a.add-tag-link');
+            var $newLinkLi = $addTagLink.closest('li');
+
+            // Get the ul that holds the collection of tags
+            $collectionHolder = $('ul.tags');
+
+            // count the current form inputs we have (e.g. 2), use that as the new
+            // index when inserting a new item (e.g. 2)
+            $collectionHolder.data('index', $collectionHolder.find(':input').length);
+
+            $addTagLink.on('click', function(e) {
+                // prevent the link from creating a "#" on the URL
+                e.preventDefault();
+
+                // add a new tag form (see next code block)
+                addTagForm($collectionHolder, $newLinkLi);
+            });
+        });
+
+        function addTagForm($collectionHolder, $newLinkLi) {
+            // Get the data-prototype explained earlier
+            var prototype = $collectionHolder.data('prototype');
+
+            // get the new index
+            var index = $collectionHolder.data('index');
+
+            // Replace '__name__' in the prototype's HTML to
+            // instead be a number based on how many items we have
+            var newForm = prototype.replace(/__name__/g, index);
+
+            // increase the index with one for the next item
+            $collectionHolder.data('index', index + 1);
+
+            // Display the form in the page in an li, before the "Add a tag" link li
+            var $newFormLi = $('<li></li>').append(newForm);
+            $newLinkLi.before($newFormLi);
+        }
     </script>
 
-    {{ form(form) }}
+
+    {{ form_start(form) }}
+
+        {{ form_row(form.title) }}
+        {{ form_row(form.liveOn) }}
+        {{ form_row(form.category) }}
+
+        <h3>Tags</h3>
+        <ul class="tags" data-prototype="{{ form_widget(form.tags.vars.prototype)|e }}">
+            <li><a href="#" class="add-tag-link">+ Add</a></li>
+            {# iterate over each existing tag and render its only field: name #}
+            {% for tag in form.tags %}
+                <li>{{ form_row(tag.name) }}</li>
+            {% endfor %}
+        </ul>
+    {{ form_end(form) }}
 
     <div class="row">
         <label for="ComponentSelect" class="col-sm-2">Add</label>

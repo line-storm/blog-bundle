@@ -2,11 +2,10 @@
 
 namespace LineStorm\BlogBundle\Form;
 
-use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
-class BlogTagType extends AbstractBlogFormType
+class BlogPostArticleType extends AbstractBlogFormType
 {
     /**
      * @param FormBuilderInterface $builder
@@ -15,8 +14,9 @@ class BlogTagType extends AbstractBlogFormType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('name')
-            //->add('createdOn')
+            ->add('body', 'textarea')
+            ->add('order', 'hidden')
+            //->add('post')
         ;
     }
     
@@ -26,7 +26,7 @@ class BlogTagType extends AbstractBlogFormType
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
         $resolver->setDefaults(array(
-            'data_class' => $this->modelManager->getEntityClass('tag')
+            'data_class' => $this->modelManager->getEntityClass('post_article')
         ));
     }
 
@@ -35,6 +35,6 @@ class BlogTagType extends AbstractBlogFormType
      */
     public function getName()
     {
-        return 'linestorm_blogbundle_blogtag';
+        return 'linestorm_blogbundle_blogpostarticle';
     }
 }

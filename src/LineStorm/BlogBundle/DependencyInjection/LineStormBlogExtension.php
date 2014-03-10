@@ -26,7 +26,18 @@ class LineStormBlogExtension extends Extension
         $loader = new Loader\YamlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
         $loader->load('services.yml');
 
-        $container->setParameter("linestorm_blog.entity_config", $config['entity_classes']);
-        $container->setParameter("linestorm_blog.entity_manager", $config['entity_manager']);
+        $xmlLoader = new Loader\XmlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
+
+        $container->setParameter("linestorm_blog.entity_config",        $config['entity_classes']);
+        $container->setParameter("linestorm_blog.entity_manager",       $config['entity_manager']);
+
+        if(($config['backend_type'] === 'orm' || $config['backend_type'] === null))
+        {
+            $container->setParameter("linestorm_blog.backend_type_orm",     true);
+            $xmlLoader->load('orm.xml');
+
+            $container->getDefinition('linestorm.blog.model.post.listener')->addTag('doctrine.event_subscriber');
+            $container->getDefinition('linestorm.blog.model.tag.listener')->addTag('doctrine.event_subscriber');
+        }
     }
 }

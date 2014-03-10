@@ -1,70 +1,44 @@
 <?php
 
-namespace LineStorm\BlogBundle\Entity;
+namespace LineStorm\BlogBundle\Model;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 
-/**
- * @ORM\Table(name="blog_category")
- * @ORM\Entity
- */
-class BlogCategory
+abstract class Category
 {
     /**
      * @var integer
-     *
-     * @ORM\Column(name="id", type="integer", nullable=false)
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
      */
     protected $id;
 
     /**
      * @var string
-     *
-     * @ORM\Column(name="name", type="string", length=50, nullable=false)
      */
     protected $name;
 
     /**
      * @var \DateTime
-     *
-     * @ORM\Column(name="edited_on", type="datetime", nullable=false)
      */
     protected $editedOn;
 
     /**
      * @var \DateTime
-     *
-     * @ORM\Column(name="created_on", type="datetime", nullable=false)
      */
     protected $createdOn;
-
-    /**
-     * @var \LineStorm\BlogBundle\Entity\BlogCategory
-     *
-     * @ORM\ManyToOne(targetEntity="BlogCategory", inversedBy="children")
-     * @ORM\JoinColumn(name="parent_id", referencedColumnName="id")
-     */
-    protected $parent;
-
-    /**
-     * @ORM\OneToMany(targetEntity="BlogCategory", mappedBy="parent")
-     */
-    protected $children;
-
 
     /**
      * @ORM\OneToMany(targetEntity="BlogPost", mappedBy="category")
      */
     protected $posts;
+
     /**
      * Constructor
      */
     public function __construct()
     {
-        $this->children = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->posts = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->children = new ArrayCollection();
+        $this->posts = new ArrayCollection();
     }
     
     /**
@@ -81,7 +55,7 @@ class BlogCategory
      * Set name
      *
      * @param string $name
-     * @return BlogCategory
+     * @return Category
      */
     public function setName($name)
     {
@@ -104,9 +78,9 @@ class BlogCategory
      * Set editedOn
      *
      * @param \DateTime $editedOn
-     * @return BlogCategory
+     * @return Category
      */
-    public function setEditedOn($editedOn)
+    public function setEditedOn(\DateTime $editedOn)
     {
         $this->editedOn = $editedOn;
     
@@ -127,9 +101,9 @@ class BlogCategory
      * Set createdOn
      *
      * @param \DateTime $createdOn
-     * @return BlogCategory
+     * @return Category
      */
-    public function setCreatedOn($createdOn)
+    public function setCreatedOn(\DateTime $createdOn)
     {
         $this->createdOn = $createdOn;
     
@@ -144,94 +118,5 @@ class BlogCategory
     public function getCreatedOn()
     {
         return $this->createdOn;
-    }
-
-    /**
-     * Set parent
-     *
-     * @param \LineStorm\BlogBundle\Entity\BlogCategory $parent
-     * @return BlogCategory
-     */
-    public function setParent(\LineStorm\BlogBundle\Entity\BlogCategory $parent = null)
-    {
-        $this->parent = $parent;
-    
-        return $this;
-    }
-
-    /**
-     * Get parent
-     *
-     * @return \LineStorm\BlogBundle\Entity\BlogCategory 
-     */
-    public function getParent()
-    {
-        return $this->parent;
-    }
-
-    /**
-     * Add children
-     *
-     * @param \LineStorm\BlogBundle\Entity\BlogCategory $children
-     * @return BlogCategory
-     */
-    public function addChildren(\LineStorm\BlogBundle\Entity\BlogCategory $children)
-    {
-        $this->children[] = $children;
-    
-        return $this;
-    }
-
-    /**
-     * Remove children
-     *
-     * @param \LineStorm\BlogBundle\Entity\BlogCategory $children
-     */
-    public function removeChildren(\LineStorm\BlogBundle\Entity\BlogCategory $children)
-    {
-        $this->children->removeElement($children);
-    }
-
-    /**
-     * Get children
-     *
-     * @return \Doctrine\Common\Collections\Collection 
-     */
-    public function getChildren()
-    {
-        return $this->children;
-    }
-
-    /**
-     * Add posts
-     *
-     * @param \LineStorm\BlogBundle\Entity\BlogPost $posts
-     * @return BlogCategory
-     */
-    public function addPost(\LineStorm\BlogBundle\Entity\BlogPost $posts)
-    {
-        $this->posts[] = $posts;
-    
-        return $this;
-    }
-
-    /**
-     * Remove posts
-     *
-     * @param \LineStorm\BlogBundle\Entity\BlogPost $posts
-     */
-    public function removePost(\LineStorm\BlogBundle\Entity\BlogPost $posts)
-    {
-        $this->posts->removeElement($posts);
-    }
-
-    /**
-     * Get posts
-     *
-     * @return \Doctrine\Common\Collections\Collection 
-     */
-    public function getPosts()
-    {
-        return $this->posts;
     }
 }
