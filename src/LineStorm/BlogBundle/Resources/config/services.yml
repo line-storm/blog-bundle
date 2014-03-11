@@ -52,8 +52,16 @@ services:
 
   #
   # TWIG ADMIN
-  acme.twig.acme_extension:
+  linestorm.blog.twig.blog_extension:
     class: LineStorm\BlogBundle\Twig\BlogAdminExtension
     arguments: [ @linestorm.blog.module_manager ]
     tags:
       - { name: twig.extension }
+
+  #
+  # FORM ADMIN
+  #
+  linestorm.blog.textarea_inline_extension:
+      class: LineStorm\BlogBundle\Form\Extension\TextareaInlineExtension
+      tags:
+          - { name: form.type_extension, alias: textarea }

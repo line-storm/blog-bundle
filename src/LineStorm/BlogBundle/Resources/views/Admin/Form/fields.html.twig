@@ -19,9 +19,7 @@
         <div class="form-group">
             {{ form_label(form) }}
             {{ form_errors(form) }}
-            <div class="col-sm-10">{{ form_widget(form) }}</div>
-
-
+            <div class="col-sm-{% if label is same as(false) %}12{% else %}10{% endif %}">{{ form_widget(form) }}</div>
         </div>
     {% endspaceless %}
 {% endblock form_row %}
@@ -92,3 +90,13 @@
         {% endif %}
     {% endspaceless %}
 {% endblock datetime_widget %}
+
+{% block textarea_widget %}
+    {% spaceless %}
+        {% if inline is same as(true) %}
+            <div {{ block('widget_attributes') }} contenteditable="true" data-role="textarea">{{ value }}</div>
+        {% else %}
+            <textarea {{ block('widget_attributes') }}>{{ value }}</textarea>
+        {% endif %}
+    {% endspaceless %}
+{% endblock textarea_widget %}

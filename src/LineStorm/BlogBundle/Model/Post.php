@@ -2,6 +2,7 @@
 
 namespace LineStorm\BlogBundle\Model;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -65,7 +66,7 @@ abstract class Post
     protected $tags;
 
     /**
-     * @var \FOS\UserBundle\Entity\User
+     * @var UserInterface
      */
     protected $deletedBy;
 
@@ -85,10 +86,10 @@ abstract class Post
      */
     public function __construct()
     {
-        $this->tags = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->children = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->articles = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->galleries = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->tags = new ArrayCollection();
+        $this->children = new ArrayCollection();
+        $this->articles = new ArrayCollection();
+        $this->galleries = new ArrayCollection();
     }
 
     /**
@@ -367,6 +368,7 @@ abstract class Post
     public function addArticle(PostArticle $articles)
     {
         $this->articles[] = $articles;
+        $articles->setPost($this);
 
         return $this;
     }

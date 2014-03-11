@@ -3,7 +3,7 @@
   <mapped-superclass name="LineStorm\BlogBundle\Model\PostArticle" table="blog_post_article">
 
     <field name="body" type="text" column="body" precision="0" scale="0" nullable="false"/>
-    <field name="order" type="integer" column="order" precision="0" scale="0" nullable="false"/>
+    <field name="order" type="integer" column="post_order" precision="0" scale="0" nullable="false"/>
 
   </mapped-superclass>
 </doctrine-mapping>

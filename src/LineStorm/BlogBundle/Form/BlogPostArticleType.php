@@ -14,9 +14,14 @@ class BlogPostArticleType extends AbstractBlogFormType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('body', 'textarea')
+            ->add('body', 'textarea', array(
+                'attr' => array(
+                    'style' => 'height:200px;'
+                ),
+                'label' => false,
+                'inline' => true,
+            ))
             ->add('order', 'hidden')
-            //->add('post')
         ;
     }
     

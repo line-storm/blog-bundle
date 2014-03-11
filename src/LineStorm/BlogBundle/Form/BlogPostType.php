@@ -35,7 +35,7 @@ class BlogPostType extends AbstractBlogFormType
                 'property' => 'name',*/
             ))
 
-            ->add('article', 'collection', array(
+            ->add('articles', 'collection', array(
                 'type'      => new BlogPostArticleType($this->modelManager),
                 'allow_add' => true,
                 'allow_delete' => true,
