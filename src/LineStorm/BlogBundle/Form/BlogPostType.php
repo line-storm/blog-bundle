@@ -40,7 +40,16 @@ class BlogPostType extends AbstractBlogFormType
                 'allow_add' => true,
                 'allow_delete' => true,
                 'by_reference' => false,
-            ));
+            ))
+
+            ->add('galleries', 'collection', array(
+                'type'      => new BlogPostGalleryType($this->modelManager),
+                'allow_add' => true,
+                'allow_delete' => true,
+                'by_reference' => false,
+            ))
+
+        ;
 
         //->add('createdOn', 'datetime')
         //->add('editedOn', 'datetime')

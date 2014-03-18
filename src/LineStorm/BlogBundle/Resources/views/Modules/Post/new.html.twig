@@ -62,15 +62,6 @@
         <script type="text/javascript" src="{{ asset_url }}"></script>
     {% endjavascripts %}
 
-    {% for component in module.components %}
-        {% javascripts
-            '@LineStormBlogBundle/Resources/public/js/dropzone.js'
-            output='compiled/js/blog.js' %}
-            <script type="text/javascript" src="{{ asset_url }}"></script>
-        {% endjavascripts %}
-        <option value="{{ component.id }}">{{ component.name }}</option>
-    {% endfor %}
-
     <script type="text/javascript" src="/bundles/linestormblog/js/ckeditor/ckeditor.js"></script>
     <script type="text/javascript" src="/bundles/linestormblog/js/ckeditor/adapters/jquery.js"></script>
     <script type="application/javascript">
@@ -327,33 +318,49 @@
             });
 
 
-            var $articleCollectionHolder, $addArticleLink;
+            var $articleCollectionHolder, $addArticleLink, $addGalleryLink;
 
-            $addArticleLink = $('a.post-component-new');
-            $articleCollectionHolder = $('.post-component-container');
+            $articleCollectionHolder = $('.post-components');
             $articleCollectionHolder.data('index', $articleCollectionHolder.find(':input').length);
 
+            $addArticleLink = $('a.post-component-new.article-new');
             $addArticleLink.on('click', function(e) {
                 // prevent the link from creating a "#" on the URL
                 e.preventDefault();
 
+                // Get the data-prototype explained earlier
+                var prototype = $(this).data('prototype');
+
                 // add a new tag form (see next code block)
-                var $el = addForm($articleCollectionHolder);
+                var $el = addForm($articleCollectionHolder, prototype);
                 var i = $articleCollectionHolder.data('index');
                 $el.find('input[type="hidden"]').val(i);
                 $el.find('[data-role="textarea"]').ckeditor().focus();
             });
 
+            $addGalleryLink = $('a.post-component-new.gallery-new');
+            $addGalleryLink.on('click', function(e) {
+                // prevent the link from creating a "#" on the URL
+                e.preventDefault();
+
+                // Get the data-prototype explained earlier
+                var prototype = $(this).data('prototype');
+
+                // add a new tag form (see next code block)
+                var $el = addForm($articleCollectionHolder, prototype);
+                var i = $articleCollectionHolder.data('index');
+                $el.find('input[type="hidden"]').val(i);
+                $el.find('[data-role="textarea"]').ckeditor().focus();
+            });
+
+
         });
 
-        function addForm($collectionHolder, element) {
-            var elementHtml, prototype, index, newForm, $elementHtml;
+        function addForm($collectionHolder, prototype, element) {
+            var elementHtml, index, newForm, $elementHtml;
 
             if(element === undefined)
                 element = 'li';
-
-            // Get the data-prototype explained earlier
-            prototype = $collectionHolder.data('prototype');
 
             // get the new index
             index = $collectionHolder.data('index');
@@ -369,7 +376,7 @@
             if(element === 'li' || element === 'div'){
                 elementHtml = "<"+element+">"+newForm+"</"+element+">";
             } else {
-                elementHtml = '<li>"+newForm+"</li>';
+                elementHtml = "<li>"+newForm+"</li>";
             }
 
             $elementHtml = $(elementHtml);
@@ -398,11 +405,15 @@
 
 
         <h3>Content</h3>
-        <div class="post-component-container" data-prototype="{{ form_widget(form.articles.vars.prototype)|e }}">
-            <div class="post-component-new-container"><a href="#" class="post-component-new">add</a></div>
+        <div class="post-component-container">
+            <div class="post-component-new-container"><a href="#" class="post-component-new article-new" data-prototype="{{ form_widget(form.articles.vars.prototype)|e }}">Add Article</a></div>
+            <div class="post-component-new-container"><a href="#" class="post-component-new gallery-new" data-prototype="{{ form_widget(form.galleries.vars.prototype)|e }}">Add Gallery</a></div>
             <ul class="post-components">
                 {% for article in form.articles %}
                     {{ form(article) }}
+                {% endfor %}
+                {% for gallery in form.galleries %}
+                    {{ form(gallery) }}
                 {% endfor %}
             </ul>
         </div>
