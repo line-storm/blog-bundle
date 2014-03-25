@@ -1,13 +1,19 @@
 {% set dzId = random() %}
-<div class="post-component post-component-gallery">
-    <div id="dropzone-{{ dzId }}" class="dropzone">
-
-    </div>
-</div>
+<a href="#" id="addgallery{{ dzId }}" data-prototype='<div class="post-component post-component-gallery"><div class="dropzone"></div></div>'>Add Gallery</a>
 <script type="text/javascript">
-    (function(){
+
+    var galleryFormCount = 0;
+
+    $('#addgallery{{ dzId }}').on('click', function(){
+        var prototype = $($(this).data('prototype').replace(/__length__/g, galleryFormCount));
+        $('#PostContent').append(prototype);
+        setupDropzone(prototype.find('.dropzone')[0]);
+        ++galleryFormCount;
+    });
+
+    var setupDropzone = function(placeholder){
         var carrosselData = [];
-        var carrosselDropZone = new Dropzone("div#dropzone-{{ dzId }}", {
+        var carrosselDropZone = new Dropzone(placeholder, {
             url: window.lineStormTags.mediaBank.path,
             acceptedFiles: 'image/*',
             init: function(){
@@ -51,6 +57,6 @@
                 '       <div class="clearfix"></div>' +
                 '   </div>'
         });
-    })()
+    };
 
 </script>

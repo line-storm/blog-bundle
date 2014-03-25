@@ -74,4 +74,5 @@ abstract class Tag
     {
         return $this->createdOn;
     }
+
 }

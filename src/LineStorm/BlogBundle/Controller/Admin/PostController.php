@@ -33,12 +33,21 @@ class PostController extends Controller
             throw new AccessDeniedException();
         }
 
-        $modelManager = $this->get('linestorm.blog.model_manager');
+        $moduleManager = $this->get('linestorm.blog.module_manager');
+        $module        = $moduleManager->getModule('post');
 
+        $modelManager = $this->get('linestorm.blog.model_manager');
         $post = $modelManager->get('post')->find($id);
 
+        $form = $this->createForm(new BlogPostType($modelManager), $post, array(
+            'action' => $this->generateUrl('linestorm_blog_admin_module_post_api_post_post_post'),
+            'method' => 'POST',
+        ));
+
         return $this->render('LineStormBlogBundle:Modules:Post/edit.html.twig', array(
-            'post' => $post,
+            'post'      => $post,
+            'form'      => $form->createView(),
+            'module'    => $module,
         ));
     }
 

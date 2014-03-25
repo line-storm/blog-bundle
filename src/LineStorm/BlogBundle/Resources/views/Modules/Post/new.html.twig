@@ -30,9 +30,8 @@
             width: calc(100% - 35px);
         }
         .post-component {
-            border: 1px solid #eaeaea;
-            background-color: #fefefe;
             min-height: 200px;
+            margin-bottom: 20px;
         }
 
         .dragged {
@@ -55,372 +54,166 @@
         filter='cssrewrite' output='compiled/css/blog.css' %}
      <link rel="stylesheet" href="{{ asset_url }}" />
     {% endstylesheets %}
+    <link rel="stylesheet" href="/bundles/linestormblog/css/select2.css" />
 
     {% javascripts
         '@LineStormBlogBundle/Resources/public/js/dropzone.js'
+        '@LineStormBlogBundle/Resources/public/js/select2/select2.min.js'
         output='compiled/js/blog.js' %}
         <script type="text/javascript" src="{{ asset_url }}"></script>
     {% endjavascripts %}
 
     <script type="text/javascript" src="/bundles/linestormblog/js/ckeditor/ckeditor.js"></script>
     <script type="text/javascript" src="/bundles/linestormblog/js/ckeditor/adapters/jquery.js"></script>
-    <script type="application/javascript">
+    <script type="text/javascript">
 
-        window.lineStormBlog = window.lineStormBlog || {};
-        window.lineStormBlog.postManager = (function(options){
+        var savePost = function(callback){
+            var form, data, field, fname;
 
-            var idCount = 1;
+            if(callback === undefined)
+                callback = function(){};
 
-            var self = {};
+            form = $('form[name="linestorm_blogbundle_blogpost"]');
 
-            if(options === undefined){
-                options = {};
-            }
+            data = {};
 
-            self.options = $.extend({
+            for(var i=0 ; i<form[0].length ; ++i){
+                field = form[0][i];
+                if(field.name){
+                    fname = field.name;
 
-            }, options);
-
-            self.components = {};
-
-            self.form = [];
-
-            self.addComponent = function(name, callback){
-                $.ajax({
-                    url: '{{ path('linestorm_blog_admin_module_post_api_component_new_component') }}',
-                    data: {
-                        'component': name
-                    },
-                    success: function(o){
-                        var $e = self.setupComponentForm(name, o.html);
-                        var cId = ++idCount;
-                        if(!$e.prop('id'))
-                            $e.prop('id', 'post-component-'+cId);
-                        $e.attr('data-component-id',    cId);
-                        $e.attr('data-component-type',  name);
-                        self.form.push({
-                            id:         cId,
-                            type:       name,
-                            element:    $e
-                        });
-                        callback($e);
-                    }
-                });
-            };
-
-            self.removeComponent = function(id){
-                var i, b, c;
-                for( var i=0,b=self.form.length ; i<b ; i++ ){
-                    c = self.form[i];
-                    if(c.id === id){
-                        self.form.splice(1, i);
-                        return true;
+                    if(field.type === 'radio'){
+                        data[fname] = data[fname] || [];
+                        data[fname].push(field.value);
+                    } else if(field.type === 'checkbox'){
+                        data[fname] = field.checked ? field.value : null;
+                    } else {
+                        if(field.name.match(/\[\]$/)){
+                            fname = field.name.replace(/\[\]$/, '');
+                            data[fname] = data[fname] || [];
+                            data[fname].push($(field).val());
+                        } else {
+                            data[fname] = $(field).val();
+                        }
                     }
                 }
-                return false;
-            };
-
-            self.save = function(callback){
-
-                var i, b, c, v, data = {
-                    components: [],
-                    post: self.serializeForm($('form[name="linestorm_blogbundle_blogpost"]'))
-                };
-                for( i=0,b=self.form.length ; i<b ; i++ ){
-                    c = self.form[i];
-                    data.components.push({
-                        type: c.type,
-                        data: self.components[c.type].getValues(c)
-                    });
-                }
-
-                $.ajax({
-                    url: '{{ path('linestorm_blog_admin_module_post_api_post_post_post') }}',
-                    type: 'POST',
-                    data: JSON.stringify(data),
-                    dataType: 'json',
-                    success: callback
-                });
-            };
-
-            self.setupComponentForm = function(name, html){
-                var c = self.components[name];
-                return c.setupForm(html);
             }
 
-            self.importComponent = function(name, component){
-                self.components[name] = component;
-            }
+            var sData = serializeForm(data);
 
-            self.serializeForm = function($form){
-
-                var self = this,
-                        fname = $form.prop('name'),
-                        json = {},
-                        push_counters = {},
-                        patterns = {
-                            "validate": /^[a-zA-Z][a-zA-Z0-9_]*(?:\[(?:\d*|[a-zA-Z0-9_]+)\])*$/,
-                            "key":      /[a-zA-Z0-9_]+|(?=\[\])/g,
-                            "push":     /^$/,
-                            "fixed":    /^\d+$/,
-                            "named":    /^[a-zA-Z0-9_]+$/
-                        };
-
-
-                this.build = function(base, key, value){
-                    base[key] = value;
-                    return base;
-                };
-
-                this.push_counter = function(key){
-                    if(push_counters[key] === undefined){
-                        push_counters[key] = 0;
-                    }
-                    return push_counters[key]++;
-                };
-
-                $.each($form.serializeArray(), function(){
-
-                    // skip invalid keys
-                    if(!patterns.validate.test(this.name)){
-                        return;
-                    }
-
-                    var k,
-                            keys = this.name.match(patterns.key),
-                            merge = this.value,
-                            reverse_key = this.name;
-
-                    while((k = keys.pop()) !== undefined){
-
-                        // adjust reverse_key
-                        reverse_key = reverse_key.replace(new RegExp("\\[" + k + "\\]$"), '');
-
-                        // push
-                        if(k.match(patterns.push)){
-                            merge = self.build([], self.push_counter(reverse_key), merge);
-                        }
-
-                        // fixed
-                        else if(k.match(patterns.fixed)){
-                            merge = self.build([], k, merge);
-                        }
-
-                        // named
-                        else if(k.match(patterns.named)){
-                            merge = self.build({}, k, merge);
-                        }
-                    }
-
-                    json = $.extend(true, json, merge);
-                });
-
-                if(fname && typeof json[fname] !== 'undefined')
-                    return json[fname];
-                else
-                    return json;
-            };
-
-            return self;
-
-        })();
-
-
-
-        (function(){
-            var component = (function(){
-
-                var self = {};
-
-                self.setupForm = function(html){
-                    return $(html).attr('contenteditable', true).ckeditor().focus();
-                };
-
-                self.getValues = function(cObject){
-                    var name = cObject.element.ckeditorGet().name;
-                    var value = CKEDITOR.instances[name].getData();
-                    return {
-                        'body': value
-                    }
-                };
-
-                return self;
-            })();
-            window.lineStormBlog.postManager.importComponent('article', component);
-        })();
-
-
-
-        (function(){
-            var component = (function(){
-
-                var self = {};
-
-                self.setupForm = function(html){
-                    return $(html);
-                };
-
-                return self;
-            })();
-            window.lineStormBlog.postManager.importComponent('gallery', component);
-        })();
-
-
-
-        $(document).ready(function () {
-
-            var ComponentSelect = $('#ComponentSelect'),
-                TitleContent = $('#blog-post-title'),
-                PostContent = $('#blog-post-content'),
-                PostSave    = $('.post-save')
-            ;
-
-            ComponentSelect.on('change', function(){
-                if(this.selectedIndex <= 0)
-                    return;
-
-                var c = $(this).val();
-                window.lineStormBlog.postManager.addComponent(c, function($component){
-                    var $row;
-                    $row = $('<li class="post-component-row"><div class="component-handle"><i class="fa-ellipsis-h fa-rotate-90 fa-2x pull-left fa-border"></i></div><div class="component-content"></div><div class="clearfix"></div></li>');
-                    $component.appendTo($row.find('.component-content'));
-
-                    $row.appendTo(PostContent);
-                });
-                this.selectedIndex = 0;
+            $.ajax({
+                url: '{{ path('linestorm_blog_admin_module_post_api_post_post_post') }}',
+                type: 'POST',
+                data: JSON.stringify(sData),
+                dataType: 'json',
+                success: callback
             });
 
-            PostSave.on('click', function(){
-                window.lineStormBlog.postManager.save(function(){
+        };
+
+        var serializeForm = function($form){
+
+            var self = this,
+                json = {},
+                push_counters = {},
+                patterns = {
+                    "validate": /^[a-zA-Z][a-zA-Z0-9_]*(?:\[(?:\d*|[a-zA-Z0-9_]+)\])*$/,
+                    "key":      /[a-zA-Z0-9_]+|(?=\[\])/g,
+                    "push":     /^$/,
+                    "fixed":    /^\d+$/,
+                    "named":    /^[a-zA-Z0-9_]+$/
+                };
+
+
+            this.build = function(base, key, value){
+                base[key] = value;
+                return base;
+            };
+
+            this.push_counter = function(key){
+                if(push_counters[key] === undefined){
+                    push_counters[key] = 0;
+                }
+                return push_counters[key]++;
+            };
+
+            $.each($form, function(i,v){
+
+                // skip invalid keys
+                if(!patterns.validate.test(this.name)){
+                    return;
+                }
+
+                var k,
+                    keys = i.match(patterns.key),
+                    merge = v,
+                    reverse_key = i;
+
+                while((k = keys.pop()) !== undefined){
+
+                    // adjust reverse_key
+                    reverse_key = reverse_key.replace(new RegExp("\\[" + k + "\\]$"), '');
+
+                    // push
+                    if(k.match(patterns.push)){
+                        merge = self.build([], self.push_counter(reverse_key), merge);
+                    }
+
+                    // fixed
+                    else if(k.match(patterns.fixed)){
+                        merge = self.build([], k, merge);
+                    }
+
+                    // named
+                    else if(k.match(patterns.named)){
+                        merge = self.build({}, k, merge);
+                    }
+                }
+
+                json = $.extend(true, json, merge);
+            });
+
+            return json;
+        };
+
+        $(document).ready(function(){
+            $('.post-save').on('click', function(){
+                savePost(function(){
                     alert('saved!');
                 });
             });
-
-            PostContent.sortable({
-                handle: '.component-handle > i'
-            });
-        });
-
-
-        jQuery(document).ready(function() {
-            var $tagCollectionHolder, $addTagLink;
-
-            $addTagLink = $('a.add-tag-link');
-            $tagCollectionHolder = $('ul.tags');
-            $tagCollectionHolder.data('index', $tagCollectionHolder.find(':input').length);
-
-            $addTagLink.on('click', function(e) {
-                // prevent the link from creating a "#" on the URL
-                e.preventDefault();
-
-                // add a new tag form (see next code block)
-                addForm($tagCollectionHolder);
-            });
-
-
-            var $articleCollectionHolder, $addArticleLink, $addGalleryLink;
-
-            $articleCollectionHolder = $('.post-components');
-            $articleCollectionHolder.data('index', $articleCollectionHolder.find(':input').length);
-
-            $addArticleLink = $('a.post-component-new.article-new');
-            $addArticleLink.on('click', function(e) {
-                // prevent the link from creating a "#" on the URL
-                e.preventDefault();
-
-                // Get the data-prototype explained earlier
-                var prototype = $(this).data('prototype');
-
-                // add a new tag form (see next code block)
-                var $el = addForm($articleCollectionHolder, prototype);
-                var i = $articleCollectionHolder.data('index');
-                $el.find('input[type="hidden"]').val(i);
-                $el.find('[data-role="textarea"]').ckeditor().focus();
-            });
-
-            $addGalleryLink = $('a.post-component-new.gallery-new');
-            $addGalleryLink.on('click', function(e) {
-                // prevent the link from creating a "#" on the URL
-                e.preventDefault();
-
-                // Get the data-prototype explained earlier
-                var prototype = $(this).data('prototype');
-
-                // add a new tag form (see next code block)
-                var $el = addForm($articleCollectionHolder, prototype);
-                var i = $articleCollectionHolder.data('index');
-                $el.find('input[type="hidden"]').val(i);
-                $el.find('[data-role="textarea"]').ckeditor().focus();
-            });
-
-
-        });
-
-        function addForm($collectionHolder, prototype, element) {
-            var elementHtml, index, newForm, $elementHtml;
-
-            if(element === undefined)
-                element = 'li';
-
-            // get the new index
-            index = $collectionHolder.data('index');
-
-            // Replace '__name__' in the prototype's HTML to
-            // instead be a number based on how many items we have
-            newForm = prototype.replace(/__name__/g, index);
-
-            // increase the index with one for the next item
-            $collectionHolder.data('index', index + 1);
-
-            // Display the form in the page in an li, before the "Add a tag" link li
-            if(element === 'li' || element === 'div'){
-                elementHtml = "<"+element+">"+newForm+"</"+element+">";
-            } else {
-                elementHtml = "<li>"+newForm+"</li>";
-            }
-
-            $elementHtml = $(elementHtml);
-            $collectionHolder.append($elementHtml);
-
-            return $elementHtml;
-        }
+        })
 
     </script>
-
-
     {{ form_start(form) }}
-
         {{ form_row(form.title) }}
         {{ form_row(form.liveOn) }}
         {{ form_row(form.category) }}
 
-        <h3>Tags</h3>
-        <ul class="tags" data-prototype="{{ form_widget(form.tags.vars.prototype)|e }}">
-            <li><a href="#" class="add-tag-link">+ Add</a></li>
-            {# iterate over each existing tag and render its only field: name #}
-            {% for tag in form.tags %}
-                <li>{{ form_row(tag.name) }}</li>
-            {% endfor %}
-        </ul>
+        <hr />
 
+        {% block components %}
+            {{ render_post_component_new(module.component('tag')) }}
+            {{ render_post_component_new(module.component('article')) }}
+            {{ render_post_component_new(module.component('gallery')) }}
+        {% endblock %}
 
-        <h3>Content</h3>
-        <div class="post-component-container">
-            <div class="post-component-new-container"><a href="#" class="post-component-new article-new" data-prototype="{{ form_widget(form.articles.vars.prototype)|e }}">Add Article</a></div>
-            <div class="post-component-new-container"><a href="#" class="post-component-new gallery-new" data-prototype="{{ form_widget(form.galleries.vars.prototype)|e }}">Add Gallery</a></div>
-            <ul class="post-components">
-                {% for article in form.articles %}
-                    {{ form(article) }}
-                {% endfor %}
-                {% for gallery in form.galleries %}
-                    {{ form(gallery) }}
-                {% endfor %}
-            </ul>
+        <div class="row">
+            <div class="col-xs-2"></div>
+            <div class="col-xs-10">
+                <div id="PostContent"></div>
+            </div>
+
         </div>
-    {{ form_end(form) }}
 
-    <button class="post-save btn btn-success">
-        <i class="fa-save"></i> Save
-    </button>
+        <hr />
+
+        <div class="form-group">
+            <div class="col-sm-offset-2 col-sm-10">
+                <button type="button" class="btn btn-default post-save">Save</button>
+            </div>
+        </div>
+
+    {{ form_end(form) }}
 
 {% endblock %}

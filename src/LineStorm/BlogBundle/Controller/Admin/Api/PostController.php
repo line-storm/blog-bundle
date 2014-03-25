@@ -4,9 +4,10 @@ namespace LineStorm\BlogBundle\Controller\Admin\Api;
 
 use FOS\RestBundle\Routing\ClassResourceInterface;
 use FOS\RestBundle\View\View;
-use LineStorm\BlogBundle\Entity\BlogPost;
 use LineStorm\BlogBundle\Form\BlogPostType;
 use LineStorm\BlogBundle\Model\ModelManager;
+use LineStorm\BlogBundle\Model\Post;
+use LineStorm\BlogBundle\Module\Post\Component\ComponentInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -44,23 +45,35 @@ class PostController extends Controller implements ClassResourceInterface
         }
 
         $modelManager = $this->getModelManager();
+        $moduleManager = $this->get('linestorm.blog.module_manager');
+        $module = $moduleManager->getModule('post');
 
         $request = $this->getRequest();
         $form = $this->getForm();
 
         $formValues = json_decode($request->getContent(), true);
 
-        $form->submit($formValues['post']);
+        $form->submit($formValues['linestorm_blogbundle_blogpost']);
 
         if ($form->isValid()) {
 
             $em = $modelManager->getManager();
             $now = new \DateTime();
 
-            /** @var BlogPost $post */
+            /** @var Post $post */
             $post = $form->getData();
             $post->setAuthor($user);
             $post->setCreatedOn($now);
+
+            // save all the components
+            $components = $formValues['component'];
+            foreach($components as $componentId => $data)
+            {
+                $component = $module->getComponent($componentId);
+                if($component instanceof ComponentInterface){
+                    $component->handleSave($post, $data);
+                }
+            }
 
             $em->persist($post);
             $em->flush();

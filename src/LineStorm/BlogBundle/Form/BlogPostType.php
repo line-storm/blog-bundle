@@ -25,14 +25,11 @@ class BlogPostType extends AbstractBlogFormType
                 'class'    => $this->modelManager->getEntityClass('category'),
                 'property' => 'name',
             ))
-            ->add('tags', 'collection', array(
+            /*->add('tags', 'collection', array(
                 'type'      => new BlogTagType($this->modelManager),
                 'allow_add' => true,
                 'allow_delete' => true,
                 'by_reference' => false,
-                /*'multiple' => true,
-                'class' => $this->modelManager->getEntityClass('tag'),
-                'property' => 'name',*/
             ))
 
             ->add('articles', 'collection', array(
@@ -47,7 +44,7 @@ class BlogPostType extends AbstractBlogFormType
                 'allow_add' => true,
                 'allow_delete' => true,
                 'by_reference' => false,
-            ))
+            ))*/
 
         ;
 

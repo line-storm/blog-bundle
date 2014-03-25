@@ -2,9 +2,11 @@
 
 namespace LineStorm\BlogBundle\Module\Post\Component;
 
+use LineStorm\BlogBundle\Model\Post;
+use LineStorm\BlogBundle\Model\PostGallery;
 use Symfony\Component\Config\Loader\LoaderInterface;
 
-class GalleryComponent extends AbstractComponent implements ComponentInterface
+class GalleryComponent extends AbstractBodyComponent implements ComponentInterface
 {
     private $name = 'Gallery';
     private $id = 'gallery';
@@ -19,19 +21,41 @@ class GalleryComponent extends AbstractComponent implements ComponentInterface
         return $this->name;
     }
 
-    public function getViewTemplate()
+    /**
+     * Get the view html
+     *
+     * @param $entity PostGallery
+     * @return string
+     */
+    public function getViewTemplate($entity)
     {
         return '';
     }
 
-    public function getEditTemplate()
+    /**
+     * Get the new form html
+     *
+     * @return string
+     */
+    public function getNewTemplate()
     {
-        return '';
+        return $this->templating->render('LineStormBlogBundle:Modules:Post/Component/gallery/new.html.twig');
+    }
+
+    /**
+     * Get the edit html
+     *
+     * @param $entity PostGallery
+     * @return string
+     */
+    public function getEditTemplate($entity)
+    {
+        return $this->templating->render('LineStormBlogBundle:Modules:Post/Component/gallery/new.html.twig');
     }
 
     public function createEntity(array $data)
     {
-        $class = $this->modelManager->getEntityClass('post_gallery');
+        $class  = $this->modelManager->getEntityClass('post_gallery');
         $entity = new $class();
 
         return $entity;
@@ -40,5 +64,10 @@ class GalleryComponent extends AbstractComponent implements ComponentInterface
     public function getRoutes(LoaderInterface $loader)
     {
         return null;
+    }
+
+    public function handleSave(Post $post, array $data)
+    {
+        // TODO: Implement handleSave() method.
     }
 }

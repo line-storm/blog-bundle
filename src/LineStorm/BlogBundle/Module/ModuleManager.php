@@ -1,10 +1,4 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: athorne1016
- * Date: 03/03/14
- * Time: 12:27
- */
 
 namespace LineStorm\BlogBundle\Module;
 

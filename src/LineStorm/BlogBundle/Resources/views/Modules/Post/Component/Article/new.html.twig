@@ -1,3 +1,11 @@
-<div class="post-component post-component-article component-inline-edit">
-    
-</div>
+{% set id = random() %}
+<a href="#" id="addarticle{{ id }}" data-prototype='<div class="post-component post-component-article"><input type="hidden" name="component[article][__length__][id]" /><textarea name="component[article][__length__][body]"></textarea></div>'>Add Article</a>
+<script type="text/javascript">
+    var articleFormCount = 0;
+    $('#addarticle{{ id }}').on('click', function(){
+        var prototype = $($(this).data('prototype').replace(/__length__/g, articleFormCount));
+        $('#PostContent').append(prototype);
+        prototype.find('textarea').ckeditor().focus();
+        ++articleFormCount;
+    });
+</script>
