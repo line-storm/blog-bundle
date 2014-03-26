@@ -18,12 +18,13 @@ class BlogPostGalleryImageType extends AbstractBlogFormType
                 'attr' => array(
                     'style' => 'height:200px;'
                 ),
-                'label' => false,
-                'inline' => true,
+                //'inline' => true,
             ))
-            ->add('order', 'hidden')
-            ->add('src')
             ->add('seo')
+            ->add('order', 'hidden')
+            ->add('src', null, array(
+                'read_only' => true
+            ))
         ;
     }
     
@@ -33,7 +34,8 @@ class BlogPostGalleryImageType extends AbstractBlogFormType
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
         $resolver->setDefaults(array(
-            'data_class' => $this->modelManager->getEntityClass('post_article')
+            'label' => false,
+            'data_class' => $this->modelManager->getEntityClass('post_gallery_image')
         ));
     }
 
@@ -42,6 +44,6 @@ class BlogPostGalleryImageType extends AbstractBlogFormType
      */
     public function getName()
     {
-        return 'linestorm_blogbundle_blogpostarticle';
+        return 'linestorm_blogbundle_blogpostgallery';
     }
 }

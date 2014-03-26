@@ -15,7 +15,9 @@ class BlogPostType extends AbstractBlogFormType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('title', 'text')
+            ->add('title', 'text', array(
+                'required' => true
+            ))
             ->add('liveOn', 'datetime', array(
                 'date_widget' => 'single_text',
                 'time_widget' => 'single_text',
@@ -25,18 +27,17 @@ class BlogPostType extends AbstractBlogFormType
                 'class'    => $this->modelManager->getEntityClass('category'),
                 'property' => 'name',
             ))
-            /*->add('tags', 'collection', array(
-                'type'      => new BlogTagType($this->modelManager),
-                'allow_add' => true,
-                'allow_delete' => true,
-                'by_reference' => false,
+            ->add('tags', 'tag', array(
+                'em' => $this->modelManager->getManager(),
+                'tag_class' => $this->modelManager->getEntityClass('tag'),
+                'name'  => 'name',
             ))
-
             ->add('articles', 'collection', array(
                 'type'      => new BlogPostArticleType($this->modelManager),
                 'allow_add' => true,
                 'allow_delete' => true,
                 'by_reference' => false,
+                'label'     => false,
             ))
 
             ->add('galleries', 'collection', array(
@@ -44,17 +45,8 @@ class BlogPostType extends AbstractBlogFormType
                 'allow_add' => true,
                 'allow_delete' => true,
                 'by_reference' => false,
-            ))*/
-
-        ;
-
-        //->add('createdOn', 'datetime')
-        //->add('editedOn', 'datetime')
-        //->add('deletedOn')
-        //->add('author')
-        //->add('editedBy')
-        //->add('parent')
-        //->add('deletedBy')
+                'label'     => false,
+            ))
         ;
     }
 

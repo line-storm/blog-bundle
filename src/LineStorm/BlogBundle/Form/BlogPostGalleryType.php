@@ -14,21 +14,23 @@ class BlogPostGalleryType extends AbstractBlogFormType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
+            ->add('images', 'dropzone', array(
+                'type'      => new BlogPostGalleryImageType($this->modelManager),
+                'allow_add' => true,
+                'allow_delete' => true,
+                'by_reference' => false,
+                'label' => false,
+                'prototype_name' => '__img_name__'
+            ))
             ->add('body', 'textarea', array(
                 'attr' => array(
                     'style' => 'height:200px;'
                 ),
                 'label' => false,
-                'inline' => true,
+                //'inline' => true,
             ))
             ->add('order', 'hidden')
 
-            ->add('images', 'collection', array(
-                'type'      => new BlogPostGalleryImageType($this->modelManager),
-                'allow_add' => true,
-                'allow_delete' => true,
-                'by_reference' => false,
-            ))
         ;
     }
     
@@ -38,7 +40,7 @@ class BlogPostGalleryType extends AbstractBlogFormType
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
         $resolver->setDefaults(array(
-            'data_class' => $this->modelManager->getEntityClass('post_article')
+            'data_class' => $this->modelManager->getEntityClass('post_gallery')
         ));
     }
 
@@ -47,6 +49,6 @@ class BlogPostGalleryType extends AbstractBlogFormType
      */
     public function getName()
     {
-        return 'linestorm_blogbundle_blogpostarticle';
+        return 'linestorm_blogbundle_blogpostgalleryimage';
     }
 }

@@ -1,7 +1,4 @@
 {% extends 'LineStormBlogBundle:Modules:Post/new.html.twig' %}
 
-{% block components %}
-    {{ render_post_component_edit(module.component('tag'), post.tags) }}
-    {{ render_post_component_edit(module.component('article'), post.articles) }}
-    {{ render_post_component_edit(module.component('gallery'), post.galleries) }}
-{% endblock %}
+{% block page_title %}Edit Post{% endblock %}
+{% block page_desc %}Pew Pew Pew{% endblock %}

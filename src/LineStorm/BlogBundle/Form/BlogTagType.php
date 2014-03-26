@@ -16,7 +16,6 @@ class BlogTagType extends AbstractBlogFormType
     {
         $builder
             ->add('name')
-            //->add('createdOn')
         ;
     }
     

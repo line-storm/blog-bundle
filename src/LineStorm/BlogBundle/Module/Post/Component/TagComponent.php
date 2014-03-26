@@ -7,7 +7,7 @@ use LineStorm\BlogBundle\Model\Post;
 use LineStorm\BlogBundle\Model\Tag;
 use Symfony\Component\Config\Loader\LoaderInterface;
 
-class TagComponent extends AbstractBodyComponent implements ComponentInterface
+class TagComponent extends AbstractHeaderComponent implements ComponentInterface
 {
     private $name = 'Tag';
     private $id = 'tag';

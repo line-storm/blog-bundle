@@ -26,7 +26,7 @@ class TagController extends Controller implements ClassResourceInterface
     /**
      * Get a list of all consumables
      *
-     * [GET] /api/blog/posts.{_format}
+     * [GET] /api/blog/tags.{_format}
      */
     public function cgetAction()
     {
@@ -36,13 +36,49 @@ class TagController extends Controller implements ClassResourceInterface
 
         $dql = "
             SELECT
-                partial p.{id,title,body,createdOn}
+                partial t.{id,name}
             FROM
-                {$modelManager->getEntityClass('post')} p
+                {$modelManager->getEntityClass('tag')} t
         ";
-        $posts = $em->createQuery($dql)->getArrayResult();
+        $tags = $em->createQuery($dql)->getArrayResult();
 
-        $this->createResponse($posts);
+        $view = $this->createResponse($tags);
+
+        return $this->get('fos_rest.view_handler')->handle($view);
+    }
+
+
+    /**
+     * Get a list of all consumables
+     *
+     * [GET] /api/blog/tags/query.{_format}
+     */
+    public function queryAction()
+    {
+        $modelManager = $this->get('linestorm.blog.model_manager');
+
+        $em = $modelManager->getManager();
+
+        $query = $this->getRequest()->query->get('q', '');
+        $maxResults = $this->getRequest()->query->get('limit', 10);
+        if(!is_numeric($maxResults) || $maxResults < 0 || $maxResults > 50)
+        {
+            $maxResults = 10;
+        }
+
+        $dql = "
+            SELECT
+                partial t.{id,name}
+            FROM
+                {$modelManager->getEntityClass('tag')} t
+            WHERE
+                t.name LIKE :query
+            ORDER BY
+                t.name
+        ";
+        $tags = $em->createQuery($dql)->setParameter('query', $query)->setMaxResults($maxResults)->getArrayResult();
+
+        $view = $this->createResponse($tags);
 
         return $this->get('fos_rest.view_handler')->handle($view);
     }

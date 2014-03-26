@@ -3,7 +3,7 @@
   <mapped-superclass name="LineStorm\BlogBundle\Model\PostGalleryImage" table="blog_post_gallery_image">
 
     <field name="body" type="text" column="body" precision="0" scale="0" nullable="false"/>
-    <field name="order" type="integer" column="order" precision="0" scale="0" nullable="false"/>
+    <field name="order" type="integer" column="image_order" precision="0" scale="0" nullable="false"/>
     <field name="src" type="string" column="src" precision="0" scale="0" nullable="false"/>
     <field name="seo" type="string" column="seo" precision="0" scale="0" nullable="false"/>
 

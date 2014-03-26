@@ -58,7 +58,11 @@
                 {{- attrname }}="{{ attrvalue|trans({}, translation_domain) }}"
             {%- elseif attrname == 'class' -%}
                 {%- set hasClass = true -%}
-                {{- attrname }}="form-control {{ attrvalue }}"
+                {% if attrvalue|length %}
+                    {{- attrname }}="{{ attrvalue }}"
+                {% else %}
+                    {{- attrname }}="form-control {{ attrvalue }}"
+                {% endif %}
             {%- elseif attrvalue is sameas(true) -%}
                 {{- attrname }}="{{ attrname }}"
             {%- elseif attrvalue is not sameas(false) -%}
@@ -100,3 +104,17 @@
         {% endif %}
     {% endspaceless %}
 {% endblock textarea_widget %}
+
+{% block dropzone_widget %}
+    {% spaceless %}
+        <div class="dropzone" {% if prototype is defined %}data-prototype="{{- form_widget(prototype)|e -}}"{% endif %}>
+        </div>
+        {{ block('collection_widget') }}
+    {% endspaceless %}
+{% endblock %}
+
+{% block tag_widget %}
+    {% spaceless %}
+        {{ block('form_widget') }}
+    {% endspaceless %}
+{% endblock %}

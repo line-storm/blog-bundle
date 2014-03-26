@@ -19,7 +19,7 @@ class BlogPostArticleType extends AbstractBlogFormType
                     'style' => 'height:200px;'
                 ),
                 'label' => false,
-                'inline' => true,
+                //'inline' => true,
             ))
             ->add('order', 'hidden')
         ;

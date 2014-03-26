@@ -55,6 +55,20 @@ services:
     class: %linestorm.blog.module.post.tag.class%
     arguments: [@linestorm.blog.model_manager]
 
+
+
+  #
+  # FORM TYPES
+  linestorm.blog.form.type.dropzone:
+        class: LineStorm\BlogBundle\Form\Type\DropZoneType
+        tags:
+            - { name: form.type, alias: dropzone }
+  linestorm.blog.form.type.tag:
+        class: LineStorm\BlogBundle\Form\Type\TagType
+        arguments: [@linestorm.blog.model_manager]
+        tags:
+            - { name: form.type, alias: tag }
+
   #
   # TWIG POST MODULE
   linestorm.blog.twig.module_post_extension:

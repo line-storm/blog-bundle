@@ -407,6 +407,7 @@ abstract class Post
     public function addGallery(PostGallery $galleries)
     {
         $this->galleries[] = $galleries;
+        $galleries->setPost($this);
 
         return $this;
     }

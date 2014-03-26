@@ -31,7 +31,7 @@ class Configuration implements ConfigurationInterface
                         ->scalarNode('post')->defaultValue('LineStorm\BlogBundle\Entity\BlogPost')->end()
                         ->scalarNode('post_article')->defaultValue('LineStorm\BlogBundle\Entity\BlogPostArticle')->end()
                         ->scalarNode('post_gallery')->defaultValue('LineStorm\BlogBundle\Entity\BlogPostGallery')->end()
-                        ->scalarNode('post_gallery_picture')->defaultValue('LineStorm\BlogBundle\Entity\BlogPostGalleryPicture')->end()
+                        ->scalarNode('post_gallery_image')->defaultValue('LineStorm\BlogBundle\Entity\BlogPostGalleryImage')->end()
                         ->scalarNode('tag')->defaultValue('LineStorm\BlogBundle\Entity\BlogTag')->end()
                         ->scalarNode('category')->defaultValue('LineStorm\BlogBundle\Entity\BlogCategory')->end()
                         ->scalarNode('user')->defaultValue('FOS\UserBundle\Entity\User')->end()
