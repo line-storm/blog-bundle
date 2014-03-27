@@ -39,7 +39,7 @@ class PostController extends Controller
         $modelManager = $this->get('linestorm.blog.model_manager');
         $post = $modelManager->get('post')->find($id);
 
-        $form = $this->createForm(new BlogPostType($modelManager), $post, array(
+        $form = $this->createForm(new BlogPostType($modelManager, $moduleManager), $post, array(
             'action' => $this->generateUrl('linestorm_blog_admin_module_post_api_post_put_post', array('id' => $post->getId())),
             'method' => 'PUT',
         ));
@@ -64,7 +64,7 @@ class PostController extends Controller
 
         $modelManager = $this->get('linestorm.blog.model_manager');
 
-        $form = $this->createForm(new BlogPostType($modelManager), null, array(
+        $form = $this->createForm(new BlogPostType($modelManager, $moduleManager), null, array(
             'action' => $this->generateUrl('linestorm_blog_admin_module_post_api_post_post_post'),
             'method' => 'POST',
         ));

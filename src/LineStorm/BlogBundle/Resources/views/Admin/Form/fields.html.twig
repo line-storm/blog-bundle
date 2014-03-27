@@ -98,7 +98,7 @@
 {% block textarea_widget %}
     {% spaceless %}
         {% if inline is same as(true) %}
-            <div {{ block('widget_attributes') }} contenteditable="true" data-role="textarea">{{ value }}</div>
+            <div {{ block('widget_attributes') }} contenteditable="true" data-role="textarea">{{ value|raw }}</div>
         {% else %}
             <textarea {{ block('widget_attributes') }}>{{ value }}</textarea>
         {% endif %}
@@ -106,10 +106,43 @@
 {% endblock textarea_widget %}
 
 {% block dropzone_widget %}
+    {% import _self as fn %}
+    {% macro dzPreview(child) %}
+        {% spaceless %}
+            <div class="dz-preview">
+                <div class="panel-left">
+                    <img class="dz-image" data-dz-thumbnail {% if child %}src="{{ child.src.vars.value }}"{% endif %} />
+                    <a class="dz-remove" href="javascript:undefined;" data-dz-remove><i class="fa-times"></i> Remove</a>
+                </div>
+                <div class="dz-details">
+                    <div class="row">
+                        <div class="col-xs-12">
+                            <div class="dz-progress"><span class="dz-upload" data-dz-uploadprogress></span></div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-xs-4">
+                            <strong>Details:</strong>
+                        </div>
+                        <div class="col-xs-8">
+                            <div class="dz-size" data-dz-size>Uploaded</div>
+                        </div>
+                    </div>
+                    <div class="dz-image-form" data-prototype="<div>__widget__</div>" data-count="0">
+                        {% if child %}{{ form_row(child) }}{% endif %}
+                    </div>
+                </div>
+                <div class="clearfix"></div>
+            </div>
+        {% endspaceless %}
+    {% endmacro %}
+
     {% spaceless %}
-        <div class="dropzone" {% if prototype is defined %}data-prototype="{{- form_widget(prototype)|e -}}"{% endif %}>
+        <div class="dropzone" data-preview="{{ fn.dzPreview()|e('html_attr') }}" {% if prototype is defined %}data-prototype="{{- form_widget(prototype)|e -}}"{% endif %}>
+            {% for child in form %}
+                {{ fn.dzPreview(child) }}
+            {% endfor %}
         </div>
-        {{ block('collection_widget') }}
     {% endspaceless %}
 {% endblock %}
 

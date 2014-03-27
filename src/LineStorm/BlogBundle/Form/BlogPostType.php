@@ -27,27 +27,14 @@ class BlogPostType extends AbstractBlogFormType
                 'class'    => $this->modelManager->getEntityClass('category'),
                 'property' => 'name',
             ))
-            ->add('tags', 'tag', array(
-                'em' => $this->modelManager->getManager(),
-                'tag_class' => $this->modelManager->getEntityClass('tag'),
-                'name'  => 'name',
-            ))
-            ->add('articles', 'collection', array(
-                'type'      => new BlogPostArticleType($this->modelManager),
-                'allow_add' => true,
-                'allow_delete' => true,
-                'by_reference' => false,
-                'label'     => false,
-            ))
-
-            ->add('galleries', 'collection', array(
-                'type'      => new BlogPostGalleryType($this->modelManager),
-                'allow_add' => true,
-                'allow_delete' => true,
-                'by_reference' => false,
-                'label'     => false,
-            ))
         ;
+
+        $module = $this->moduleManager->getModule('post');
+        foreach($module->getComponents() as $component){
+            $component->buildForm($builder, $options);
+        }
+
+
     }
 
     /**

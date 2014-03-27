@@ -6,6 +6,7 @@ namespace LineStorm\BlogBundle\Module\Post\Component;
 use LineStorm\BlogBundle\Model\Post;
 use LineStorm\BlogBundle\Model\Tag;
 use Symfony\Component\Config\Loader\LoaderInterface;
+use Symfony\Component\Form\FormBuilderInterface;
 
 class TagComponent extends AbstractHeaderComponent implements ComponentInterface
 {
@@ -55,6 +56,17 @@ class TagComponent extends AbstractHeaderComponent implements ComponentInterface
             'component'     => $this,
             'tags'          => $tags,
         ));
+    }
+
+    public function buildForm(FormBuilderInterface $builder, array $options)
+    {
+        $builder
+            ->add('tags', 'tag', array(
+                'em' => $this->modelManager->getManager(),
+                'tag_class' => $this->modelManager->getEntityClass('tag'),
+                'name'  => 'name',
+            ))
+        ;
     }
 
 

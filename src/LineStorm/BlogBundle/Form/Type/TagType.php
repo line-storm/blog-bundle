@@ -44,7 +44,6 @@ class TagType extends AbstractType
         $name           = $options['name'];
         $tags           = array();
 
-
         if($name)
         {
             $tagArray = $entityManager->getRepository($dataClass)->createQueryBuilder('c')->getQuery()->getArrayResult();

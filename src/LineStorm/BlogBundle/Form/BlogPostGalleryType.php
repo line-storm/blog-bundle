@@ -24,7 +24,7 @@ class BlogPostGalleryType extends AbstractBlogFormType
             ))
             ->add('body', 'textarea', array(
                 'attr' => array(
-                    'style' => 'height:200px;'
+                    'class' => 'ckeditor-textarea gallery-body',
                 ),
                 'label' => false,
                 //'inline' => true,

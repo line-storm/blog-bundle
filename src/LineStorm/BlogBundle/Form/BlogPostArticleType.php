@@ -16,10 +16,10 @@ class BlogPostArticleType extends AbstractBlogFormType
         $builder
             ->add('body', 'textarea', array(
                 'attr' => array(
-                    'style' => 'height:200px;'
+                    'class' => 'form-control ckeditor-textarea',
+                    'style' => 'height:200px;',
                 ),
                 'label' => false,
-                //'inline' => true,
             ))
             ->add('order', 'hidden')
         ;

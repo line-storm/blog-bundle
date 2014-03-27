@@ -2,9 +2,11 @@
 
 namespace LineStorm\BlogBundle\Module\Post\Component;
 
+use LineStorm\BlogBundle\Form\BlogPostGalleryType;
 use LineStorm\BlogBundle\Model\Post;
 use LineStorm\BlogBundle\Model\PostGallery;
 use Symfony\Component\Config\Loader\LoaderInterface;
+use Symfony\Component\Form\FormBuilderInterface;
 
 class GalleryComponent extends AbstractBodyComponent implements ComponentInterface
 {
@@ -51,6 +53,19 @@ class GalleryComponent extends AbstractBodyComponent implements ComponentInterfa
     public function getEditTemplate($entity)
     {
         return $this->templating->render('LineStormBlogBundle:Modules:Post/Component/gallery/new.html.twig');
+    }
+
+    public function buildForm(FormBuilderInterface $builder, array $options)
+    {
+        $builder
+            ->add('galleries', 'collection', array(
+                'type'      => new BlogPostGalleryType($this->modelManager),
+                'allow_add' => true,
+                'allow_delete' => true,
+                'by_reference' => false,
+                'label'     => false,
+            ))
+        ;
     }
 
     public function createEntity(array $data)

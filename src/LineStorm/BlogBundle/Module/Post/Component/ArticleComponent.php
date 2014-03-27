@@ -2,9 +2,11 @@
 
 namespace LineStorm\BlogBundle\Module\Post\Component;
 
+use LineStorm\BlogBundle\Form\BlogPostArticleType;
 use LineStorm\BlogBundle\Model\Post;
 use LineStorm\BlogBundle\Model\PostArticle;
 use Symfony\Component\Config\Loader\LoaderInterface;
+use Symfony\Component\Form\FormBuilderInterface;
 
 class ArticleComponent extends AbstractBodyComponent implements ComponentInterface
 {
@@ -46,6 +48,19 @@ class ArticleComponent extends AbstractBodyComponent implements ComponentInterfa
         return $this->templating->render('LineStormBlogBundle:Modules:Post/Component/article/new.html.twig', array(
             'articles' => $entity,
         ));
+    }
+
+    public function buildForm(FormBuilderInterface $builder, array $options)
+    {
+        $builder
+            ->add('articles', 'collection', array(
+                'type'      => new BlogPostArticleType($this->modelManager),
+                'allow_add' => true,
+                'allow_delete' => true,
+                'by_reference' => false,
+                'label'     => false,
+            ))
+        ;
     }
 
     public function handleSave(Post $post, array $data)

@@ -7,15 +7,22 @@ use FOS\RestBundle\View\View;
 use LineStorm\BlogBundle\Form\BlogPostType;
 use LineStorm\BlogBundle\Model\ModelManager;
 use LineStorm\BlogBundle\Model\Post;
-use LineStorm\BlogBundle\Module\Post\Component\ComponentInterface;
+use LineStorm\BlogBundle\Module\ModuleManager;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Symfony\Component\Form\FormError;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Symfony\Component\Security\Core\User\UserInterface;
 
 class PostController extends Controller implements ClassResourceInterface
 {
     private $modelManager = null;
+
+    private $moduleManager = null;
+
+    private function createResponse($data = null, $code = 200, $headers = array())
+    {
+        return View::create($data, $code, $headers)
+            ->setFormat('json');
+    }
 
     /**
      * @return ModelManager
@@ -28,9 +35,20 @@ class PostController extends Controller implements ClassResourceInterface
         return $this->modelManager;
     }
 
+    /**
+     * @return ModuleManager
+     */
+    private function getModuleManager()
+    {
+        if(!$this->moduleManager)
+            $this->moduleManager = $this->get('linestorm.blog.module_manager');
+
+        return $this->moduleManager;
+    }
+
     private function getForm($entity = null)
     {
-        return $this->createForm(new BlogPostType($this->getModelManager()), $entity);
+        return $this->createForm(new BlogPostType($this->getModelManager(), $this->getModuleManager()), $entity);
     }
 
     public function getAction($id)
@@ -82,7 +100,9 @@ class PostController extends Controller implements ClassResourceInterface
             $em->persist($post);
             $em->flush();
 
-            $view = View::createRouteRedirect('linestorm_blog_admin_module_post_api_post_get_post', array('id' => $form->getData()->getId()));
+            $view = View::create(null, 201, array(
+                'location' => $this->generateUrl('linestorm_blog_admin_module_post_api_post_get_post', array( 'id' => $form->getData()->getId() ))
+            ));
         } else {
             $view = View::create($form);
         }
@@ -123,21 +143,33 @@ class PostController extends Controller implements ClassResourceInterface
             $updatedPost->setEditedBy($user);
             $updatedPost->setEditedOn($now);
 
+/*
+            // remove the relationship between the tag and the Task
+            foreach ($post->getArticles() as $article) {
+                if (false === $updatedPost->getArticles()->contains($article)) {
+                    // remove the Task from the Tag
+                    $updatedPost->removeArticle($article);
+                    // if it was a many-to-one relationship, remove the relationship like this
+                    // $tag->setTask(null);
+
+                    $em->persist($tag);
+
+                    // if you wanted to delete the Tag entirely, you can also do that
+                    // $em->remove($tag);
+                }
+            }*/
+
             $em->persist($post);
             $em->flush();
 
-            $view = View::createRouteRedirect('linestorm_blog_admin_module_post_api_post_get_post', array('id' => $updatedPost->getId()));
-        } else {
+            $view = $this->createResponse(array('location' => $this->generateUrl('linestorm_blog_admin_module_post_api_post_get_post', array( 'id' => $form->getData()->getId()))), 200);
+        }
+        else
+        {
             $view = View::create($form);
         }
 
         return $this->get('fos_rest.view_handler')->handle($view);
     }
 
-
-    private function getApiView($form)
-    {
-        $view = View::create($form);
-        return $this->get('fos_rest.view_handler')->handle($view);
-    }
 }

@@ -96,10 +96,18 @@
 .dropzone .dz-preview {
     margin-bottom: 10px;
 }
+.dropzone .dz-preview .panel-left {
+    width: 100px;
+    float: left;
+}
+
 .dropzone .dz-preview .dz-image {
     height: 100px;
     width: 100px;
-    float: left;
+}
+.dropzone .dz-preview .dz-remove {
+    max-width: 100px;
+    cursor: pointer;
 }
 .dropzone .dz-preview .dz-details {
     width: calc(100% - 120px);

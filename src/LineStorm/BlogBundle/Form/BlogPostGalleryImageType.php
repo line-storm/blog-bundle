@@ -18,12 +18,11 @@ class BlogPostGalleryImageType extends AbstractBlogFormType
                 'attr' => array(
                     'style' => 'height:200px;'
                 ),
-                //'inline' => true,
             ))
             ->add('seo')
             ->add('order', 'hidden')
-            ->add('src', null, array(
-                'read_only' => true
+            ->add('src', 'hidden', array(
+                'read_only' => true,
             ))
         ;
     }

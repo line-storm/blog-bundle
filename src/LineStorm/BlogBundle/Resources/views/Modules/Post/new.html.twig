@@ -34,22 +34,58 @@
             margin-bottom: 20px;
         }
 
-        .dragged {
-            position: absolute;
-            opacity: 0.5;
-            z-index: 2000;
-        }
-
-        ul.example li.placeholder {
-            position: relative;
-            /** More li styles **/
-        }
-        ul.example li.placeholder:before {
-            position: absolute;
-            /** Define arrowhead **/
-        }
         .tag-search {
             width:100%;
+        }
+        ul.post-components {
+            margin: 0;
+            padding: 0;
+        }
+        ul.post-components > li {
+            list-style: none;
+        }
+        div.post-component-item {
+            position: relative;
+        }
+        div.post-component-item > .post-component-item-controls {
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 30px;
+        }
+        div.post-component-item > .post-component-item-controls > button,
+        div.post-component-item > .post-component-item-controls > span {
+            width: 38px;
+            height: 38px;
+            margin-bottom: 10px;
+        }
+        div.post-component-item > .post-component-item-controls > span.item-reorder {
+            cursor: ns-resize;
+        }
+        div.post-component-item > .post-component-item-widget {
+            width: calc(100% - 35px);
+        }
+
+        .fade-overlay {
+            max-height: 200px;
+            overflow: hidden;
+            position: relative;
+        }
+        .fade-overlay:after {
+            content: '';
+            height: 100px;
+            display: block;
+            position: absolute;
+            top: 100px;
+            left: 0;
+            width: 100%;
+            background: -moz-linear-gradient(top,  rgba(255,255,255,0) 1%, rgba(255,255,255,0) 2%, rgba(255,255,255,1) 87%); /* FF3.6+ */
+            background: -webkit-gradient(linear, left top, left bottom, color-stop(1%,rgba(255,255,255,0)), color-stop(2%,rgba(255,255,255,0)), color-stop(87%,rgba(255,255,255,1))); /* Chrome,Safari4+ */
+            background: -webkit-linear-gradient(top,  rgba(255,255,255,0) 1%,rgba(255,255,255,0) 2%,rgba(255,255,255,1) 87%); /* Chrome10+,Safari5.1+ */
+            background: -o-linear-gradient(top,  rgba(255,255,255,0) 1%,rgba(255,255,255,0) 2%,rgba(255,255,255,1) 87%); /* Opera 11.10+ */
+            background: -ms-linear-gradient(top,  rgba(255,255,255,0) 1%,rgba(255,255,255,0) 2%,rgba(255,255,255,1) 87%); /* IE10+ */
+            background: linear-gradient(to bottom,  rgba(255,255,255,0) 1%,rgba(255,255,255,0) 2%,rgba(255,255,255,1) 87%); /* W3C */
+            filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#00ffffff', endColorstr='#ffffff',GradientType=0 ); /* IE6-9 */
         }
     </style>
     {% stylesheets
@@ -71,9 +107,9 @@
     <script type="text/javascript">
 
         var contentCounts = {
-            article: {count: 0},
-            gallery: {count: 0},
-            tag:     {count: 0}
+            article: {count: {{ form.articles|length }} },
+            gallery: {count: {{ form.galleries|length }} },
+            gallery_images: {}
         };
 
         var savePost = function(callback_success, callback_failure){
@@ -93,7 +129,7 @@
                     fname = field.name;
 
                     if(field.name === '_method'){
-                        method = field.value;prote
+                        method = field.value;
                     } else if(field.type === 'radio'){
                         data[fname] = data[fname] || [];
                         data[fname].push(field.value);
@@ -213,8 +249,14 @@
                 e.preventDefault();
                 e.stopPropagation();
                 $('#FormErrors').slideUp(function(){ $(this).html(''); });
-                savePost(function(){
-                    alert('saved!');
+                savePost(function(on, status, xhr){
+                    if(xhr.status === 200){
+                        alert('updated!');
+                    } else if(xhr.status === 201) {
+                        alert('created!');
+                    } else {
+                        alert('saved ('+xhr.status+')!');
+                    }
                 }, function(e, status, ex){
                     if(e.status === 400){
                         if(e.responseJSON){
@@ -223,7 +265,7 @@
                             for(var i in errors){
                                 if(errors[i].length)
                                     str += "<p class=''><strong style='text-transform:capitalize;'>"+i+":</strong> "+errors[i].join(', ')+"</p>";
-                            }
+                             }
                             $('#FormErrors').html(str).slideDown();
                         } else {
                             alert(status);
@@ -233,11 +275,6 @@
 
                 return false;
             });
-        })
-
-
-
-        jQuery(document).ready(function() {
 
             var $articleCollectionHolder, $addArticleLink, $addGalleryLink;
 
@@ -253,8 +290,8 @@
 
                 // add a new tag form (see next code block)
                 var $el = addForm($articleCollectionHolder, prototype, contentCounts.article);
-                $el.find('input[type="hidden"]').val(contentCounts.gallery);
-                $el.find('[data-role="textarea"]').ckeditor().focus();
+                $el.find('input[type="hidden"]').val(contentCounts.gallery.count);
+                $el.find('[data-role="textarea"],textarea').ckeditor().focus();
             });
 
             $addGalleryLink = $('a.post-component-new.gallery-new');
@@ -267,20 +304,74 @@
 
                 // add a new tag form (see next code block)
                 var $el = addForm($articleCollectionHolder, prototype, contentCounts.gallery);
-                $el.find('input[type="hidden"]').val(contentCounts.gallery);
-                $el.find('[data-role="textarea"]').ckeditor().focus();
+                $el.find('input[type="hidden"]').val(contentCounts.gallery.count);
+                $el.find('[data-role="textarea"],textarea').ckeditor().focus();
 
                 setupDropzone($el.find('.dropzone')[0]);
             });
 
+            // add ckeditor to all the pre-loaded articles
+            $articleCollectionHolder.find('textarea[name*="linestorm_blogbundle_blogpost[articles]"]').ckeditor();
+            $articleCollectionHolder.find('.item-gallery').each(function(){
+                setupDropzone($(this).find('.dropzone')[0]);
+                $(this).find('textarea.gallery-body').ckeditor();
+                // bind the remove button as it won't be set by dropzone on init
+                $(this).find('.dz-remove').on('click', function(){
+                    $(this).closest('.dz-preview').remove();
+                });
+            });
 
+            // set up the sortable content
+            $articleCollectionHolder.sortable({
+                handle: '.item-reorder',
+                axis: 'y',
+                start: function(e, ui){
+
+                    $(e.target).children().addClass('fade-overlay');
+                    $(this).sortable('refreshPositions');
+
+                    // save the ckeditor state and destroy it else is breaks on sorting stop
+                    var tarea = ui.item.find('textarea.ckeditor-textarea');
+                    if(tarea.length){
+                        tarea.data('value', tarea.val()).val('Moving...');
+                        var ck = tarea.ckeditorGet();
+                        ck.destroy();
+                    }
+                },
+                stop:function(e,ui){
+
+                    $(e.target).children().removeClass('fade-overlay');
+                    $(this).sortable('refreshPositions');
+
+                    // rebuild ckeditor
+                    var tarea = ui.item.find('textarea.ckeditor-textarea');
+                    if(tarea.length){
+                        tarea.val(tarea.data('value'));
+                        tarea.ckeditor();
+                    }
+
+                    // update the order
+                    $articleCollectionHolder.children('li').each(function(i, li){
+                        var $li = $(li);
+                        var $order = $li.find('input[name*="[order]"]');
+                        $order.val(i);
+                    });
+                }
+            });
+
+            // configure remove button
+            $articleCollectionHolder.on('click', 'button.item-remove', function(){
+                if(confirm('Are you sure you want to remove this item?\n\nNOTE: IT CANNOT BE UNDONE ONCE SAVED')){
+                    var i = $(this).data('count');
+                    $(this).closest('.post-component-item').parent().remove();
+                    --contentCounts[i];
+                }
+            });
         });
 
-        function addForm($collectionHolder, prototype, indexer, element, name) {
-            var elementHtml, index, newForm, $elementHtml;
-
-            if(element === undefined)
-                element = 'li';
+        // add a new form to the page from a prototype
+        function addForm($collectionHolder, prototype, indexer, name) {
+            var newForm, newContainer, $elementHtml;
 
             if(indexer === undefined){
                 console.log('addForm: indexer must be defined');
@@ -291,38 +382,38 @@
                 name = '__name__'
 
             // Replace '__name__' in the prototype's HTML to
-            // instead be a number based on how many items we have
+            // instead be a number based on how many items we have#
             var rgx = new RegExp(name, 'g');
             newForm = prototype.replace(rgx, indexer.count);
             indexer.count++;
 
-            // Display the form in the page in an li, before the "Add a tag" link li
-            if(element === 'li' || element === 'div'){
-                elementHtml = "<"+element+">"+newForm+"</"+element+">";
-            } else {
-                elementHtml = "<li>"+newForm+"</li>";
-            }
+            newContainer = $collectionHolder.data('prototype').replace(/__widget__/, newForm);
 
-            $elementHtml = $(elementHtml);
+            $elementHtml = $(newContainer);
             $collectionHolder.append($elementHtml);
 
             return $elementHtml;
         }
 
-    </script>
-
-    <script type="text/javascript">
-
-
+        // setup dropzone
         var setupDropzone = function(placeholder){
 
-            var carrosselDropZone = new Dropzone(placeholder, {
+            var $p = $(placeholder),
+                localCount, carrosselDropZone;
+
+            contentCounts.gallery_images[contentCounts.gallery.count] = {count: $p.find('.dz-preview').length || 0};
+            localCount = contentCounts.gallery_images[contentCounts.gallery.count];
+
+            carrosselDropZone = new Dropzone(placeholder, {
                 url: window.lineStormTags.mediaBank.path,
                 acceptedFiles: 'image/*',
                 init: function(){
                     this.on("success", function(file, response) {
-                        var idx = contentCounts.tag.count;
-                        var $form = addForm($(file.previewElement).find('.dz-image-form'), $(placeholder).data('prototype'), contentCounts.tag, 'div', '__img_name__');
+                        var dzForm = $(file.previewElement).find('.dz-image-form'),
+                            idx = localCount.count
+                        ;
+                        var $form = addForm(dzForm, $(placeholder).data('prototype'), localCount, '__img_name__');
+
                         $form.find('input[name*="[src]"]').val(response.url);
                         $form.find('input[name*="[order]"]').val(idx);
                     });
@@ -331,27 +422,7 @@
                         alert("Cannot add file: "+response);
                     });
                 },
-                previewTemplate:
-                    '   <div class="dz-preview">' +
-                    '       <img class="dz-image" data-dz-thumbnail />' +
-                    '       <div class="dz-details">' +
-                    '           <div class="row">' +
-                    '               <div class="col-xs-12">' +
-                    '                   <div class="dz-progress"><span class="dz-upload" data-dz-uploadprogress></span></div>' +
-                    '               </div>' +
-                    '           </div>' +
-                    '           <div class="row">' +
-                    '               <div class="col-xs-4">' +
-                    '                   <strong>Details:</strong>' +
-                    '               </div>' +
-                    '               <div class="col-xs-8">' +
-                    '                   <div class="dz-size" data-dz-size></div>' +
-                    '               </div>' +
-                    '           </div>' +
-                    '           <div class="dz-image-form"></div>' +
-                    '       </div>' +
-                    '       <div class="clearfix"></div>' +
-                    '   </div>'
+                previewTemplate: $p.data('preview')
             });
         };
 
@@ -384,25 +455,30 @@
         <div class="post-component-container">
             <div class="post-component-new-container"><a href="#" class="post-component-new article-new" data-prototype="{{ form_widget(form.articles.vars.prototype)|e }}">Add Article</a></div>
             <div class="post-component-new-container"><a href="#" class="post-component-new gallery-new" data-prototype="{{ form_widget(form.galleries.vars.prototype)|e }}">Add Gallery</a></div>
-            <ul class="post-components">
+            <ul class="post-components" data-prototype='<li><div class="post-component-item"><div class="post-component-item-widget">__widget__</div><div class="post-component-item-controls"><button type="button" class="btn btn-default item-remove" title="Remove This Article" data-count="article"><i class="fa-times"></i></button><span type="button" class="btn btn-default item-reorder" title="Click and Drag to Reorder"><i class="fa-arrows-v"></i></span></div></div></li>'>
                 {% for article in form.articles %}
-                    {{ form(article) }}
+                    <li>
+                        <div class="post-component-item item-article">
+                            <div class="post-component-item-widget">{{ form_widget(article) }}</div>
+                            <div class="post-component-item-controls">
+                                <button type="button" class="btn btn-default item-remove" title="Remove This Article" data-count="article"><i class="fa-times"></i></button>
+                                <span type="button" class="btn btn-default item-reorder" title="Click and Drag to Reorder"><i class="fa-arrows-v"></i></span>
+                            </div>
+                        </div>
+                    </li>
                 {% endfor %}
                 {% for gallery in form.galleries %}
-                    {{ form(gallery) }}
+                    <li>
+                        <div class="post-component-item item-gallery">
+                            <div class="post-component-item-widget">{{ form_widget(gallery) }}</div>
+                            <div class="post-component-item-controls">
+                                <button type="button" class="btn btn-default item-remove" title="Remove This Gallery" data-count="gallery"><i class="fa-times"></i></button>
+                                <span type="button" class="btn btn-default item-reorder" title="Click and Drag to Reorder"><i class="fa-arrows-v"></i></span>
+                            </div>
+                        </div>
+                    </li>
                 {% endfor %}
             </ul>
-        </div>
-
-        {{ form_row(form.articles) }}
-        {{ form_row(form.galleries) }}
-
-        <div class="row">
-            <div class="col-xs-2"></div>
-            <div class="col-xs-10">
-                <div id="PostContent"></div>
-            </div>
-
         </div>
 
         <hr />
