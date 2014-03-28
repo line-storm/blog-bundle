@@ -48,7 +48,7 @@ class PostController extends Controller implements ClassResourceInterface
 
     private function getForm($entity = null)
     {
-        return $this->createForm(new BlogPostType($this->getModelManager(), $this->getModuleManager()), $entity);
+        return $this->createForm('linestorm_blog_form_post', $entity);
     }
 
     public function getAction($id)
@@ -131,7 +131,7 @@ class PostController extends Controller implements ClassResourceInterface
 
         $formValues = json_decode($request->getContent(), true);
 
-        $form->submit($formValues['linestorm_blogbundle_blogpost']);
+        $form->submit($formValues['linestorm_blog_form_post']);
 
         if ($form->isValid())
         {
@@ -143,7 +143,7 @@ class PostController extends Controller implements ClassResourceInterface
             $updatedPost->setEditedBy($user);
             $updatedPost->setEditedOn($now);
 
-            $em->persist($post);
+            $em->persist($updatedPost);
             $em->flush();
 
             $view = $this->createResponse(array('location' => $this->generateUrl('linestorm_blog_admin_module_post_api_post_get_post', array( 'id' => $form->getData()->getId()))), 200);

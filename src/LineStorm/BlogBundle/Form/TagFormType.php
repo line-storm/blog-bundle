@@ -2,10 +2,11 @@
 
 namespace LineStorm\BlogBundle\Form;
 
+use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
-class BlogPostGalleryImageType extends AbstractBlogFormType
+class TagFormType extends AbstractBlogFormType
 {
     /**
      * @param FormBuilderInterface $builder
@@ -14,16 +15,7 @@ class BlogPostGalleryImageType extends AbstractBlogFormType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('body', 'textarea', array(
-                'attr' => array(
-                    'style' => 'height:200px;'
-                ),
-            ))
-            ->add('seo')
-            ->add('order', 'hidden')
-            ->add('src', 'hidden', array(
-                'read_only' => true,
-            ))
+            ->add('name')
         ;
     }
     
@@ -33,8 +25,7 @@ class BlogPostGalleryImageType extends AbstractBlogFormType
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
         $resolver->setDefaults(array(
-            'label' => false,
-            'data_class' => $this->modelManager->getEntityClass('post_gallery_image')
+            'data_class' => $this->modelManager->getEntityClass('tag')
         ));
     }
 
@@ -43,6 +34,6 @@ class BlogPostGalleryImageType extends AbstractBlogFormType
      */
     public function getName()
     {
-        return 'linestorm_blogbundle_blogpostgallery';
+        return 'linestorm_blog_form_tag';
     }
 }

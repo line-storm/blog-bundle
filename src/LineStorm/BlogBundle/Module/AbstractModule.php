@@ -10,5 +10,22 @@ namespace LineStorm\BlogBundle\Module;
 
 abstract class AbstractModule
 {
+    protected $name;
+    protected $id;
 
+    /**
+     * @return string
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * @return string
+     */
+    public function getName()
+    {
+        return $this->name;
+    }
 }

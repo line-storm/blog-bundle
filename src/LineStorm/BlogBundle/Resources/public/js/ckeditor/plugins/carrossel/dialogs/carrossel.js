@@ -26,7 +26,7 @@ CKEDITOR.dialog.add( 'carrosselDialog', function ( editor ) {
         ],
         onLoad: function(){
             carrosselDropZone = new Dropzone("div#dropzone", {
-                url: window.lineStormTags.mediaBank.path,
+                url: window.lineStormTags.mediaBank.upload,
                 acceptedFiles: 'image/*',
                 init: function(){
                     this.on("success", function(file, response) {

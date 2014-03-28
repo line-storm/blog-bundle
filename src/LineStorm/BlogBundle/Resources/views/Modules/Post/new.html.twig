@@ -124,7 +124,7 @@
         var savePost = function(callback_success, callback_failure){
             var form, data, field, fname, method;
 
-            form = $('form[name="linestorm_blogbundle_blogpost"]');
+            form = $('form[name="linestorm_blog_form_post"]');
             method = form[0].method;
 
             callback_success = callback_success || null;
@@ -254,7 +254,7 @@
         };
 
         $(document).ready(function(){
-            $('form[name="linestorm_blogbundle_blogpost"]').on('submit', function(e){
+            $('form[name="linestorm_blog_form_post"]').on('submit', function(e){
                 e.preventDefault();
                 e.stopPropagation();
                 $('#FormErrors').slideUp(function(){ $(this).html(''); });
@@ -320,14 +320,10 @@
             });
 
             // add ckeditor to all the pre-loaded articles
-            $articleCollectionHolder.find('textarea[name*="linestorm_blogbundle_blogpost[articles]"]').ckeditor();
+            $articleCollectionHolder.find('textarea.ckeditor-textarea').ckeditor();
             $articleCollectionHolder.find('.item-gallery').each(function(){
                 setupDropzone($(this).find('.dropzone')[0]);
                 $(this).find('textarea.gallery-body').ckeditor();
-                // bind the remove button as it won't be set by dropzone on init
-                $(this).find('.dz-remove').on('click', function(){
-                    $(this).closest('.dz-preview').remove();
-                });
             });
 
             // set up the sortable content
@@ -377,8 +373,8 @@
                 }
             });
 
-            $('.options-toggle').on('click', function(){
-                $('.'+$(this).data('toggle')).slideToggle();
+            $(document).on('click', '.options-toggle', function(){
+                $(this).next('.'+$(this).data('toggle')).slideToggle();
                 return false;
             });
         });
@@ -410,6 +406,7 @@
         }
 
         // setup dropzone
+        Dropzone.autoDiscover = false;
         var setupDropzone = function(placeholder){
 
             var $p = $(placeholder),
@@ -418,22 +415,41 @@
             contentCounts.gallery_images[contentCounts.gallery.count] = {count: $p.find('.dz-preview').length || 0};
             localCount = contentCounts.gallery_images[contentCounts.gallery.count];
 
+            // bind the remove button as it won't be set by dropzone on init
+            $p.find('.dz-remove').on('click', function(){
+                $(this).closest('.dz-preview').remove();
+                --localCount.count;
+            });
+
             carrosselDropZone = new Dropzone(placeholder, {
-                url: window.lineStormTags.mediaBank.path,
+                url: window.lineStormTags.mediaBank.upload,
                 acceptedFiles: 'image/*',
                 init: function(){
                     this.on("success", function(file, response) {
+                        if(file.xhr.status == 200){
+                            alert('An identical file already exists and has been returned.');
+                        }
                         var dzForm = $(file.previewElement).find('.dz-image-form'),
                             idx = localCount.count
                         ;
                         var $form = addForm(dzForm, $(placeholder).data('prototype'), localCount, '__img_name__');
 
-                        $form.find('input[name*="[src]"]').val(response.url);
+                        $form.find('input[name*="[hash]"]').val(response.hash);
+                        $form.find('input[name*="[src]"]').val(response.src);
+
+                        $form.find('input[name*="[title]"]').val(response.title);
+                        $form.find('input[name*="[description]"]').val(response.description);
+                        $form.find('input[name*="[alt]"]').val(response.alt);
+                        $form.find('input[name*="[seo]"]').val(response.seo);
+
                         $form.find('input[name*="[order]"]').val(idx);
                     });
                     this.on("error", function(file, response) {
                         this.removeFile(file);
                         alert("Cannot add file: "+response);
+                    });
+                    this.on("removedfile", function(file){
+                        --localCount.count;
                     });
                 },
                 previewTemplate: $p.data('preview')

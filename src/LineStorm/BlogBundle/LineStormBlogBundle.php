@@ -2,9 +2,9 @@
 
 namespace LineStorm\BlogBundle;
 
+use LineStorm\BlogBundle\DependencyInjection\ContainerBuilder\MediaCompilerPass;
 use LineStorm\BlogBundle\DependencyInjection\ContainerBuilder\ModuleCompilerPass;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
-use Symfony\Component\DependencyInjection\Definition;
 use Symfony\Component\HttpKernel\Bundle\Bundle;
 use Doctrine\Bundle\DoctrineBundle\DependencyInjection\Compiler\DoctrineOrmMappingsPass;
 use LineStorm\BlogBundle\DependencyInjection\Compiler\DoctrineOrmMappingsPass as LocalDoctrineOrmMappingsPass;
@@ -16,6 +16,7 @@ class LineStormBlogBundle extends Bundle
         parent::build($container);
 
         $container->addCompilerPass(new ModuleCompilerPass());
+        $container->addCompilerPass(new MediaCompilerPass());
 
         $modelDir = realpath(__DIR__.'/Resources/config/doctrine/model');
         $mappings = array(

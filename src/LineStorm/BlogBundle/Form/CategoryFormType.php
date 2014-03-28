@@ -6,9 +6,9 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
-class BlogTagType extends AbstractBlogFormType
+class CategoryFormType extends AbstractType
 {
-    /**
+        /**
      * @param FormBuilderInterface $builder
      * @param array $options
      */
@@ -16,6 +16,9 @@ class BlogTagType extends AbstractBlogFormType
     {
         $builder
             ->add('name')
+            ->add('editedOn')
+            ->add('createdOn')
+            ->add('parent')
         ;
     }
     
@@ -25,7 +28,7 @@ class BlogTagType extends AbstractBlogFormType
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
         $resolver->setDefaults(array(
-            'data_class' => $this->modelManager->getEntityClass('tag')
+            'data_class' => 'Andy\PortfolioBundle\Entity\BlogCategory'
         ));
     }
 
@@ -34,6 +37,6 @@ class BlogTagType extends AbstractBlogFormType
      */
     public function getName()
     {
-        return 'linestorm_blogbundle_blogtag';
+        return 'linestorm_blog_form_category';
     }
 }

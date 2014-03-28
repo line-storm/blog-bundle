@@ -5,7 +5,7 @@ namespace LineStorm\BlogBundle\Form;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
-class BlogPostArticleType extends AbstractBlogFormType
+class PostGalleryFormType extends AbstractBlogFormType
 {
     /**
      * @param FormBuilderInterface $builder
@@ -14,14 +14,23 @@ class BlogPostArticleType extends AbstractBlogFormType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
+            ->add('images', 'dropzone', array(
+                'type'      => 'linestorm_blog_form_post_gallery_image',
+                'allow_add' => true,
+                'allow_delete' => true,
+                'by_reference' => false,
+                'label' => false,
+                'prototype_name' => '__img_name__'
+            ))
             ->add('body', 'textarea', array(
                 'attr' => array(
-                    'class' => 'form-control ckeditor-textarea',
-                    'style' => 'height:200px;',
+                    'class' => 'ckeditor-textarea gallery-body',
                 ),
                 'label' => false,
+                //'inline' => true,
             ))
             ->add('order', 'hidden')
+
         ;
     }
     
@@ -31,7 +40,7 @@ class BlogPostArticleType extends AbstractBlogFormType
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
         $resolver->setDefaults(array(
-            'data_class' => $this->modelManager->getEntityClass('post_article')
+            'data_class' => $this->modelManager->getEntityClass('post_gallery')
         ));
     }
 
@@ -40,6 +49,6 @@ class BlogPostArticleType extends AbstractBlogFormType
      */
     public function getName()
     {
-        return 'linestorm_blogbundle_blogpostarticle';
+        return 'linestorm_blog_form_post_gallery';
     }
 }

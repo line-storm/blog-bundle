@@ -25,6 +25,7 @@ class LineStormBlogExtension extends Extension
 
         $loader = new Loader\YamlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
         $loader->load('services.yml');
+        $loader->load('services-form-types.yml');
 
         $xmlLoader = new Loader\XmlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
 
@@ -39,5 +40,7 @@ class LineStormBlogExtension extends Extension
             $container->getDefinition('linestorm.blog.model.post.listener')->addTag('doctrine.event_subscriber');
             $container->getDefinition('linestorm.blog.model.tag.listener')->addTag('doctrine.event_subscriber');
         }
+
+        $container->setParameter('linestorm.blog.media_provider.default', $config['media']['default_provider']);
     }
 }

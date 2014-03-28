@@ -5,7 +5,7 @@ namespace LineStorm\BlogBundle\Form;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
-class BlogPostType extends AbstractBlogFormType
+class PostFormType extends AbstractBlogFormType
 {
 
     /**
@@ -56,6 +56,6 @@ class BlogPostType extends AbstractBlogFormType
      */
     public function getName()
     {
-        return 'linestorm_blogbundle_blogpost';
+        return 'linestorm_blog_form_post';
     }
 }

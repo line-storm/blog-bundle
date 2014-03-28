@@ -19,6 +19,8 @@ class PostController extends Controller
     {
         $modelManager = $this->get('linestorm.blog.model_manager');
 
+        $mediaManager = $this->get('linestorm.blog.media_manager');
+
         $post = $modelManager->get('post')->find($id);
 
         if(!($post instanceof Post))

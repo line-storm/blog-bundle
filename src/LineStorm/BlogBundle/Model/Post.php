@@ -100,6 +100,9 @@ abstract class Post
      */
     protected $metaKeywords;
 
+
+    protected $coverImage;
+
     /**
      * Constructor
      */
@@ -130,6 +133,16 @@ abstract class Post
     {
         return $this->slug ?: strtolower(str_replace(' ', '-', $this->title));
     }
+
+    /**
+     * @param string $slug
+     */
+    public function setSlug($slug)
+    {
+        $this->slug = $slug;
+    }
+
+
     
     /**
      * Get id

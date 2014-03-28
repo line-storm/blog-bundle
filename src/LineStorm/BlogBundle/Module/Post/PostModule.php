@@ -10,8 +10,8 @@ use Symfony\Component\Routing\RouteCollection;
 
 class PostModule extends AbstractModule implements ModuleInterface
 {
-    private $name = 'Post';
-    private $id = 'post';
+    protected $name = 'Post';
+    protected $id = 'post';
 
     /**
      * @var ComponentInterface[]
@@ -71,22 +71,6 @@ class PostModule extends AbstractModule implements ModuleInterface
         $this->components[$component->getId()] = $component;
 
         return $this;
-    }
-
-    /**
-     * @return string
-     */
-    public function getId()
-    {
-        return $this->id;
-    }
-
-    /**
-     * @return string
-     */
-    public function getName()
-    {
-        return $this->name;
     }
 
     /**

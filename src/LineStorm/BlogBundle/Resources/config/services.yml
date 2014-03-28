@@ -10,6 +10,8 @@ parameters:
   linestorm.blog.module.post.gallery.class:     LineStorm\BlogBundle\Module\Post\Component\GalleryComponent
   linestorm.blog.module.post.tag.class:         LineStorm\BlogBundle\Module\Post\Component\TagComponent
 
+  linestorm.blog.module.media.class:            LineStorm\BlogBundle\Module\Media\MediaModule
+
 services:
 
   linestorm.blog.routing_loader:
@@ -55,19 +57,16 @@ services:
     class: %linestorm.blog.module.post.tag.class%
     arguments: [@linestorm.blog.model_manager]
 
-
+  linestorm.blog.module.media:
+    class: %linestorm.blog.module.media.class%
+    arguments: [@linestorm.blog.media_manager]
+    tags:
+      - { name: linestorm.blog.module }
 
   #
-  # FORM TYPES
-  linestorm.blog.form.type.dropzone:
-        class: LineStorm\BlogBundle\Form\Type\DropZoneType
-        tags:
-            - { name: form.type, alias: dropzone }
-  linestorm.blog.form.type.tag:
-        class: LineStorm\BlogBundle\Form\Type\TagType
-        arguments: [@linestorm.blog.model_manager]
-        tags:
-            - { name: form.type, alias: tag }
+  # MEDIA
+  linestorm.blog.media_manager:
+        class: LineStorm\BlogBundle\Media\MediaManager
 
   #
   # TWIG POST MODULE

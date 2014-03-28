@@ -23,19 +23,14 @@ class PostGalleryImage
     protected $order;
 
     /**
-     * @var string
-     */
-    protected $src;
-
-    /**
-     * @var string
-     */
-    protected $seo;
-
-    /**
      * @var PostGallery[]
      */
     protected $gallery;
+
+    /**
+     * @var Media
+     */
+    protected $image;
 
 
 
@@ -105,36 +100,22 @@ class PostGalleryImage
     }
 
     /**
-     * @param string $seo
+     * @param Media $image
      */
-    public function setSeo($seo)
+    public function setImage(Media $image)
     {
-        $this->seo = $seo;
+        $this->image = $image;
     }
 
     /**
-     * @return string
+     * @return Media
      */
-    public function getSeo()
+    public function getImage()
     {
-        return $this->seo;
+        return $this->image;
     }
 
-    /**
-     * @param string $src
-     */
-    public function setSrc($src)
-    {
-        $this->src = $src;
-    }
 
-    /**
-     * @return string
-     */
-    public function getSrc()
-    {
-        return $this->src;
-    }
     
     
 }

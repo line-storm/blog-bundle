@@ -10,7 +10,7 @@
     <div class="carousel-inner">
         {% for image in gallery.images %}
             <div class="item {% if loop.first %}active{% endif %}">
-                <img src="{{ image.src }}" alt="{{ image.seo }}" class="img-responsive">
+                <img src="{{ image.image.src }}" alt="{{ image.image.alt }}"  class="img-responsive" data-meta="{{ image.image.seo }}">
                 <div class="carousel-caption">
                     {{ image.body | raw }}
                 </div>

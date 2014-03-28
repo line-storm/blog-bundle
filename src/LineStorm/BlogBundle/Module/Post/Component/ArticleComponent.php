@@ -51,7 +51,7 @@ class ArticleComponent extends AbstractBodyComponent implements ComponentInterfa
     {
         $builder
             ->add('articles', 'collection', array(
-                'type'      => new BlogPostArticleType($this->modelManager),
+                'type'      => 'linestorm_blog_form_post_article',
                 'allow_add' => true,
                 'allow_delete' => true,
                 'by_reference' => false,

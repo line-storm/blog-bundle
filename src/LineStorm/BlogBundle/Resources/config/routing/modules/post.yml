@@ -27,4 +27,4 @@ linestorm_blog_admin_module_post_api_component:
 linestorm_blog_admin_module_post_api_post:
   type:         rest
   prefix:       /api
-  resource:     "@LineStormBlogBundle/Resources/config/routing/modules/post/api.yml"
+  resource:     "@LineStormBlogBundle/Resources/config/routing/modules/api/post.yml"

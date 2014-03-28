@@ -113,7 +113,7 @@
         {% spaceless %}
             <div class="dz-preview">
                 <div class="panel-left">
-                    <img class="dz-image" data-dz-thumbnail {% if child %}src="{{ child.src.vars.value }}"{% endif %} />
+                    <img class="dz-image" data-dz-thumbnail {% if child %}src="{{ child.image.offsetGet('src').vars.value }}"{% endif %} />
                     <a class="dz-remove" href="javascript:undefined;" data-dz-remove><i class="fa-times"></i> Remove</a>
                 </div>
                 <div class="dz-details">
@@ -122,6 +122,7 @@
                             <div class="dz-progress"><span class="dz-upload" data-dz-uploadprogress></span></div>
                         </div>
                     </div>
+                    {% if not child %}
                     <div class="row">
                         <div class="col-xs-4">
                             <strong>Details:</strong>
@@ -130,6 +131,7 @@
                             <div class="dz-size" data-dz-size>Uploaded</div>
                         </div>
                     </div>
+                    {% endif %}
                     <div class="dz-image-form" data-prototype="<div>__widget__</div>" data-count="0">
                         {% if child %}{{ form_row(child) }}{% endif %}
                     </div>
@@ -151,5 +153,19 @@
 {% block tag_widget %}
     {% spaceless %}
         {{ block('form_widget') }}
+    {% endspaceless %}
+{% endblock %}
+
+
+{% block linestorm_blog_form_post_gallery_image_widget %}
+    {% spaceless %}
+        {{ form_widget(form.order) }}
+        {{ form_widget(form.body) }}
+        <hr />
+        <a href="#" class="options-toggle" data-toggle="image-options">Image Options <i class="pull-right fa-angle-down"></i></a>
+        <div class="image-options" style="display: none">
+            {{ form_row(form.image) }}
+        </div>
+
     {% endspaceless %}
 {% endblock %}

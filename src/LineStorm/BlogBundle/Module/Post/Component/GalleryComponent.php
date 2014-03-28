@@ -56,7 +56,7 @@ class GalleryComponent extends AbstractBodyComponent implements ComponentInterfa
     {
         $builder
             ->add('galleries', 'collection', array(
-                'type'      => new BlogPostGalleryType($this->modelManager),
+                'type'      => 'linestorm_blog_form_post_gallery',
                 'allow_add' => true,
                 'allow_delete' => true,
                 'by_reference' => false,
