@@ -10,17 +10,12 @@ use Symfony\Component\Form\FormBuilderInterface;
 
 class ArticleComponent extends AbstractBodyComponent implements ComponentInterface
 {
-    private $name = 'Article';
-    private $id = 'article';
+    protected $name = 'Article';
+    protected $id = 'article';
 
-    public function getId()
+    public function isSupported($entity)
     {
-        return $this->id;
-    }
-
-    public function getName()
-    {
-        return $this->name;
+        return ($entity instanceof PostArticle);
     }
 
     /**
@@ -29,7 +24,9 @@ class ArticleComponent extends AbstractBodyComponent implements ComponentInterfa
      */
     public function getViewTemplate($entity)
     {
-        return '';
+        return $this->templating->render('LineStormBlogBundle:Modules:Post/Component/article/view.html.twig', array(
+            'article' => $entity,
+        ));
     }
 
     public function getNewTemplate()

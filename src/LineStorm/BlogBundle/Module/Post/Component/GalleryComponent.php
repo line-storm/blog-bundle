@@ -10,17 +10,12 @@ use Symfony\Component\Form\FormBuilderInterface;
 
 class GalleryComponent extends AbstractBodyComponent implements ComponentInterface
 {
-    private $name = 'Gallery';
-    private $id = 'gallery';
+    protected $name = 'Gallery';
+    protected $id = 'gallery';
 
-    public function getId()
+    public function isSupported($entity)
     {
-        return $this->id;
-    }
-
-    public function getName()
-    {
-        return $this->name;
+        return ($entity instanceof PostGallery);
     }
 
     /**
@@ -31,7 +26,9 @@ class GalleryComponent extends AbstractBodyComponent implements ComponentInterfa
      */
     public function getViewTemplate($entity)
     {
-        return '';
+        return $this->templating->render('LineStormBlogBundle:Modules:Post/Component/gallery/view.html.twig', array(
+            'gallery' => $entity,
+        ));
     }
 
     /**

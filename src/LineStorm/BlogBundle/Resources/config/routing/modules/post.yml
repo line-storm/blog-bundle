@@ -3,8 +3,14 @@ linestorm_blog_admin_module_post_list:
     defaults: { _controller: LineStormBlogBundle:Admin/Post:list }
 
 linestorm_blog_admin_module_post_edit:
-    pattern:  /edit/{id}
+    pattern:  /{id}/edit
     defaults: { _controller: LineStormBlogBundle:Admin/Post:edit }
+    requirements:
+       id: \d+
+
+linestorm_blog_admin_module_post_view:
+    pattern:  /{id}
+    defaults: { _controller: LineStormBlogBundle:Admin/Post:view }
     requirements:
        id: \d+
 

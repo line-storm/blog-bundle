@@ -143,22 +143,6 @@ class PostController extends Controller implements ClassResourceInterface
             $updatedPost->setEditedBy($user);
             $updatedPost->setEditedOn($now);
 
-/*
-            // remove the relationship between the tag and the Task
-            foreach ($post->getArticles() as $article) {
-                if (false === $updatedPost->getArticles()->contains($article)) {
-                    // remove the Task from the Tag
-                    $updatedPost->removeArticle($article);
-                    // if it was a many-to-one relationship, remove the relationship like this
-                    // $tag->setTask(null);
-
-                    $em->persist($tag);
-
-                    // if you wanted to delete the Tag entirely, you can also do that
-                    // $em->remove($tag);
-                }
-            }*/
-
             $em->persist($post);
             $em->flush();
 

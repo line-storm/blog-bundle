@@ -226,7 +226,7 @@ a.btn{
 .btn.btn-primary:hover{
     background: #0f608b !important;
 }
-
+/*
 .btn.btn-info{
     background: #52b9e9 !important;
 }
@@ -258,7 +258,7 @@ a.btn{
 .btn.btn-danger:hover{
     background: #d82829 !important;
 }
-
+*/
 /* Label colors */
 .label {
   display: inline;

@@ -80,6 +80,25 @@ abstract class Post
      */
     protected $galleries;
 
+    /**
+     * @var string
+     */
+    protected $slug;
+
+    /**
+     * @var string
+     */
+    protected $blurb;
+
+    /**
+     * @var string
+     */
+    protected $metaDescription;
+
+    /**
+     * @var string
+     */
+    protected $metaKeywords;
 
     /**
      * Constructor
@@ -87,7 +106,6 @@ abstract class Post
     public function __construct()
     {
         $this->tags = new ArrayCollection();
-        $this->children = new ArrayCollection();
         $this->articles = new ArrayCollection();
         $this->galleries = new ArrayCollection();
     }
@@ -103,10 +121,14 @@ abstract class Post
             $this->editedOn = new \DateTime();
     }
 
-
+    /**
+     * Get the slug. If it's not set, generate it from the title
+     *
+     * @return string
+     */
     public function getSlug()
     {
-        return strtolower(str_replace(' ', '-', $this->title));
+        return $this->slug ?: strtolower(str_replace(' ', '-', $this->title));
     }
     
     /**
@@ -431,4 +453,53 @@ abstract class Post
     {
         return $this->galleries;
     }
+
+    /**
+     * @param string $blurb
+     */
+    public function setBlurb($blurb)
+    {
+        $this->blurb = $blurb;
+    }
+
+    /**
+     * @return string
+     */
+    public function getBlurb()
+    {
+        return $this->blurb;
+    }
+
+    /**
+     * @param string $metaDescription
+     */
+    public function setMetaDescription($metaDescription)
+    {
+        $this->metaDescription = $metaDescription;
+    }
+
+    /**
+     * @return string
+     */
+    public function getMetaDescription()
+    {
+        return $this->metaDescription;
+    }
+
+    /**
+     * @param string $metaKeywords
+     */
+    public function setMetaKeywords($metaKeywords)
+    {
+        $this->metaKeywords = $metaKeywords;
+    }
+
+    /**
+     * @return string
+     */
+    public function getMetaKeywords()
+    {
+        return $this->metaKeywords;
+    }
+
 }

@@ -3,150 +3,11 @@
 namespace LineStorm\BlogBundle\Controller;
 
 use Doctrine\ORM\Query;
-use FOS\RestBundle\Routing\ClassResourceInterface;
-use FOS\RestBundle\View\View;
-use LineStorm\BlogBundle\Entity\BasePost;
-use LineStorm\BlogBundle\Entity\PostInterface;
-use LineStorm\BlogBundle\Entity\TagInterface;
+use LineStorm\BlogBundle\Model\Tag;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
-class TagController extends Controller implements ClassResourceInterface
+class TagController extends Controller
 {
-    private function createResponse($data, $code=200)
-    {
-        return View::create()
-            ->setStatusCode($code)
-            ->setData($data)
-            ->setFormat('json')
-        ;
-    }
-
-
-    /**
-     * Get a list of all consumables
-     *
-     * [GET] /api/blog/tags.{_format}
-     */
-    public function cgetAction()
-    {
-        $modelManager = $this->get('linestorm.blog.model_manager');
-
-        $em = $modelManager->getManager();
-
-        $dql = "
-            SELECT
-                partial t.{id,name}
-            FROM
-                {$modelManager->getEntityClass('tag')} t
-        ";
-        $tags = $em->createQuery($dql)->getArrayResult();
-
-        $view = $this->createResponse($tags);
-
-        return $this->get('fos_rest.view_handler')->handle($view);
-    }
-
-
-    /**
-     * Get a list of all consumables
-     *
-     * [GET] /api/blog/tags/query.{_format}
-     */
-    public function queryAction()
-    {
-        $modelManager = $this->get('linestorm.blog.model_manager');
-
-        $em = $modelManager->getManager();
-
-        $query = $this->getRequest()->query->get('q', '');
-        $maxResults = $this->getRequest()->query->get('limit', 10);
-        if(!is_numeric($maxResults) || $maxResults < 0 || $maxResults > 50)
-        {
-            $maxResults = 10;
-        }
-
-        $dql = "
-            SELECT
-                partial t.{id,name}
-            FROM
-                {$modelManager->getEntityClass('tag')} t
-            WHERE
-                t.name LIKE :query
-            ORDER BY
-                t.name
-        ";
-        $tags = $em->createQuery($dql)->setParameter('query', $query)->setMaxResults($maxResults)->getArrayResult();
-
-        $view = $this->createResponse($tags);
-
-        return $this->get('fos_rest.view_handler')->handle($view);
-    }
-
-
-    /**
-     * Get a post
-     *
-     * [GET] /api/blog/post/{id}.{_format}
-     */
-    public function getAction($id)
-    {
-        $modelManager = $this->get('linestorm.blog.model_manager');
-
-        $em = $modelManager->getManager();
-
-        $dql = "
-            SELECT
-                partial p.{id,title,body,createdOn}
-            FROM
-                {$modelManager->getEntityClass('post')} p
-            WHERE
-                p.id = ?1
-        ";
-        $post = $em->createQuery($dql)->setParameter(1, $id)->getOneOrNullResult(Query::HYDRATE_ARRAY);
-
-        $view = $this->createResponse($post, is_array($post) ? 200 : 404);
-
-        return $this->get('fos_rest.view_handler')->handle($view);
-    }
-
-
-    /**
-     * Get an edit form for a post
-     *
-     * [GET] /api/blog/post/{id}/edit
-     */
-    public function editAction($id)
-    {
-        $user = $this->getUser();
-        if(!$user->isAdmin())
-        {
-            throw new AccessDeniedException();
-        }
-
-        $modelManager = $this->get('linestorm.blog.model_manager');
-
-        $em = $modelManager->getManager();
-
-        $dql = "
-            SELECT
-                partial p.{id,title,body}
-            FROM
-                {$modelManager->getEntityClass('post')} p
-            WHERE
-                p.id = ?1
-        ";
-
-        $csrf = $this->get('form.csrf_provider');
-        $token = $csrf->generateCsrfToken('blog_post_edit');
-
-        $post = $em->createQuery($dql)->setParameter(1, $id)->getOneOrNullResult(Query::HYDRATE_ARRAY);
-
-        $post['_csrf'] = $token;
-        $view = $this->createResponse($post, is_array($post) ? 200 : 404);
-
-        return $this->get('fos_rest.view_handler')->handle($view);
-    }
 
     public function displayAction($tag)
     {
@@ -154,15 +15,28 @@ class TagController extends Controller implements ClassResourceInterface
 
         $tagEntity = $modelManager->get('tag')->findOneByName($tag);
 
-        if (!($tagEntity instanceof TagInterface)) {
+        if (!($tagEntity instanceof Tag))
+        {
             throw $this->createNotFoundException("Tag Not Found");
         }
 
-        $posts = $modelManager->get('post')->findBy(array('tags' => $tagEntity), array('liveOn' => 'DESC'), 10);
+        $postClass = $modelManager->getEntityClass('post');
+        $dql = "
+            SELECT
+                p
+            FROM
+                {$postClass} p
+            WHERE
+                :tag MEMBER OF p.tags
+            ORDER BY
+                p.liveOn DESC
+        ";
+        $posts = $modelManager->getManager()->createQuery($dql)->setParameter('tag', $tagEntity)->setMaxResults(10)->getResult();
 
         return $this->render('LineStormBlogBundle:Tag:display.html.twig', array(
-            'tag'      => $tagEntity,
-            'posts'    => $posts,
+            'tag'   => $tagEntity,
+            'posts' => $posts,
         ));
     }
+
 }

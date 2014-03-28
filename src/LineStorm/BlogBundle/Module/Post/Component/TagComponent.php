@@ -10,17 +10,12 @@ use Symfony\Component\Form\FormBuilderInterface;
 
 class TagComponent extends AbstractHeaderComponent implements ComponentInterface
 {
-    private $name = 'Tag';
-    private $id = 'tag';
+    protected $name = 'Tag';
+    protected $id = 'tag';
 
-    public function getId()
+    public function isSupported($entity)
     {
-        return $this->id;
-    }
-
-    public function getName()
-    {
-        return $this->name;
+        return ($entity instanceof Tag);
     }
 
     /**

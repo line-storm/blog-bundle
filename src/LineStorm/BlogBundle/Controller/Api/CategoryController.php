@@ -1,12 +1,11 @@
 <?php
 
-namespace LineStorm\BlogBundle\Controller;
+namespace LineStorm\BlogBundle\Controller\Api;
 
 use Doctrine\ORM\Query;
-use LineStorm\BlogBundle\Model\Category;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use FOS\RestBundle\Routing\ClassResourceInterface;
 
-class CategoryController extends Controller
+class CategoryController extends AbstractApiController implements ClassResourceInterface
 {
     public function displayAction($category)
     {
@@ -14,7 +13,7 @@ class CategoryController extends Controller
 
         $category = $modelManager->get('category')->findOneByName($category);
 
-        if (!($category instanceof Category)) {
+        if (!($category instanceof CategoryInterface)) {
             throw $this->createNotFoundException("Category Not Found");
         }
 

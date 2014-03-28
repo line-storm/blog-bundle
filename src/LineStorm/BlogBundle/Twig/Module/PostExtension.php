@@ -4,6 +4,7 @@ namespace LineStorm\BlogBundle\Twig\Module;
 
 use LineStorm\BlogBundle\Module\ModuleManager;
 use LineStorm\BlogBundle\Module\Post\Component\ComponentInterface;
+use LineStorm\BlogBundle\Module\Post\PostModule;
 use Symfony\Component\DependencyInjection\Container;
 
 class PostExtension extends \Twig_Extension
@@ -14,6 +15,11 @@ class PostExtension extends \Twig_Extension
     private $moduleManager;
 
     /**
+     * @var PostModule
+     */
+    private $postModule;
+
+    /**
      * @var Container
      */
     private $container;
@@ -22,6 +28,7 @@ class PostExtension extends \Twig_Extension
     {
         $this->container = $container;
         $this->moduleManager = $moduleManager;
+        $this->postModule = $this->moduleManager->getModule('post');
     }
 
     public function getFunctions()
@@ -40,18 +47,30 @@ class PostExtension extends \Twig_Extension
         return $component->getNewTemplate();
     }
 
-    public function renderPostComponentEdit(ComponentInterface $component, $entities)
+    public function renderPostComponentEdit($entities)
     {
-        // we need to pass in templating here or we get cyclic references :(
-        $component->setTemplateEngine($this->container->get('templating'));
-        return $component->getEditTemplate($entities);
+        foreach($this->postModule->getComponents() as $component)
+        {
+            if($component->isSupported($entities))
+            {
+                // we need to pass in templating here or we get cyclic references :(
+                $component->setTemplateEngine($this->container->get('templating'));
+                return $component->getEditTemplate($entities);
+            }
+        }
     }
 
-    public function renderPostComponentView(ComponentInterface $component, $entities)
+    public function renderPostComponentView($entities)
     {
-        // we need to pass in templating here or we get cyclic references :(
-        $component->setTemplateEngine($this->container->get('templating'));
-        return $component->getViewTemplate($entities);
+        foreach($this->postModule->getComponents() as $component)
+        {
+            if($component->isSupported($entities))
+            {
+                // we need to pass in templating here or we get cyclic references :(
+                $component->setTemplateEngine($this->container->get('templating'));
+                return $component->getViewTemplate($entities);
+            }
+        }
     }
 
     public function getName()

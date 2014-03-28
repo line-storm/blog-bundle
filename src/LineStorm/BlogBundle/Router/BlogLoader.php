@@ -79,18 +79,6 @@ class BlogLoader extends Loader implements LoaderInterface
         // add the new route to the route collection:
         $routeName = 'linestorm_blog_post';
         $this->routes->add($routeName, $route);
-/*
-        // prepare a new route
-        $pattern = '/admin/post/new';
-        $defaults = array(
-            '_controller' => 'LineStormBlogBundle:Post:create',
-        );
-        $requirements = array();
-        $route = new Route($pattern, $defaults, $requirements, array(),'', array(), array('GET'));
-
-        // add the new route to the route collection:
-        $routeName = 'linestorm_blog_post_new';
-        $this->routes->add($routeName, $route);*/
     }
 
     private function makeCategoryRoutes()

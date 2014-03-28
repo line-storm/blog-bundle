@@ -12,6 +12,9 @@ abstract class AbstractComponent
     const TYPE_BODY     = 3;
     const TYPE_FOOTER   = 4;
 
+    protected $name;
+    protected $id;
+
     /**
      * @var ModelManager
      */
@@ -22,6 +25,16 @@ abstract class AbstractComponent
     public function __construct(ModelManager $modelManager)
     {
         $this->modelManager = $modelManager;
+    }
+
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    public function getName()
+    {
+        return $this->name;
     }
 
     public function setTemplateEngine(EngineInterface $templating)

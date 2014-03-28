@@ -8,7 +8,13 @@ use Symfony\Component\Templating\EngineInterface;
 
 interface ComponentInterface
 {
+    public function getId();
+
+    public function getName();
+
     public function getType();
+
+    public function isSupported($entity);
 
     public function handleSave(Post $post, array $data);
 

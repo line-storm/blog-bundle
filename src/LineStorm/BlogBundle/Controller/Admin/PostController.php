@@ -26,6 +26,21 @@ class PostController extends Controller
     }
 
 
+    public function viewAction($id)
+    {
+        $moduleManager = $this->get('linestorm.blog.module_manager');
+        $module        = $moduleManager->getModule('post');
+
+        $modelManager = $this->get('linestorm.blog.model_manager');
+        $post = $modelManager->get('post')->find($id);
+
+        return $this->render('LineStormBlogBundle:Modules:Post/view.html.twig', array(
+            'post'      => $post,
+            'module'    => $module,
+        ));
+    }
+
+
     public function editAction($id)
     {
         $user = $this->getUser();

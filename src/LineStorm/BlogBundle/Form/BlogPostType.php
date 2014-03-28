@@ -27,6 +27,10 @@ class BlogPostType extends AbstractBlogFormType
                 'class'    => $this->modelManager->getEntityClass('category'),
                 'property' => 'name',
             ))
+            ->add('slug')
+            ->add('blurb')
+            ->add('metaDescription')
+            ->add('metaKeywords')
         ;
 
         $module = $this->moduleManager->getModule('post');
