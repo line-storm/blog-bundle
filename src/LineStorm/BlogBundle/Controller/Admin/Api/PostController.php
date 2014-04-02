@@ -85,7 +85,7 @@ class PostController extends Controller implements ClassResourceInterface
 
         $formValues = json_decode($request->getContent(), true);
 
-        $form->submit($formValues['linestorm_blogbundle_blogpost']);
+        $form->submit($formValues['linestorm_blog_form_post']);
 
         if ($form->isValid()) {
 

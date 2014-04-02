@@ -59,3 +59,9 @@ services:
             - { name: form.type, alias: linestorm_blog_form_media }
 
 
+  linestorm.blog.form.type.category:
+        class: LineStorm\BlogBundle\Form\CategoryFormType
+        arguments: [@linestorm.blog.model_manager]
+        tags:
+            - { name: form.type, alias: linestorm_blog_form_category }
+

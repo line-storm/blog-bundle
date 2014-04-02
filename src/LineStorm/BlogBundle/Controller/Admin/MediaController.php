@@ -90,6 +90,7 @@ class MediaController extends Controller
         }
         catch(MediaFileAlreadyExistsException $e)
         {
+            $media = $e->getEntity();
             $code = 200;
         }
         catch(HttpException $e)
