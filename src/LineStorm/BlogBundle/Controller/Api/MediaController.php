@@ -1,6 +1,6 @@
 <?php
 
-namespace LineStorm\BlogBundle\Controller\Admin\Api;
+namespace LineStorm\BlogBundle\Controller\Api;
 
 use FOS\RestBundle\Routing\ClassResourceInterface;
 use FOS\RestBundle\View\View;

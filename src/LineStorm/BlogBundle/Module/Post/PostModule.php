@@ -103,7 +103,7 @@ class PostModule extends AbstractModule implements ModuleInterface
      */
     public function addRoutes(LoaderInterface $loader)
     {
-        $moduleRoutes = $loader->import('@LineStormBlogBundle/Resources/config/routing/modules/post.yml', 'yaml');
+        $moduleRoutes = $loader->import('@LineStormBlogBundle/Resources/config/routing/modules/post/post.yml', 'yaml');
 
         // import all the component routes
         foreach ($this->components as $component) {

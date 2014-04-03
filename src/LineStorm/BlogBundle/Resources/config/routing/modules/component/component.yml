@@ -1,5 +1,0 @@
-linestorm_blog_admin_module_api_new:
-    type:     rest
-    resource: LineStorm\BlogBundle\Controller\Admin\Api\ComponentController
-    name_prefix:  linestorm_blog_admin_module_post_api_component_
-    prefix:   /

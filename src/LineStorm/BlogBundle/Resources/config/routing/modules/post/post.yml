@@ -18,13 +18,7 @@ linestorm_blog_admin_module_post_create:
     pattern:  /new
     defaults: { _controller: LineStormBlogBundle:Admin/Post:new }
 
-
-linestorm_blog_admin_module_post_api_component:
-  type:         rest
-  prefix:       /api
-  resource:     "@LineStormBlogBundle/Resources/config/routing/modules/component/component.yml"
-
 linestorm_blog_admin_module_post_api_post:
   type:         rest
   prefix:       /api
-  resource:     "@LineStormBlogBundle/Resources/config/routing/modules/api/post.yml"
+  resource:     "api.yml"

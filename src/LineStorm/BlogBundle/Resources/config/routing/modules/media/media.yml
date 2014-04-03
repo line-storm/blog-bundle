@@ -6,7 +6,7 @@ linestorm_blog_admin_module_media:
 linestorm_blog_admin_module_media_api:
   type:         rest
   prefix:       /api
-  resource:     "@LineStormBlogBundle/Resources/config/routing/modules/api/media.yml"
+  resource:     "api.yml"
 
 
 linestorm_blog_admin_module_media_create:

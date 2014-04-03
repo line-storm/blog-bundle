@@ -54,6 +54,6 @@ class MediaModule extends AbstractModule implements ModuleInterface
      */
     public function addRoutes(LoaderInterface $loader)
     {
-        return $loader->import('@LineStormBlogBundle/Resources/config/routing/modules/media.yml', 'yaml');
+        return $loader->import('@LineStormBlogBundle/Resources/config/routing/modules/media/media.yml', 'yaml');
     }
 } 
