@@ -68,6 +68,11 @@ class ModelManager
      */
     public function getEntityClass($name)
     {
+        if(!array_key_exists($name, $this->mappings))
+        {
+            throw new ModelNotFoundException($name);
+        }
+
         return $this->mappings[$name];
     }
 

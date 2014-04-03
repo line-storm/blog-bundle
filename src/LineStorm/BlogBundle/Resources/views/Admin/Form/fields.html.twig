@@ -107,16 +107,6 @@
     {% endspaceless %}
 {% endblock datetime_widget %}
 
-{% block textarea_widget %}
-    {% spaceless %}
-        {% if inline is same as(true) %}
-            <div {{ block('widget_attributes') }} contenteditable="true" data-role="textarea">{{ value|raw }}</div>
-        {% else %}
-            <textarea {{ block('widget_attributes') }}>{{ value }}</textarea>
-        {% endif %}
-    {% endspaceless %}
-{% endblock textarea_widget %}
-
 {% block dropzone_widget %}
     {% import _self as fn %}
     {% macro dzPreview(child) %}

@@ -5,13 +5,6 @@ parameters:
   linestorm.blog.model_manager.class:           LineStorm\BlogBundle\Model\ModelManager
   linestorm.blog.module_manager.class:          LineStorm\BlogBundle\Module\ModuleManager
 
-  linestorm.blog.module.post.class:             LineStorm\BlogBundle\Module\Post\PostModule
-  linestorm.blog.module.post.article.class:     LineStorm\BlogBundle\Module\Post\Component\ArticleComponent
-  linestorm.blog.module.post.gallery.class:     LineStorm\BlogBundle\Module\Post\Component\GalleryComponent
-  linestorm.blog.module.post.tag.class:         LineStorm\BlogBundle\Module\Post\Component\TagComponent
-
-  linestorm.blog.module.media.class:            LineStorm\BlogBundle\Module\Media\MediaModule
-
 services:
 
   linestorm.blog.routing_loader:
@@ -36,58 +29,9 @@ services:
       - [ setEntityManager, [@doctrine, %linestorm_blog.entity_manager%] ]
 
   #
-  # Module Management
-  #
-  linestorm.blog.module.post:
-    class: %linestorm.blog.module.post.class%
-    tags:
-      - { name: linestorm.blog.module }
-    calls:
-      - [ setComponents, [ [@linestorm.blog.module.post.article, @linestorm.blog.module.post.gallery, @linestorm.blog.module.post.tag] ] ]
-
-  linestorm.blog.module.post.article:
-    class: %linestorm.blog.module.post.article.class%
-    arguments: [@linestorm.blog.model_manager]
-
-  linestorm.blog.module.post.gallery:
-    class: %linestorm.blog.module.post.gallery.class%
-    arguments: [@linestorm.blog.model_manager]
-
-  linestorm.blog.module.post.tag:
-    class: %linestorm.blog.module.post.tag.class%
-    arguments: [@linestorm.blog.model_manager]
-
-  linestorm.blog.module.media:
-    class: %linestorm.blog.module.media.class%
-    arguments: [@linestorm.blog.media_manager]
-    tags:
-      - { name: linestorm.blog.module }
-
-  #
-  # MEDIA
-  linestorm.blog.media_manager:
-        class: LineStorm\BlogBundle\Media\MediaManager
-
-  #
-  # TWIG POST MODULE
-  linestorm.blog.twig.module_post_extension:
-    class: LineStorm\BlogBundle\Twig\Module\PostExtension
-    arguments: [ @linestorm.blog.module_manager, @service_container ]
-    tags:
-      - { name: twig.extension }
-
-  #
   # TWIG ADMIN
   linestorm.blog.twig.blog_extension:
     class: LineStorm\BlogBundle\Twig\BlogAdminExtension
     arguments: [ @linestorm.blog.module_manager ]
     tags:
       - { name: twig.extension }
-
-  #
-  # FORM ADMIN
-  #
-  linestorm.blog.textarea_inline_extension:
-      class: LineStorm\BlogBundle\Form\Extension\TextareaInlineExtension
-      tags:
-          - { name: form.type_extension, alias: textarea }

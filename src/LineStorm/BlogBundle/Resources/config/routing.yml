@@ -2,10 +2,10 @@ linestorm_blog_routes:
   resource: .
   type:       linestorm_blog
 
-linestorm_blog_api:
-  type:         rest
-  prefix:       /api
-  resource:     "@LineStormBlogBundle/Resources/config/routing/api.yml"
+#linestorm_blog_api:
+#  type:         rest
+#  prefix:       /api
+#  resource:     "@LineStormBlogBundle/Resources/config/routing/api.yml"
 
 linestorm_blog_admin:
   prefix:       /admin
