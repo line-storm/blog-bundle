@@ -12,9 +12,9 @@ namespace LineStorm\BlogBundle\Model\Exception;
 class ModelNotFoundException extends \Exception
 {
 
-    public function __construct($message = 'Requested Model Not Found', $code = null, $exception = null)
+    public function __construct($name = '', $message = 'Requested Model Not Found', $code = null, $exception = null)
     {
-        parent::__construct($message, $code, $exception);
+        parent::__construct("{$message}: {$name}", $code, $exception);
     }
 
 } 

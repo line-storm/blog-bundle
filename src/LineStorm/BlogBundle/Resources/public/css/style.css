@@ -1228,7 +1228,7 @@ form label{
     display:inline-block;
     height: 20px;
     width: 20px;
-    background: url(../img/icons/load-spinner-blue.gif) no-repeat 0 0 transparent !important;
+    background: url(../../../../../../../blog-post-bundle/src/LineStorm/BlogPostBundle/Resources/public/img/icons/load-spinner-blue.gif) no-repeat 0 0 transparent !important;
 }
 
 .widget .widget-head .widget-icons i{
