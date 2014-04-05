@@ -67,7 +67,7 @@ class BlogLoader extends Loader implements LoaderInterface
         // prepare a new route
         $pattern = '/{category}/{id}-{slug}';
         $defaults = array(
-            '_controller' => 'LineStormBlogBundle:Post:display',
+            '_controller' => 'LineStormBlogPostBundle:Post:display',
         );
         $requirements = array(
             'category' => '[\w\d-]+',
@@ -86,7 +86,7 @@ class BlogLoader extends Loader implements LoaderInterface
         // prepare a new route
         $pattern = '/{category}/';
         $defaults = array(
-            '_controller' => 'LineStormBlogBundle:Category:display',
+            '_controller' => 'LineStormBlogPostBundle:Category:display',
         );
         $requirements = array(
             'category' => '[\w\d-]*',
@@ -103,7 +103,7 @@ class BlogLoader extends Loader implements LoaderInterface
         // prepare a new route
         $pattern = '/tag/{tag}';
         $defaults = array(
-            '_controller' => 'LineStormBlogBundle:tag:display',
+            '_controller' => 'LineStormBlogPostBundle:tag:display',
         );
         $requirements = array(
             'tag' => '[\w\d-]*',
