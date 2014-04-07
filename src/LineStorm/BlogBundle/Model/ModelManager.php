@@ -4,6 +4,7 @@ namespace LineStorm\BlogBundle\Model;
 
 use Doctrine\Bundle\DoctrineBundle\Registry;
 use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\EntityRepository;
 use LineStorm\BlogBundle\Model\Exception\ModelNotFoundException;
 
 /**
@@ -64,6 +65,7 @@ class ModelManager
      *
      * @param $name
      *
+     * @throws Exception\ModelNotFoundException
      * @return string
      */
     public function getEntityClass($name)
@@ -81,7 +83,7 @@ class ModelManager
      *
      * @throws Exception\ModelNotFoundException
      *
-     * @return \Doctrine\Common\Persistence\ObjectRepository
+     * @return EntityRepository
      */
     public function get($model)
     {

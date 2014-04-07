@@ -112,11 +112,19 @@ window.lineStorm.api = (function(){
 
         var sData = _serializeForm(data);
 
+        $form.find('input[type="submit"]').prop('disabled', true);
+
         _call($form[0].action, {
             data: JSON.stringify(sData),
             method: method,
-            success: callback_success,
-            error: callback_failure
+            success: function(e){
+                $form.find('input[type="submit"]').prop('disabled', false);
+                callback_success.call(this, e);
+            },
+            error: function(a,b,c){
+                $form.find('input[type="submit"]').prop('disabled', false);
+                callback_failure.call(this, a,b,c);
+            }
         });
 
     };
