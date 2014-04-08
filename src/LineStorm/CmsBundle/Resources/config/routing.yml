@@ -1,0 +1,7 @@
+linestorm_cms_routes:
+  resource: .
+  type:     linestorm_cms
+
+linestorm_cms_admin:
+  prefix:       /cms/admin
+  resource:     'routing/admin.yml'

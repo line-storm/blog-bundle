@@ -1,7 +1,0 @@
-linestorm_blog_routes:
-  resource: .
-  type:     linestorm_blog
-
-linestorm_blog_admin:
-  prefix:       /cms/admin
-  resource:     'routing/admin.yml'

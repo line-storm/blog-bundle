@@ -1,0 +1,37 @@
+parameters:
+  linestorm.cms.routing_loader.class:          LineStorm\CmsBundle\Router\CmsLoader
+  linestorm.cms.admin.routing_loader.class:    LineStorm\CmsBundle\Router\CmsAdminLoader
+
+  linestorm.cms.model_manager.class:           LineStorm\CmsBundle\Model\ModelManager
+  linestorm.cms.module_manager.class:          LineStorm\CmsBundle\Module\ModuleManager
+
+services:
+
+  linestorm.cms.routing_loader:
+    class: %linestorm.cms.routing_loader.class%
+    arguments: [@linestorm.cms.module_manager]
+    tags:
+      - { name: routing.loader }
+
+  linestorm.cms.admin.routing_loader:
+    class: %linestorm.cms.admin.routing_loader.class%
+    arguments: [@linestorm.cms.module_manager]
+    tags:
+      - { name: routing.loader }
+
+  linestorm.cms.module_manager:
+    class: %linestorm.cms.module_manager.class%
+
+  linestorm.cms.model_manager:
+    class: %linestorm.cms.model_manager.class%
+    calls:
+      - [ setMappings, [%linestorm_cms.entity_config%] ]
+      - [ setEntityManager, [@doctrine, %linestorm_cms.entity_manager%] ]
+
+  #
+  # TWIG ADMIN
+  linestorm.cms.twig.cms_extension:
+    class: LineStorm\CmsBundle\Twig\CmsAdminExtension
+    arguments: [ @linestorm.cms.module_manager ]
+    tags:
+      - { name: twig.extension }
