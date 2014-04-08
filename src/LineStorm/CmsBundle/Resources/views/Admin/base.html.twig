@@ -28,19 +28,19 @@
     </script>
 
     {% stylesheets
-        'css/bootstrap.css'
+        'vendor/bootstrap/dist/css/bootstrap.min.css'
+        'vendor/font-awesome/css/font-awesome.min.css'
         'css/bootstrap-theme.css'
         'css/custom.css'
-        'css/font-awesome.css'
         'bundles/linestormcms/css/style.css'
         filter='cssrewrite' output='compiled/css/style.css' %}
         <link rel="stylesheet" href="{{ asset_url }}" />
     {% endstylesheets %}
 
     {% javascripts
-        'js/jquery.js'
-        'js/jquery-ui.js'
-        'js/bootstrap.js'
+        'vendor/jquery/dist/jquery.min.js'
+        'vendor/jquery-ui/ui/minified/jquery-ui.min.js'
+        'vendor/bootstrap/dist/js/bootstrap.min.js'
         '@LineStormCmsBundle/Resources/public/js/custom.js'
         output='compiled/js/main.js' %}
         <script type="text/javascript" src="{{ asset_url }}"></script>
