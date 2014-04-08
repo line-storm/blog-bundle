@@ -89,7 +89,7 @@ class CmsLoader extends Loader implements LoaderInterface
             '_controller' => 'LineStormPostBundle:Category:display',
         );
         $requirements = array(
-            'category' => '[\w\d-]*',
+            'category' => '[\w\d-]+',
         );
         $route = new Route($pattern, $defaults, $requirements, array(),'', array(), array('GET'));
 
@@ -106,7 +106,7 @@ class CmsLoader extends Loader implements LoaderInterface
             '_controller' => 'LineStormPostBundle:tag:display',
         );
         $requirements = array(
-            'tag' => '[\w\d-]*',
+            'tag' => '[\w\d-]+',
         );
         $route = new Route($pattern, $defaults, $requirements, array(),'', array(), array('GET'));
 
