@@ -1,6 +1,6 @@
 {
-    "name": "linestorm/blog-bundle",
-    "description": "Blog Bundle for symfony 2.3",
+    "name": "linestorm/linestorm-cms",
+    "description": "LineStorm CMS Bundle for symfony 2.3",
     "require": {
         "php": ">=5.3.0",
         "symfony/symfony": ">=2.3"
@@ -9,8 +9,7 @@
         {
             "name": "Andy Thorne",
             "email": "contrabandvr@gmail.com",
-            "homepage": "http://www.andy-thorne.co.uk",
-            "role": "Senior Developer"
+            "homepage": "http://www.andy-thorne.co.uk"
         }
     ],
     "autoload": {

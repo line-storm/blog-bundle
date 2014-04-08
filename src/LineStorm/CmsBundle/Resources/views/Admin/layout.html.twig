@@ -1,0 +1,40 @@
+{% extends 'LineStormCmsBundle:Admin:base.html.twig' %}
+
+{% block title %}
+    fifa | {{ parent() }}
+{% endblock %}
+
+{% block header %}
+    <em>line</em><strong>STORM</strong>
+{% endblock %}
+
+{% block pagetitle %}
+
+{% endblock %}
+
+{% block pagesubtitle %}
+
+{% endblock %}
+
+{% block breadcrumbs %}
+
+{% endblock %}
+
+{% block nav %}
+    {% for id,module in cms_admin_module_list() %}
+        <li class="has_submenu">
+            <a class="" href="#menu-{{ id }}"><i class="fa-angle-right"></i>{{ module.name }}</a>
+            <ul id="menu-{{ id }}" class="">
+                {% for text,link in module.navigation %}
+                    <li><a href="{{ path(link[0], link[1]) }}">{{ text }}</a></li>
+                {% endfor %}
+            </ul>
+        </li>
+    {% endfor %}
+{% endblock %}
+{% block body %}
+    <div class="body">
+        {% block content %}
+        {% endblock %}
+    </div>
+{% endblock %}
