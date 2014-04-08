@@ -1,7 +1,10 @@
-LineStorm Blog Bundle
+LineStorm CMS Bundle
 =====================
 
-Blog Bundle for symfony >=2.3
+LineStorm CMS Bundle for symfony >=2.3.
+
+This bundle is pretty useless on it's own, as it's just the core files. You will need to install various modules to make
+it meaningful.
 
 Configuration
 =============
@@ -19,11 +22,7 @@ Add these config options in `app/config/config.yml`
 line_storm_blog:
   entity_manager: default
   entity_classes:
-    post:       Acme\DemoBundle\Entity\BlogPost
-    tag:        Acme\DemoBundle\Entity\BlogTag
-    category:   Acme\DemoBundle\Entity\BlogCategory
-    user:       Acme\DemoBundle\Entity\User
-    user_group: Acme\DemoBundle\Entity\Group
+    ...:       Acme\DemoBundle\Entity\...
 ```
 
 routing.yml
@@ -31,10 +30,8 @@ routing.yml
 Add this route in `app/config/routing.yml`
 
 ```yml
-linestorm_blog:
-    type:       linestorm_blog
-    resource:   LineStorm\BlogBundle\Controller\BlogController
-    prefix:     /blog
+acme_cms:
+    resource:   "@LineStormBlogBundle/Resources/config/routing.yml"
 ```
 
 AppKernel.php
@@ -50,4 +47,4 @@ Add these classes to the `app/AppKernel.php`
 
 Twig Template Overrides
 -----------------------
-As will all symfony2 bundles, you can override the default templates by adding files under `app/Resources/LineStromBlogBundle/views/...`
+As with all symfony2 bundles, you can override the default templates by adding files under `app/Resources/LineStromBlogBundle/views/...`

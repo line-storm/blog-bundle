@@ -50,9 +50,9 @@ class BlogLoader extends Loader implements LoaderInterface
     private function makeHomepageRoute()
     {
         // prepare a new route
-        $pattern = '/';
+        $pattern = '/blog';
         $defaults = array(
-            '_controller' => 'LineStormBlogBundle:Blog:index',
+            '_controller' => 'LineStormBlogPostBundle:Blog:index',
         );
         $requirements = array();
         $route = new Route($pattern, $defaults, $requirements, array(),'', array(), array('GET'));
@@ -65,7 +65,7 @@ class BlogLoader extends Loader implements LoaderInterface
     private function makePostRoutes()
     {
         // prepare a new route
-        $pattern = '/{category}/{id}-{slug}';
+        $pattern = '/blog/{category}/{id}-{slug}';
         $defaults = array(
             '_controller' => 'LineStormBlogPostBundle:Post:display',
         );
@@ -84,7 +84,7 @@ class BlogLoader extends Loader implements LoaderInterface
     private function makeCategoryRoutes()
     {
         // prepare a new route
-        $pattern = '/{category}/';
+        $pattern = '/blog/{category}/';
         $defaults = array(
             '_controller' => 'LineStormBlogPostBundle:Category:display',
         );
@@ -101,7 +101,7 @@ class BlogLoader extends Loader implements LoaderInterface
     private function makeTagRoutes()
     {
         // prepare a new route
-        $pattern = '/tag/{tag}';
+        $pattern = '/blog/tag/{tag}';
         $defaults = array(
             '_controller' => 'LineStormBlogPostBundle:tag:display',
         );
