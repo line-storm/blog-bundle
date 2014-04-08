@@ -19,7 +19,7 @@ config.yml
 Add these config options in `app/config/config.yml`
 
 ```yml
-line_storm_blog:
+line_storm_cms:
   entity_manager: default
   entity_classes:
     ...:       Acme\DemoBundle\Entity\...
