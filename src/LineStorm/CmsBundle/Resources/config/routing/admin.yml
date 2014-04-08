@@ -1,0 +1,3 @@
+linestorm_cms_admin_home:
+    resource: .
+    type: linestorm_cms_admin
