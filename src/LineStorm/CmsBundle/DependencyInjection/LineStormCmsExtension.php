@@ -26,6 +26,8 @@ class LineStormCmsExtension extends Extension
         $loader = new Loader\YamlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
         $loader->load('services.yml');
 
+        // extract the loaded modules
+
         $container->setParameter("linestorm_cms.entity_config",        $config['entity_classes']);
         $container->setParameter("linestorm_cms.entity_manager",       $config['entity_manager']);
         $container->setParameter("linestorm_cms.backend_type_orm",     true);

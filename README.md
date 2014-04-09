@@ -32,6 +32,11 @@ Add this route in `app/config/routing.yml`
 ```yml
 acme_cms:
     resource:   "@LineStormBlogBundle/Resources/config/routing.yml"
+
+linestorm_cms_routes:
+  resource: .
+  type:     linestorm_cms
+  prefix:   /path/to/cms
 ```
 
 AppKernel.php

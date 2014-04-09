@@ -33,7 +33,7 @@
         'css/bootstrap-theme.css'
         'css/custom.css'
         'bundles/linestormcms/css/style.css'
-        filter='cssrewrite' output='compiled/css/admin-style.css' %}
+        filter='cssrewrite' output='compiled/css/admin/style.css' %}
         <link rel="stylesheet" href="{{ asset_url }}" />
     {% endstylesheets %}
 
@@ -42,7 +42,7 @@
         'vendor/jquery-ui/ui/minified/jquery-ui.min.js'
         'vendor/bootstrap/dist/js/bootstrap.min.js'
         '@LineStormCmsBundle/Resources/public/js/custom.js'
-        output='compiled/js/admin-main.js' %}
+        output='compiled/js/admin/main.js' %}
         <script type="text/javascript" src="{{ asset_url }}"></script>
     {% endjavascripts %}
 
