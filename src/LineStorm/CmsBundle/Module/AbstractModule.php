@@ -1,20 +1,18 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: athorne1016
- * Date: 03/03/14
- * Time: 15:00
- */
 
 namespace LineStorm\CmsBundle\Module;
 
+/**
+ * Class AbstractModule
+ * @package LineStorm\CmsBundle\Module
+ */
 abstract class AbstractModule
 {
     protected $name;
     protected $id;
 
     /**
-     * @return string
+     * @inheritdoc
      */
     public function getId()
     {
@@ -22,7 +20,7 @@ abstract class AbstractModule
     }
 
     /**
-     * @return string
+     * @inheritdoc
      */
     public function getName()
     {
