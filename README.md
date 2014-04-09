@@ -1,57 +1,76 @@
 LineStorm CMS Bundle
 =====================
 
-LineStorm CMS Bundle for symfony >=2.3.
+LineStorm CMS is a Content Management System Bundle for symfony >=2.3.
 
-[![Build Status](https://travis-ci.org/linestorm/linestorm-cms.svg?branch=master)](https://travis-ci.org/linestorm/linestorm-cms)
-
-This bundle is pretty useless on it's own, as it's just the core files. You will need to install various modules to make
+This bundle is pretty useless on it's own as it's just the core files. You will need to install various modules to make
 it meaningful.
 
 Configuration
 =============
+1. Download and Enable
+2. Configure the Bundle
+3. Install some modules
 
-Dependencies
-------------
-FosUserBundle
-FosRestBundle
+Step 1: Download and Enable
+---------------------------
 
-config.yml
-----------
-Add these config options in `app/config/config.yml`
+Add `linestorm/linestorm-cms` to your `composer.json` and add `new LineStorm\CmsBundle\CmsBundle(),` to your `app/AppKernel.php` file.
+
+Step 2: Configure the Bundle
+----------------------------
+
+There is very little configuration that is needed for this bundle as it doesn't actually do anything on its own, but 
+there is configurations that you should know about:
+
+###config.yml
+
+Add these config options in `app/config/config.yml`:
 
 ```yml
 line_storm_cms:
   entity_manager: default
+  backend_type: orm
   entity_classes:
     ...:       Acme\DemoBundle\Entity\...
 ```
 
-routing.yml
------------
+* entity_manager refers to the entity manager id to use
+* backend_type refers to the backend database type. Currently only orm (Doctrine) is supported
+* entity_classes is an array of "id: [class namespace]" scalars LineStorm needs to know about your entity classes for
+  your modules to be able to access them. Each module you install will tell you what classes to have here
+
+###routing.yml
+
 Add this route in `app/config/routing.yml`
 
 ```yml
 acme_cms:
-    resource:   "@LineStormBlogBundle/Resources/config/routing.yml"
-
-linestorm_cms_routes:
   resource: .
   type:     linestorm_cms
-  prefix:   /path/to/cms
+  prefix:   /blog
+
+acme_cms_admin:
+    resource:   "@LineStormCmsBundle/Resources/config/routing.yml"
 ```
 
-AppKernel.php
--------------
-Add these classes to the `app/AppKernel.php`
+* acme_cms is your frontend route controller
+* acme_cms_admin is your backend routes
 
-```php
-    new FOS\UserBundle\FOSUserBundle(),
-    new FOS\RestBundle\FOSRestBundle(),
-    new JMS\SerializerBundle\JMSSerializerBundle(),
-    new LineStorm\BlogBundle\LineStormBlogBundle(),
-```
 
-Twig Template Overrides
------------------------
-As with all symfony2 bundles, you can override the default templates by adding files under `app/Resources/LineStromBlogBundle/views/...`
+
+###Third Party Dependencies
+
+* [FosUserBundle](https://github.com/FriendsOfSymfony/FOSUserBundle)
+* [FosRestBundle](https://github.com/FriendsOfSymfony/FOSRestBundle)
+
+You will need to follow the configuration guides in these bundles to set them up.
+
+Step 3: Install some modules
+----------------------------
+Modules are what do all the work in LineStorm. To see a few modules, take a look at the [LineStorm Organisation on GitHub](https://github.com/linestorm)
+
+
+Documentation
+=============
+To see the full documentation, see  [docs/](docs/index.md)
