@@ -58,7 +58,6 @@ acme_cms_admin:
 * acme_cms_admin is your backend routes
 
 
-
 ###Third Party Dependencies
 
 * [FosUserBundle](https://github.com/FriendsOfSymfony/FOSUserBundle)
@@ -73,4 +72,4 @@ Modules are what do all the work in LineStorm. To see a few modules, take a look
 
 Documentation
 =============
-To see the full documentation, see  [docs/](docs/index.md)
+To see the full documentation, see [docs](docs/index.md)
