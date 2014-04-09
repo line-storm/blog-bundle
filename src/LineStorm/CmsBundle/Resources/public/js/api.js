@@ -1,6 +1,21 @@
 window.lineStorm = window.lineStorm || {};
 window.lineStorm.api = (function(){
 
+    var modalContainer =
+        '<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true"> ' +
+        '    <div class="modal-dialog"> ' +
+        '    <div class="modal-content"> ' +
+        '        <div class="modal-header"> ' +
+        '            <h4 class="modal-title" id="myModalLabel">__title__</h4> ' +
+        '        </div> ' +
+        '        <div class="modal-body">__widget__</div> ' +
+        '        <div class="modal-footer"> ' +
+        '            <button type="button" class="btn btn-default close-button" style="display: none;" data-dismiss="modal">Close</button> ' +
+        '        </div> ' +
+        '    </div> ' +
+        '    </div> ' +
+        '</div>';
+
     // convert a form to a multi dimentional array
     var _serializeForm = function($form){
 
@@ -51,7 +66,7 @@ window.lineStorm.api = (function(){
 
                 // fixed
                 else if(k.match(patterns.fixed)){
-                    merge = self.build([], k, merge);
+                    merge = self.build({}, k, merge);
                 }
 
                 // named
@@ -112,18 +127,44 @@ window.lineStorm.api = (function(){
 
         var sData = _serializeForm(data);
 
-        $form.find('input[type="submit"]').prop('disabled', true);
+        $form.find('[type="submit"]').prop('disabled', true);
+        var formModalPrototype = modalContainer.replace('__widget__', '<div class="modal-message">Please wait while we save your form.</div>').replace('__title__', 'Saving Form...')
+        var $formModal= $(formModalPrototype);
+        $formModal.modal();
 
         _call($form[0].action, {
             data: JSON.stringify(sData),
             method: method,
-            success: function(e){
-                $form.find('input[type="submit"]').prop('disabled', false);
-                callback_success.call(this, e);
+            success: function(e,s,x){
+                $form.find('[type="submit"]').prop('disabled', false);
+                $formModal.find('.modal-message').html("The form has been saved.");
+                $formModal.find('.close-button').show();
+                callback_success.call(this, e,s,x);
             },
-            error: function(a,b,c){
-                $form.find('input[type="submit"]').prop('disabled', false);
-                callback_failure.call(this, a,b,c);
+            error: function(e,b,c){
+                $form.find('[type="submit"]').prop('disabled', false);
+                var html = '<p>An error occured when saving the form.</p><div id="FormErrors" class="alert alert-danger">';
+                if(e.status === 400){
+                    if(e.responseJSON){
+                        var errors = parseError(e.responseJSON.errors);
+                        var str = '';
+                        for(var i in errors){
+                            if(i.toLowerCase() == 'children')
+                                continue;
+                            if(errors[i].length){
+                                html += "<p class=''><strong style='text-transform:capitalize;'>"+i+":</strong> "+errors[i].join(', ')+"</p>";
+                            }
+
+                        }
+                        $('#FormErrors').html(str).slideDown();
+                    } else {
+                        alert(status);
+                    }
+                }
+                html += '</div>'
+                $formModal.find('.modal-message').html(html);
+                $formModal.find('.close-button').show();
+                callback_failure.call(this, e,b,c,$formModal);
             }
         });
 

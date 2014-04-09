@@ -1,3 +1,9 @@
-linestorm_cms_admin_home:
+linestorm_cms_admin_index:
+  pattern:  /
+  defaults: { _controller: LineStormCmsBundle:Admin:index }
+  requirements:
+
+
+linestorm_cms_admin_modules:
     resource: .
     type: linestorm_cms_admin

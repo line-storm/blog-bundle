@@ -1,14 +1,8 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: athorne1016
- * Date: 03/03/14
- * Time: 12:29
- */
 
 namespace LineStorm\CmsBundle\Module;
 
-use Symfony\Component\Config\Loader\LoaderInterface;
+use Symfony\Component\Config\Loader\Loader;
 
 interface ModuleInterface {
 
@@ -20,5 +14,7 @@ interface ModuleInterface {
 
     public function getNavigation();
 
-    public function addRoutes(LoaderInterface $loader);
+    public function addRoutes(Loader $loader);
+
+    public function addAdminRoutes(Loader $loader);
 } 

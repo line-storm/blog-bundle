@@ -28,13 +28,17 @@ class CmsAdminLoader extends Loader implements LoaderInterface
 
     public function load($resource, $type = null)
     {
-
         if (true === $this->loaded) {
             throw new \RuntimeException('Do not add the "app" loader twice');
         }
 
-        $this->makeHomepageRoute();
-        $this->makeModuleRoute();
+        foreach($this->moduleManager->getModules() as $module)
+        {
+            $routes = $module->addAdminRoutes($this, $this->routes);
+            $requirements = array();
+            $routes->addPrefix('/module/'.$module->getId(), array(), $requirements);
+            $this->routes->addCollection($routes);
+        }
 
         $this->loaded = true;
 
@@ -44,31 +48,5 @@ class CmsAdminLoader extends Loader implements LoaderInterface
     public function supports($resource, $type = null)
     {
         return 'linestorm_cms_admin' === $type;
-    }
-
-    private function makeHomepageRoute()
-    {
-        // prepare a new route
-        $pattern = '/dashboard';
-        $defaults = array(
-            '_controller' => 'LineStormCmsBundle:Admin:index',
-        );
-        $requirements = array();
-        $route = new Route($pattern, $defaults, $requirements, array(),'', array(), array('GET'));
-
-        // add the new route to the route collection:
-        $routeName = 'linestorm_cms_admin_index';
-        $this->routes->add($routeName, $route);
-    }
-
-    private function makeModuleRoute()
-    {
-        foreach($this->moduleManager->getModules() as $module)
-        {
-            $routes = $module->addRoutes($this, $this->routes);
-            $requirements = array();
-            $routes->addPrefix('/module/'.$module->getId(), array(), $requirements);
-            $this->routes->addCollection($routes);
-        }
     }
 }
