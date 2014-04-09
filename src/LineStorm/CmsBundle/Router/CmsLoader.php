@@ -84,7 +84,7 @@ class CmsLoader extends Loader implements LoaderInterface
     private function makeCategoryRoutes()
     {
         // prepare a new route
-        $pattern = '/blog/{category}/';
+        $pattern = '/blog/{category}';
         $defaults = array(
             '_controller' => 'LineStormPostBundle:Category:display',
         );
@@ -103,7 +103,7 @@ class CmsLoader extends Loader implements LoaderInterface
         // prepare a new route
         $pattern = '/blog/tag/{tag}';
         $defaults = array(
-            '_controller' => 'LineStormPostBundle:tag:display',
+            '_controller' => 'LineStormPostBundle:Tag:display',
         );
         $requirements = array(
             'tag' => '[\w\d-]+',
