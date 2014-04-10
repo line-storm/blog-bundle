@@ -93,4 +93,21 @@ class ModelManager
 
         return $this->em->getRepository($this->mappings[$model]);
     }
+
+    /**
+     * Create a model class
+     *
+     * @param $model
+     * @return mixed
+     * @throws Exception\ModelNotFoundException
+     */
+    public function create($model)
+    {
+        if (!array_key_exists($model, $this->mappings)) {
+            throw new ModelNotFoundException();
+        }
+
+        $class = $this->mappings[$model];
+        return new $class;
+    }
 }
