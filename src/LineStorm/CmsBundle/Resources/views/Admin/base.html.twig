@@ -27,7 +27,12 @@
         };
     </script>
 
-    <link rel="stylesheet" href="{{ asset(assetsPath ~ '/css/cms/main.css') }}" />
+    {% stylesheets
+        filter="compass" output="assets/bundles/linestormcms/css/main.css"
+        "@LineStormCmsBundle/Resources/assets/sass/main.scss"
+    %}
+        <link rel="stylesheet" href="{{ asset_url }}" />
+    {% endstylesheets %}
 
     {% block head %}
         {{ include('AndyPortfolioBundle::requirejs.html.twig', {
