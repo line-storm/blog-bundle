@@ -110,7 +110,8 @@ window.lineStorm.api = (function(){
                     method = field.value;
                 } else if(field.type === 'radio'){
                     data[fname] = data[fname] || [];
-                    data[fname].push(field.value);
+                    if(field.checked)
+                        data[fname].push(field.value);
                 } else if(field.type === 'checkbox'){
                     data[fname] = field.checked ? field.value : null;
                 } else {
