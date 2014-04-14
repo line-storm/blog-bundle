@@ -27,34 +27,15 @@
         };
     </script>
 
-    {% stylesheets
-        'vendor/bootstrap/dist/css/bootstrap.min.css'
-        'vendor/font-awesome/css/font-awesome.min.css'
-        'css/bootstrap-theme.css'
-        'css/custom.css'
-        'bundles/linestormcms/css/style.css'
-        filter='cssrewrite' output='compiled/css/admin/style.css' %}
-        <link rel="stylesheet" href="{{ asset_url }}" />
-    {% endstylesheets %}
-
-    {% javascripts
-        'vendor/jquery/dist/jquery.min.js'
-        'vendor/jquery-ui/ui/minified/jquery-ui.min.js'
-        'vendor/bootstrap/dist/js/bootstrap.min.js'
-        '@LineStormCmsBundle/Resources/public/js/custom.js'
-        output='compiled/js/admin/main.js' %}
-        <script type="text/javascript" src="{{ asset_url }}"></script>
-    {% endjavascripts %}
+    <link rel="stylesheet" href="{{ asset(assetsPath ~ '/css/cms/main.css') }}" />
 
     {% block head %}
-
+        {{ include('AndyPortfolioBundle::requirejs.html.twig', {
+            requirejs_module: ['../bundles/linestormcms/js/main']
+        }) }}
     {% endblock %}
-      <!-- HTML5 Support for IE -->
-      <!--[if lt IE 9]>
-      <script src="js/html5shim.js"></script>
-      <![endif]-->
 
-      <!-- Favicon -->
+    <!-- Favicon -->
     <link rel="shortcut icon" href="img/favicon/favicon.png">
 </head>
 

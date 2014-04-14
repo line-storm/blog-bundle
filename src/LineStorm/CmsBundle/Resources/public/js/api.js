@@ -146,7 +146,7 @@ window.lineStorm.api = (function(){
                 var html = '<p>An error occured when saving the form.</p><div id="FormErrors" class="alert alert-danger">';
                 if(e.status === 400){
                     if(e.responseJSON){
-                        var errors = parseError(e.responseJSON.errors);
+                        var errors = _parseError(e.responseJSON.errors);
                         var str = '';
                         for(var i in errors){
                             if(i.toLowerCase() == 'children')
@@ -170,10 +170,42 @@ window.lineStorm.api = (function(){
 
     };
 
+
+
+    var _parseError = function(e, p){
+        if(p === undefined){
+            p = 'error';
+        }
+        var errors = {}, childErrors;
+        for(var i in e){
+            if(i === 'errors'){
+                errors[p] = e[i];
+            } else if ("string" === typeof e[i] || e[i] instanceof Array){
+                errors[i] = e[i];
+            } else {
+                childErrors = _parseError(e[i], i);
+                for (var attrname in childErrors) { errors[attrname] = childErrors[attrname]; }
+            }
+        }
+
+        return errors;
+    };
+
+    var apiRoutes = {};
+    var _addApiRoute = function(key, route){
+        apiRoutes[key] = route;
+    }
+    var _getApiRoute = function(key){
+        return apiRoutes[key];
+    }
+
     return {
         serializeForm:  _serializeForm,
         saveForm:       _saveForm,
-        call:           _call
+        call:           _call,
+        parseError:     _parseError,
+        addApiRoute:    _addApiRoute,
+        getApiRoute:    _getApiRoute
     }
 
 })();
