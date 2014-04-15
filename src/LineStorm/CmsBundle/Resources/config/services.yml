@@ -32,6 +32,6 @@ services:
   # TWIG ADMIN
   linestorm.cms.twig.cms_extension:
     class: LineStorm\CmsBundle\Twig\CmsAdminExtension
-    arguments: [ @linestorm.cms.module_manager ]
+    arguments: [ @linestorm.cms.module_manager, @service_container ]
     tags:
       - { name: twig.extension }
