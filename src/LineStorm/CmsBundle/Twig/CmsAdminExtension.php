@@ -42,11 +42,11 @@ class CmsAdminExtension extends \Twig_Extension
         if(strpos($name, '@') === 0)
         {
             // split it up
-            if(preg_match('/^\@([a-zA-Z0-9]+)Bundle\/Resources\/public\/(.+).js$/', $name, $matches))
+            if(preg_match('/^\@([a-zA-Z0-9]+)Bundle\/Resources\/public\/js\/(.+).js$/', $name, $matches))
             {
                 $bundle = strtolower($matches[1]);
                 $module = $matches[2];
-                return "'/assets/bundles/{$bundle}/{$module}'";
+                return "'cms_{$module}'";
             }
             else
             {
