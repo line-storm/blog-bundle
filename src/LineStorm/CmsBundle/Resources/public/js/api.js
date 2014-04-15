@@ -129,7 +129,7 @@ window.lineStorm.api = (function(){
         var sData = _serializeForm(data);
 
         $form.find('[type="submit"]').prop('disabled', true);
-        var formModalPrototype = modalContainer.replace('__widget__', '<div class="modal-message">Please wait while we save your form.</div>').replace('__title__', 'Saving Form...')
+        var formModalPrototype = modalContainer.replace('__widget__', '<div class="modal-message">Please wait while we save your form.</div>').replace('__title__', 'Saving Form...');
         var $formModal= $(formModalPrototype);
         $formModal.modal();
 
@@ -162,7 +162,7 @@ window.lineStorm.api = (function(){
                         alert(status);
                     }
                 }
-                html += '</div>'
+                html += '</div>';
                 $formModal.find('.modal-message').html(html);
                 $formModal.find('.close-button').show();
                 callback_failure.call(this, e,b,c,$formModal);
@@ -195,10 +195,10 @@ window.lineStorm.api = (function(){
     var apiRoutes = {};
     var _addApiRoute = function(key, route){
         apiRoutes[key] = route;
-    }
+    };
     var _getApiRoute = function(key){
         return apiRoutes[key];
-    }
+    };
 
     return {
         serializeForm:  _serializeForm,
@@ -207,6 +207,6 @@ window.lineStorm.api = (function(){
         parseError:     _parseError,
         addApiRoute:    _addApiRoute,
         getApiRoute:    _getApiRoute
-    }
+    };
 
 })();
