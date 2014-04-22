@@ -3,9 +3,14 @@
 namespace LineStorm\CmsBundle\Twig;
 
 use LineStorm\CmsBundle\Module\ModuleManager;
-use Symfony\Component\DependencyInjection\Container;
-use Symfony\Component\HttpKernel\Kernel;
 
+/**
+ * Twig extension functions
+ *
+ * Class CmsAdminExtension
+ *
+ * @package LineStorm\CmsBundle\Twig
+ */
 class CmsAdminExtension extends \Twig_Extension
 {
     /**
@@ -14,16 +19,16 @@ class CmsAdminExtension extends \Twig_Extension
     private $moduleManager;
 
     /**
-     * @var Container
+     * @param ModuleManager $moduleManager
      */
-    private $container;
-
-    public function __construct(ModuleManager $moduleManager, $container)
+    public function __construct(ModuleManager $moduleManager)
     {
         $this->moduleManager = $moduleManager;
-        $this->container = $container;
     }
 
+    /**
+     * @inheritdoc
+     */
     public function getFunctions()
     {
         return array(
@@ -32,11 +37,24 @@ class CmsAdminExtension extends \Twig_Extension
         );
     }
 
+    /**
+     * Return all the modules
+     *
+     * @return \LineStorm\CmsBundle\Module\ModuleInterface[]
+     */
     public function getModulesFunction()
     {
         return $this->moduleManager->getModules();
     }
 
+    /**
+     * Convert an asset URL into a requirejs bundle
+     *
+     * @param $name
+     *
+     * @return string
+     * @throws \Exception
+     */
     public function getRequireAsset($name)
     {
         if(strpos($name, '@') === 0)
@@ -59,6 +77,9 @@ class CmsAdminExtension extends \Twig_Extension
         }
     }
 
+    /**
+     * @inheritdoc
+     */
     public function getName()
     {
         return 'linestorm_cms_admin_extension';

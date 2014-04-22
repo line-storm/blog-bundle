@@ -44,6 +44,5 @@ class DoctrineOrmCompilerPass
         $ormPass = $compilerPass::createXmlMappingDriver($mappings, $em, $flag);
 
         return $ormPass;
-
     }
 }
