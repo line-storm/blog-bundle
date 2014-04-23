@@ -18,5 +18,5 @@
     "autoload": {
         "psr-0": {"LineStorm\\": "src/"}
     },
-    "minimum-stability": "dev"
+    "minimum-stability": "stable"
 }
