@@ -15,7 +15,7 @@
     <title>LineStorm CMS Admin Panel</title>
 
     <script type="text/javascript">
-        window.lineStorm = window.lineStorm || {};
+        window.lineStorm = {};
         window.lineStormTags = {
             page: {
                 baseUrl: '{{ app.request.getBaseUrl() }}',
@@ -23,6 +23,9 @@
             },
             mediaBank: {
                 upload: '{{ path('linestorm_cms_admin_module_media_upload') }}'
+            },
+            assets: {
+                path: '/{{ assetsPath }}'
             }
         };
     </script>
