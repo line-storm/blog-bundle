@@ -1,0 +1,18 @@
+<script type="text/javascript" src="{{ asset(assetsPath ~ '/vendor/requirejs/require.js') }}"></script>
+<script type="text/javascript">
+    requirejs.config({
+        baseUrl: '/{{ assetsPath }}/js'
+    });
+
+    require(['common'], function(common){
+        require(['cms_search_input', {% spaceless %}
+                {% if requirejs_module is defined -%}
+                        {%- for m in requirejs_module -%}
+                            {{ require(m) }}{% if not loop.last %},{% endif %}
+                        {%- endfor -%}
+                {% else %}
+                    'app/main'
+                {% endif %}
+            {% endspaceless %}]);
+    });
+</script>

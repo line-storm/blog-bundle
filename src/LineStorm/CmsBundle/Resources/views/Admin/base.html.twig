@@ -38,7 +38,7 @@
     {% endstylesheets %}
 
     {% block head %}
-        {{ include('AndyPortfolioBundle::requirejs.html.twig', {
+        {{ include('LineStormCmsBundle::requirejs.html.twig', {
             requirejs_module: ['../bundles/linestormcms/js/main']
         }) }}
     {% endblock %}
