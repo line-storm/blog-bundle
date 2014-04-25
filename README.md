@@ -3,6 +3,8 @@ LineStorm CMS Bundle
 
 LineStorm CMS Bundle for symfony >=2.3.
 
+[![Build Status](https://travis-ci.org/linestorm/linestorm-cms.svg?branch=master)](https://travis-ci.org/linestorm/linestorm-cms)
+
 This bundle is pretty useless on it's own, as it's just the core files. You will need to install various modules to make
 it meaningful.
 

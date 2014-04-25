@@ -2,7 +2,9 @@
 
 namespace LineStorm\CmsBundle\Tests\Module;
 
+use LineStorm\CmsBundle\Module\ModuleInterface;
 use LineStorm\CmsBundle\Tests\Fixtures\Module\TestModule;
+use Symfony\Component\Routing\RouteCollection;
 
 /**
  * Module Unit Tests
@@ -13,19 +15,46 @@ use LineStorm\CmsBundle\Tests\Fixtures\Module\TestModule;
  */
 class ModuleTest extends \PHPUnit_Framework_TestCase
 {
+    protected $id = 'test';
+    protected $name = 'Test';
+
+    /**
+     * @return ModuleInterface
+     */
+    protected function getModule()
+    {
+        return new TestModule();
+    }
+
+    public function testId()
+    {
+        $module = $this->getModule();
+
+        $id = $module->getId();
+        $this->assertEquals($id, $this->id);
+    }
+
+    public function testName()
+    {
+        $module = $this->getModule();
+
+        $name = $module->getName();
+        $this->assertEquals($name, $this->name);
+    }
+
     /**
      * Test the module creation
      */
     public function testModule()
     {
-        $module = new TestModule();
+        $module = $this->getModule();
 
         $this->assertInstanceOf('\LineStorm\CmsBundle\Module\ModuleInterface', $module);
     }
 
     public function testNavigation()
     {
-        $module = new TestModule();
+        $module = $this->getModule();
 
         $navigation = $module->getNavigation();
 
@@ -38,23 +67,23 @@ class ModuleTest extends \PHPUnit_Framework_TestCase
 
     public function testFrontendRoutes()
     {
-        $module = new TestModule();
+        $module = $this->getModule();
 
         $loader = $this->getMock('\Symfony\Component\Config\Loader\Loader', array(), array(), '', false);
 
         $routes = $module->addRoutes($loader);
 
-        $this->assertInstanceOf('\Symfony\Component\Routing\RouteCollection', $routes);
+        $this->assertTrue($routes instanceof RouteCollection || $routes === null);
     }
 
     public function testAdminRoutes()
     {
-        $module = new TestModule();
+        $module = $this->getModule();
 
         $loader = $this->getMock('\Symfony\Component\Config\Loader\Loader', array(), array(), '', false);
 
         $routes = $module->addAdminRoutes($loader);
 
-        $this->assertInstanceOf('\Symfony\Component\Routing\RouteCollection', $routes);
+        $this->assertTrue($routes instanceof RouteCollection || $routes === null);
     }
 } 
