@@ -22,7 +22,8 @@
                 basePath: '{{ app.request.getBasePath() }}'
             },
             mediaBank: {
-                upload: '{{ path('linestorm_cms_admin_module_media_upload') }}'
+                search: '{{ url('linestorm_cms_module_media_api_search_media') }}',
+                upload: '{{ url('linestorm_cms_admin_module_media_upload') }}'
             },
             assets: {
                 path: '/{{ assetsPath }}'
