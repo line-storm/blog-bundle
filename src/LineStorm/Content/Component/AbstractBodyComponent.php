@@ -6,12 +6,10 @@ namespace LineStorm\Content\Component;
  * Class AbstractBodyComponent
  * @package LineStorm\Content\Component
  */
-class AbstractBodyComponent extends AbstractComponent
+abstract class AbstractBodyComponent extends AbstractComponent implements ComponentInterface
 {
     /**
-     * Returns the body type
-     *
-     * @return mixed
+     * @inheritdoc
      */
     public function getType()
     {

@@ -11,7 +11,7 @@ use Symfony\Component\Form\FormView;
  * Class AbstractComponent
  * @package LineStorm\Content\Component
  */
-abstract class AbstractComponent
+abstract class AbstractComponent implements ComponentInterface
 {
     const TYPE_HEADER   = 1;
     const TYPE_META     = 2;
@@ -46,20 +46,14 @@ abstract class AbstractComponent
      *
      * @return string
      */
-    public function getId()
-    {
-        return $this->id;
-    }
+    abstract public function getId();
 
     /**
      * Fetch the component name
      *
      * @return mixed
      */
-    public function getName()
-    {
-        return $this->name;
-    }
+    abstract public function getName();
 
     /**
      * @inheritdoc
