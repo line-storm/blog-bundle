@@ -42,20 +42,6 @@ abstract class AbstractComponent implements ComponentInterface
     }
 
     /**
-     * Fetch the component id string
-     *
-     * @return string
-     */
-    abstract public function getId();
-
-    /**
-     * Fetch the component name
-     *
-     * @return mixed
-     */
-    abstract public function getName();
-
-    /**
      * @inheritdoc
      */
     public function getAssets()
