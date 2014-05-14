@@ -1,0 +1,5 @@
+linestorm_cms_api_session:
+  type:         rest
+  resource:     LineStorm\CmsBundle\Controller\Api\SessionController
+  name_prefix:  linestorm_cms_api_session_
+  prefix:       /session

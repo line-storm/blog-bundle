@@ -25,6 +25,9 @@
                 search: '{{ url('linestorm_cms_module_media_api_search_media') }}',
                 upload: '{{ url('linestorm_cms_admin_module_media_upload') }}'
             },
+            session: {
+                poke: '{{ url('linestorm_cms_api_session_poke') }}'
+            },
             assets: {
                 path: '/{{ assetsPath }}'
             }

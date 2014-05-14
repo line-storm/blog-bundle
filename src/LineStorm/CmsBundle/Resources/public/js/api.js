@@ -1,20 +1,34 @@
 window.lineStorm = window.lineStorm || {};
 window.lineStorm.api = (function(){
 
-    var modalContainer =
-        '<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true"> ' +
-        '    <div class="modal-dialog"> ' +
-        '    <div class="modal-content"> ' +
-        '        <div class="modal-header"> ' +
-        '            <h4 class="modal-title" id="myModalLabel">__title__</h4> ' +
-        '        </div> ' +
-        '        <div class="modal-body">__widget__</div> ' +
-        '        <div class="modal-footer"> ' +
-        '            <button type="button" class="btn btn-default close-button" style="display: none;" data-dismiss="modal">Close</button> ' +
-        '        </div> ' +
-        '    </div> ' +
-        '    </div> ' +
-        '</div>';
+
+
+    var _buildModalContainer = function(title, content, showClose){
+        var $container,
+            container =
+                '<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true"> ' +
+                '    <div class="modal-dialog"> ' +
+                '    <div class="modal-content"> ' +
+                '        <div class="modal-header"> ' +
+                '            <h4 class="modal-title" id="myModalLabel">__title__</h4> ' +
+                '        </div> ' +
+                '        <div class="modal-body">__widget__</div> ' +
+                '        <div class="modal-footer"> ' +
+                '            <button type="button" class="btn btn-default close-button" data-dismiss="modal">Close</button> ' +
+                '        </div> ' +
+                '    </div> ' +
+                '    </div> ' +
+                '</div>'
+        ;
+
+        $container = $(container.replace('__widget__', content).replace('__title__', title));
+
+        if(showClose === false){
+            $container.find('button.close-button').hide();
+        }
+
+        return $container;
+    };
 
     // convert a form to a multi dimentional array
     var _serializeForm = function($form){
@@ -129,8 +143,7 @@ window.lineStorm.api = (function(){
         var sData = _serializeForm(data);
 
         $form.find('[type="submit"]').prop('disabled', true);
-        var formModalPrototype = modalContainer.replace('__widget__', '<div class="modal-message">Please wait while we save your form.</div>').replace('__title__', 'Saving Form...');
-        var $formModal= $(formModalPrototype);
+        var $formModal = _buildModalContainer('Saving Form...', '<div class="modal-message">Please wait while we save your form.</div>', false);
         $formModal.modal();
 
         _call($form[0].action, {
@@ -171,8 +184,6 @@ window.lineStorm.api = (function(){
 
     };
 
-
-
     var _parseError = function(e, p){
         if(p === undefined){
             p = 'error';
@@ -200,13 +211,54 @@ window.lineStorm.api = (function(){
         return apiRoutes[key];
     };
 
+    var _poke = function(){
+        if("undefined" != typeof window.lineStormTags.session.poke){
+            var now = new Date().getTime();
+            lineStorm.api.call(window.lineStormTags.session.poke, {
+                data: {
+                    t: now
+                },
+                success: function(o,state,xhr){
+                    if(xhr.status === 204){
+                        return;
+                    }
+
+                    var $formModal = _buildModalContainer( 'Session Error', '<div class="alert-error"><p>The session entered an unknown state ('+xhr.status+')</p></div>');
+                    $formModal.modal();
+
+                },
+                error: function(xhr, state, o){
+                    var $formModal;
+
+                    if(xhr.status === 403){
+
+                        $formModal = _buildModalContainer( 'Session Error', '<div class="alert-error"><p>Your session has expired</p></div>', false);
+                        $formModal.find('.modal-footer').append('<a href="'+xhr.responseJSON.url+'" class="btn btn-primary">Login</a>');
+                        $formModal.modal();
+                        clearInterval(_sessionPokeInterval);
+                        return;
+                    }
+
+                    $formModal = _buildModalContainer( 'Session Error', '<div class="alert-error"><p>The session entered an unknown state ('+xhr.status+')</p></div>');
+                    $formModal.modal();
+                }
+            });
+        } else {
+            clearInterval(_sessionPokeInterval);
+        }
+    };
+
+    // keep our API session alive
+    var _sessionPokeInterval = setInterval(_poke, 60000);
+
     return {
         serializeForm:  _serializeForm,
         saveForm:       _saveForm,
         call:           _call,
         parseError:     _parseError,
         addApiRoute:    _addApiRoute,
-        getApiRoute:    _getApiRoute
+        getApiRoute:    _getApiRoute,
+        sessionPoke:    _poke
     };
 
 })();

@@ -5,5 +5,5 @@ linestorm_cms_admin_index:
 
 
 linestorm_cms_admin_modules:
-    resource: .
-    type: linestorm_cms_admin
+  resource: .
+  type: linestorm_cms_admin

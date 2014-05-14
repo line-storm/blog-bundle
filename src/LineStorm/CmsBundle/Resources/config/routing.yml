@@ -1,3 +1,8 @@
 linestorm_cms_admin:
   prefix:       /cms/admin
   resource:     "routing/admin.yml"
+
+linestorm_cms_api:
+  prefix:       /cms/api
+  type:         rest
+  resource:     "routing/api.yml"
