@@ -44,5 +44,9 @@ class DoctrineOrmCompilerPass
         $ormPass = $compilerPass::createXmlMappingDriver($mappings, $em, $flag);
 
         return $ormPass;
+<<<<<<< HEAD
+=======
+
+>>>>>>> Added helper orm mappings pass
     }
 }
