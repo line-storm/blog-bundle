@@ -212,7 +212,7 @@ window.lineStorm.api = (function(){
     };
 
     var _poke = function(){
-        if("undefined" != typeof window.lineStormTags.session.poke){
+        if("undefined" != typeof window.lineStormTags && 'session' in window.lineStormTags){
             var now = new Date().getTime();
             lineStorm.api.call(window.lineStormTags.session.poke, {
                 data: {
