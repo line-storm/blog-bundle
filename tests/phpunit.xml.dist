@@ -9,12 +9,12 @@
          processIsolation="false"
          stopOnFailure="false"
          syntaxCheck="false"
-         bootstrap="tests/bootstrap.php"
+         bootstrap="bootstrap.php"
     >
 
   <testsuites>
-    <testsuite name="TestBundle Test Suite">
-      <directory>./src</directory>
+    <testsuite name="LineStormCmsBundle Test Suite">
+      <directory>../src</directory>
     </testsuite>
   </testsuites>
 </phpunit>

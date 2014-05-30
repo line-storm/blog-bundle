@@ -34,7 +34,11 @@ class CmsLoader extends Loader implements LoaderInterface
         foreach($modules as $module)
         {
             $routeCollection = $module->addRoutes($this);
-            $this->routes->addCollection($routeCollection);
+
+            if($routeCollection)
+            {
+                $this->routes->addCollection($routeCollection);
+            }
         }
 
         $this->loaded = true;

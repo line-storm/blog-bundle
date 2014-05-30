@@ -35,9 +35,13 @@ class CmsAdminLoader extends Loader implements LoaderInterface
         foreach($this->moduleManager->getModules() as $module)
         {
             $routes = $module->addAdminRoutes($this, $this->routes);
-            $requirements = array();
-            $routes->addPrefix('/module/'.$module->getId(), array(), $requirements);
-            $this->routes->addCollection($routes);
+
+            if($routes)
+            {
+                $requirements = array();
+                $routes->addPrefix('/module/'.$module->getId(), array(), $requirements);
+                $this->routes->addCollection($routes);
+            }
         }
 
         $this->loaded = true;

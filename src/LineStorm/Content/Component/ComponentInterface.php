@@ -82,6 +82,14 @@ interface ComponentInterface
     public function buildForm(FormBuilderInterface $builder, array $options);
 
     /**
+     * Return a list of form elements to render on the content node form. This allows LineStormCMS to group component
+     * inputs together.
+     *
+     * @return array
+     */
+    public function getFormFields();
+
+    /**
      * Add routes to the cms router.
      * Normally, for a component, there are no routes. Exceptions apply, for example Tags, where you want the user to be
      * able to view all tags.

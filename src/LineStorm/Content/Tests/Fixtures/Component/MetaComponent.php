@@ -70,4 +70,15 @@ class MetaComponent extends AbstractMetaComponent implements ComponentInterface
     {
     }
 
+    /**
+     * Return a list of form elements to render on the content node form. This allows LineStormCMS to group component
+     * inputs together.
+     *
+     * @return array
+     */
+    public function getFormFields()
+    {
+        return array();
+    }
+
 }
