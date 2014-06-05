@@ -106,6 +106,13 @@ window.lineStorm.api = (function(){
     };
 
     var _saveForm = function($form, callback_success, callback_failure){
+
+
+        var $formModal = _buildModalContainer('Saving Form...', '<div class="modal-message">Please wait while we save your form.</div>', false);
+        $formModal.modal();
+
+        var returned = 0;
+
         var data, field, fname, method;
 
         method = $form[0].method;
@@ -141,22 +148,25 @@ window.lineStorm.api = (function(){
         }
 
         var sData = _serializeForm(data);
+        var buttons =  $form.find('button, input[type="submit"]');
 
-        $form.find('[type="submit"]').prop('disabled', true);
-        var $formModal = _buildModalContainer('Saving Form...', '<div class="modal-message">Please wait while we save your form.</div>', false);
-        $formModal.modal();
+        if(buttons)
+            buttons.prop('disabled', true);
 
         _call($form[0].action, {
             data: JSON.stringify(sData),
             method: method,
             success: function(e,s,x){
-                $form.find('[type="submit"]').prop('disabled', false);
+                if(buttons)
+                    buttons.prop('disabled', false);
                 $formModal.find('.modal-message').html("The form has been saved.");
                 $formModal.find('.close-button').show();
                 callback_success.call(this, e,s,x);
             },
             error: function(e,b,c){
-                $form.find('[type="submit"]').prop('disabled', false);
+                if(buttons)
+                    buttons.prop('disabled', false);
+
                 var html = '<p>An error occured when saving the form.</p><div id="FormErrors" class="alert alert-danger">';
                 if(e.status === 400){
                     if(e.responseJSON){
@@ -176,12 +186,11 @@ window.lineStorm.api = (function(){
                     }
                 }
                 html += '</div>';
+
                 $formModal.find('.modal-message').html(html);
-                $formModal.find('.close-button').show();
                 callback_failure.call(this, e,b,c,$formModal);
             }
         });
-
     };
 
     var _parseError = function(e, p){
@@ -249,7 +258,7 @@ window.lineStorm.api = (function(){
     };
 
     // keep our API session alive
-    var _sessionPokeInterval = setInterval(_poke, 60000);
+    var _sessionPokeInterval = setInterval(_poke, 600 * 1000);
 
     return {
         serializeForm:  _serializeForm,

@@ -45,12 +45,12 @@
             display: block;
         }
 
-        .bread-crumb {
+        .breadcrumb {
             font-size: 13px;
-            margin-top: 15px;
+            margin: 15px 0 0 2px;
             color: #aaa;
-            margin-left: 2px;
             width: auto;
+            background-color: transparent;
 
             .divider {
                 margin: 0px 3px;

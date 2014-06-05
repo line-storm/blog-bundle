@@ -132,10 +132,10 @@
             </h2>
 
             <!-- Breadcrumb -->
-            <div class="bread-crumb pull-right">
-                  <a href="#"><i class="icon-home"></i> Home</a>
-                  {% block breadcrumbs %}{% endblock %}
-            </div>
+            <ol class="breadcrumb pull-right">
+                <li><a href="{{ url('linestorm_cms_admin_index') }}"><i class="fa-home"></i> Home</a></li>
+                {% block breadcrumbs %}{% endblock %}
+            </ol>
             <div class="clearfix"></div>
         </div>
 
