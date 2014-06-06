@@ -6,6 +6,8 @@ LineStorm CMS is a Content Management System Bundle for symfony >=2.3.
 This bundle is pretty useless on it's own as it's just the core files. You will need to install various modules to make
 it meaningful.
 
+[![Build Status](https://travis-ci.org/linestorm/linestorm-cms.svg?branch=master)](https://travis-ci.org/linestorm/linestorm-cms)
+
 Configuration
 =============
 1. Download and Enable
