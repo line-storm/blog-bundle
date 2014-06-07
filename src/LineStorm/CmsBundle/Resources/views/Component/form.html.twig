@@ -1,4 +1,5 @@
 {% form_theme form 'LineStormPollComponentBundle:Form:fields.html.twig' %}
+<h4>{{ component.name }}</h4>
 {% if form.parent %}
     {{ form_widget(form) }}
 {% else %}
