@@ -11,11 +11,12 @@ define(['jquery', 'bootstrap'], function ($, bs) {
             }
         });
 
-        $(".has_submenu > a").click(function(e) {
+        $(".has_submenu").on('mouseenter mouseleave click', function(e) {
             e.preventDefault();
-            var menu_li = $(this).parent("li");
-            var menu_ul = $(this).next("ul");
+            var menu_li = $(this);
+            var menu_ul = menu_li.children("ul");
 
+            menu_ul.stop(true, true);
             if (menu_li.hasClass("open")) {
                 menu_ul.slideUp(350);
                 menu_li.removeClass("open");
