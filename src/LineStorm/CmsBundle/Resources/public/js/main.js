@@ -11,7 +11,7 @@ define(['jquery', 'bootstrap'], function ($, bs) {
             }
         });
 
-        $(".has_submenu").on('mouseenter mouseleave click', function(e) {
+        $(".has_submenu").on('mouseenter mouseleave', function(e) {
             e.preventDefault();
             var menu_li = $(this);
             var menu_ul = menu_li.children("ul");
