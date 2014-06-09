@@ -1,7 +1,7 @@
 (function(){
     define(['jquery', 'bootstrap'], function ($, bs) {
 
-        var api = this;
+        var api = null;
 
         var _buildModalContainer = function(title, content, showClose){
             var $container,
@@ -184,6 +184,8 @@
                         } else {
                             alert(status);
                         }
+                    } else {
+                        html += "<p><strong style='text-transform:capitalize;'>Oh Dear.</strong> Looks like we have a problem here, the server responded with a "+e.status+" resonse.</p></div>";
                     }
                     html += '</div>';
 
@@ -257,10 +259,7 @@
             }
         };
 
-        // keep our API session alive
-        var _sessionPokeInterval = setInterval(_poke, 600 * 1000);
-
-        return {
+        api = {
             serializeForm:  _serializeForm,
             saveForm:       _saveForm,
             call:           _call,
@@ -269,5 +268,10 @@
             getApiRoute:    _getApiRoute,
             sessionPoke:    _poke
         };
+
+        // keep our API session alive
+        var _sessionPokeInterval = setInterval(_poke, 600 * 1000);
+
+        return api;
     });
 })();
