@@ -101,10 +101,13 @@ class CmsAdminExtension extends \Twig_Extension
             }
         }
 
-        var_dump($inputs);
-        $asset = $this->assetFactory->createAsset($inputs, array(), array(
-            'name' => 'test.css'
-        ));
+        $filters = array('compass');
+        $attributes = array(
+            'output' => 'test.css'
+        );
+        $attributes['name'] = $this->assetFactory->generateAssetName($inputs, $filters, $attributes);
+
+        $asset = $this->assetFactory->createAsset($inputs, $filters, $attributes);
 
         $asset->load();
         var_dump($asset->dump());
