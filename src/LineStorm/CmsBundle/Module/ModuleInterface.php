@@ -55,4 +55,6 @@ interface ModuleInterface {
      * @return mixed
      */
     public function addAdminRoutes(Loader $loader);
+
+    public function getAssets();
 } 

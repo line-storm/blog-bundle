@@ -2,6 +2,8 @@
 
 namespace LineStorm\CmsBundle\Twig;
 
+use Assetic\Factory\AssetFactory;
+use Assetic\Factory\LazyAssetManager;
 use LineStorm\CmsBundle\Module\ModuleManager;
 
 /**
@@ -19,11 +21,18 @@ class CmsAdminExtension extends \Twig_Extension
     private $moduleManager;
 
     /**
-     * @param ModuleManager $moduleManager
+     * @var AssetFactory
      */
-    public function __construct(ModuleManager $moduleManager)
+    private $assetFactory;
+
+    /**
+     * @param ModuleManager    $moduleManager
+     * @param AssetFactory $assetFactory
+     */
+    public function __construct(ModuleManager $moduleManager, AssetFactory $assetFactory)
     {
         $this->moduleManager = $moduleManager;
+        $this->assetFactory  = $assetFactory;
     }
 
     /**
@@ -34,6 +43,7 @@ class CmsAdminExtension extends \Twig_Extension
         return array(
             new \Twig_SimpleFunction('cms_admin_module_list', array($this, 'getModulesFunction')),
             new \Twig_SimpleFunction('require', array($this, 'getRequireAsset'), array('is_safe' => array('html'))),
+            new \Twig_SimpleFunction('linestorm_module_assets', array($this, 'getLinestormAssets'), array('is_safe' => array('html'))),
         );
     }
 
@@ -64,6 +74,7 @@ class CmsAdminExtension extends \Twig_Extension
             {
                 $bundle = strtolower($matches[1]);
                 $module = $matches[2];
+
                 return "'cms_{$module}'";
             }
             else
@@ -75,6 +86,29 @@ class CmsAdminExtension extends \Twig_Extension
         {
             return "'{$name}'";
         }
+    }
+
+    public function getLinestormAssets()
+    {
+        $modules = $this->moduleManager->getModules();
+
+        $inputs = array();
+        foreach($modules as $module)
+        {
+            foreach($module->getAssets() as $asset)
+            {
+                $inputs[] = $asset;
+            }
+        }
+
+        var_dump($inputs);
+        $asset = $this->assetFactory->createAsset($inputs, array(), array(
+            'name' => 'test.css'
+        ));
+
+        $asset->load();
+        var_dump($asset->dump());
+        die();
     }
 
     /**

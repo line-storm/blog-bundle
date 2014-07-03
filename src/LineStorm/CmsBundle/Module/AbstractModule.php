@@ -6,7 +6,7 @@ namespace LineStorm\CmsBundle\Module;
  * Class AbstractModule
  * @package LineStorm\CmsBundle\Module
  */
-abstract class AbstractModule
+abstract class AbstractModule implements ModuleInterface
 {
     protected $name;
     protected $id;
@@ -26,4 +26,13 @@ abstract class AbstractModule
     {
         return $this->name;
     }
+
+    /**
+     * @inheritdoc
+     */
+    public function getAssets()
+    {
+        return array();
+    }
+
 }

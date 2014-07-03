@@ -32,6 +32,17 @@ services:
   # TWIG ADMIN
   linestorm.cms.twig.cms_extension:
     class: LineStorm\CmsBundle\Twig\CmsAdminExtension
-    arguments: [ @linestorm.cms.module_manager ]
+    arguments: [ @linestorm.cms.module_manager, @linestorm.cms.asset_factory ]
     tags:
       - { name: twig.extension }
+
+  linestorm.cms.asset_factory:
+    class: Assetic\Factory\AssetFactory
+    arguments: [%assetic.read_from%, %assetic.debug%]
+    calls:
+      - [ setAssetManager, [@linestorm.cms.asset_manager]]
+      - [ setFilterManager, [@assetic.filter_manager]]
+
+  linestorm.cms.asset_manager:
+    class: Assetic\Factory\LazyAssetManager
+    arguments: [@linestorm.cms.asset_factory]
