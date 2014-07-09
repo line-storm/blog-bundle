@@ -1,0 +1,71 @@
+requirejs.config({
+    paths: {
+        domReady:   '../vendor/requirejs-domready/domReady',
+        jquery:     '../vendor/jquery/dist/jquery',
+        jqueryui:   '../vendor/jquery-ui/ui/jquery-ui',
+        bootstrap:  '../vendor/bootstrap/dist/js/bootstrap',
+        typeahead:  '../vendor/typeahead.js/dist/typeahead.bundle',
+        dropzone:   '../vendor/dropzone/downloads/dropzone',
+        select2:    '../vendor/select2/select2',
+        ckeditor:   '../vendor/ckeditor/ckeditor',
+        jckeditor:  '../vendor/ckeditor/adapters/jquery',
+        ace:        '../vendor/ace/lib/ace',
+        highlightjs:'../vendor/highlightjs/highlight.pack',
+        jstree:     '../vendor/jstree/dist/jstree',
+
+        {% for module in moduleManager %}
+            {% for asset in module.assets %}
+                {{ require() }}
+            {% endfor %}
+        {% endfor %}
+        // cms core libraries
+        cms_main:   '../bundles/linestormcms/js/main',
+        cms_api:    '../bundles/linestormcms/js/api',
+
+        // cms post library
+        cms_post:           '../bundles/linestormpost/js/post',
+        cms_post_view:      '../bundles/linestormpost/js/view',
+
+        // cms page library
+        cms_page:           '../bundles/linestormpage/js/page',
+        cms_page_type:      '../bundles/linestormpage/js/page_type',
+        cms_page_view:      '../bundles/linestormpage/js/view',
+
+        // comment lib
+        cms_comment:        '../bundles/linestormcommentcomponent/js/comment',
+        linestorm_comments: '../bundles/linestormcomment/js/comment',
+
+        // article component
+        cms_article:        '../bundles/linestormarticlecomponent/js/article',
+
+        // gallery component
+        cms_gallery:        '../bundles/linestormgallerycomponent/js/gallery',
+
+        // gallery component
+        cms_tag:            '../bundles/linestormtagcomponent/js/tag',
+
+        // cms poll library
+        cms_poll:           '../bundles/linestormpollcomponent/js/poll',
+        cms_poll_view:      '../bundles/linestormpollcomponent/js/poll_view',
+
+        // cms media library
+        cms_media:          '../bundles/linestormmedia/js/media',
+        cms_media_list:     '../bundles/linestormmedia/js/list',
+        cms_media_treebrowser: '../bundles/linestormmedia/js/form/treebrowser',
+        cms_media_dropzone: '../bundles/linestormmedia/js/form/dropzone',
+
+        // cms search library
+        cms_search_input:   '../bundles/linestormsearch/js/search_input'
+    },
+    shim: {
+        dropzone:   ['jquery'],
+        jqueryui:   ['jquery'],
+        bootstrap:  ['jquery'],
+        typeahead:  ['bootstrap'],
+        select2:    ['bootstrap'],
+        jckeditor:  ['jquery', 'ckeditor'],
+        linestorm_comments: ['jquery'],
+        cms_comment: ['linestorm_comments'],
+        cms_media_dropzone: ['dropzone','jquery']
+    }
+});

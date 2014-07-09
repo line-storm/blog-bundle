@@ -15,6 +15,8 @@ class CmsAdminLoader extends Loader implements LoaderInterface
 
     private $routes;
 
+    private $resources = array();
+
     /**
      * @var ModuleManager
      */
@@ -26,20 +28,26 @@ class CmsAdminLoader extends Loader implements LoaderInterface
         $this->moduleManager = $moduleManager;
     }
 
+    public function addRoutes(array $routes, $module)
+    {
+        foreach($routes as $route)
+        {
+            $this->resources[$module][] = $route;
+        }
+    }
+
     public function load($resource, $type = null)
     {
         if (true === $this->loaded) {
             throw new \RuntimeException('Do not add the "app" loader twice');
         }
 
-        foreach($this->moduleManager->getModules() as $module)
+        foreach($this->resources as $module => $routes)
         {
-            $routes = $module->addAdminRoutes($this, $this->routes);
-
-            if($routes)
+            foreach($routes as $route)
             {
-                $requirements = array();
-                $routes->addPrefix('/module/'.$module->getId(), array(), $requirements);
+                $routes = $this->import($route);
+                $routes->addPrefix('/module/'.$module, array(), array());
                 $this->routes->addCollection($routes);
             }
         }

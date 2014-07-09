@@ -16,6 +16,8 @@ class CmsLoader extends Loader implements LoaderInterface
 
     private $routes;
 
+    private $resources = array();
+
     private $moduleManager;
 
     public function __construct(ModuleManager $moduleManager)
@@ -24,21 +26,20 @@ class CmsLoader extends Loader implements LoaderInterface
         $this->moduleManager = $moduleManager;
     }
 
+    public function addRoutes(array $routes)
+    {
+        $this->resources = array_merge_recursive($this->resources, $routes);
+    }
+
     public function load($resource, $type = null)
     {
         if (true === $this->loaded) {
             throw new \RuntimeException('Do not add the "CMS" loader twice');
         }
 
-        $modules = $this->moduleManager->getModules();
-        foreach($modules as $module)
+        foreach($this->resources as $route)
         {
-            $routeCollection = $module->addRoutes($this);
-
-            if($routeCollection)
-            {
-                $this->routes->addCollection($routeCollection);
-            }
+            $this->routes->addCollection($this->import($route));
         }
 
         $this->loaded = true;

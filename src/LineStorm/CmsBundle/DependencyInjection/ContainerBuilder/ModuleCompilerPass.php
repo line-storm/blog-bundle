@@ -27,7 +27,6 @@ class ModuleCompilerPass implements CompilerPassInterface
             return;
         }
 
-        $compilerPass          = null;
         $ormCompilerClass      = 'Doctrine\Bundle\DoctrineBundle\DependencyInjection\Compiler\DoctrineOrmMappingsPass';
         $localOrmCompilerClass = 'LineStorm\CmsBundle\DependencyInjection\Compiler\DoctrineOrmMappingsPass';
 
@@ -63,6 +62,5 @@ class ModuleCompilerPass implements CompilerPassInterface
             $ormPass = $compilerPass::createXmlMappingDriver($mappings, $em, $flag);
             $container->addCompilerPass($ormPass);
         }
-
     }
 } 

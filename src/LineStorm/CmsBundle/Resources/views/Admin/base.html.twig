@@ -42,8 +42,11 @@
     {% endstylesheets %}
 
     {% block head %}
+        <script type="text/javascript">
+            var assets = [{% javascripts "@LineStormCmsBundle/Resources/public/js/*.js" %}'{{ asset_url }}',{% endjavascripts %}];
+        </script>
         {{ include('LineStormCmsBundle::requirejs.html.twig', {
-            requirejs_module: ['../bundles/linestormcms/js/main']
+            requirejs_module: []
         }) }}
     {% endblock %}
 

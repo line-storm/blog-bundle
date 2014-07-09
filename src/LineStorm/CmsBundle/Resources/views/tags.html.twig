@@ -1,0 +1,13 @@
+{% spaceless %}
+<script type="text/javascript">
+    var LineStorm = {
+        core: {
+            require: {
+                {% for module in app.kernel %}
+
+                {% endfor %}
+            }
+        }
+    };
+</script>
+{% endspaceless %}
