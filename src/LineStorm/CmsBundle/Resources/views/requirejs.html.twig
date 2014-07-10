@@ -1,4 +1,10 @@
-<script type="text/javascript" src="{{ asset(assetsPath ~ '/vendor/requirejs/require.js') }}"></script>
+
+{% javascripts
+    filter="uglifyjs2" output="cms/core/js/require.js"
+    "assets-dev/vendor/requirejs/require.js"
+%}
+<script type="text/javascript" src="{{ asset_url }}"></script>
+{% endjavascripts %}
 <script type="text/javascript">
     requirejs.config({
         baseUrl: '/{{ assetsPath }}/js'
